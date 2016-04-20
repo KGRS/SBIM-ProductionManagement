@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="QueryReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1d4b839-af8f-4a37-a540-31aeea9ca260">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     Suppliers."SupplierName" AS Suppliers_SupplierName,
+     Suppliers."SupplierCode" AS Suppliers_SupplierCode,
+     PurchaseOrderMain."PODate" AS PurchaseOrderMain_PODate,
+     PurchaseOrderMain."POID" AS PurchaseOrderMain_POID,
+     PurchaseOrderMain."SupplierCode" AS PurchaseOrderMain_SupplierCode,
+     PurchaseOrderMain."IsPending" AS PurchaseOrderMain_IsPending
+FROM
+     "dbo"."Suppliers" Suppliers INNER JOIN "dbo"."PurchaseOrderMain" PurchaseOrderMain ON Suppliers."SupplierCode" = PurchaseOrderMain."SupplierCode"
+WHERE Suppliers."SupplierName" LIKE 'a%' AND
+      PurchaseOrderMain."IsPending" = 'Yes'
+]]>
+	</queryString>
+	<field name="Suppliers_SupplierName" class="java.lang.String"/>
+	<field name="Suppliers_SupplierCode" class="java.lang.String"/>
+	<field name="PurchaseOrderMain_PODate" class="java.lang.String"/>
+	<field name="PurchaseOrderMain_POID" class="java.lang.String"/>
+	<field name="PurchaseOrderMain_SupplierCode" class="java.lang.String"/>
+	<field name="PurchaseOrderMain_IsPending" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

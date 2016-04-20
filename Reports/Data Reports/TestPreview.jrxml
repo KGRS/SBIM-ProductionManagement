@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54fab8e8-f45a-4b34-81db-b52d21fd8734">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<parameter name="User" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="GRNID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     ClientCompany."Companyname" AS ClientCompany_Companyname,
+     ClientCompany."Address" AS ClientCompany_Address,
+     ClientCompany."Email" AS ClientCompany_Email,
+     ClientCompany."Web" AS ClientCompany_Web,
+     ClientCompany."VATRegistrationNo" AS ClientCompany_VATRegistrationNo,
+     ClientCompany."Fax" AS ClientCompany_Fax,
+     ClientCompany."Telephone1" AS ClientCompany_Telephone1,
+     ClientCompany."Telephone2" AS ClientCompany_Telephone2,
+     InvTrTestPreviewMain."Date" AS InvTrTestPreviewMain_Date,
+     InvTrTestPreviewMain."Time" AS InvTrTestPreviewMain_Time,
+     InvTrTestPreviewMain."PreviousID" AS InvTrTestPreviewMain_PreviousID,
+     InvTrTestPreviewMain."SupplierInvoice" AS InvTrTestPreviewMain_SupplierInvoice,
+     InvTrTestPreviewMain."UserID" AS InvTrTestPreviewMain_UserID,
+     InvTrTestPreviewMain."TotalWithOutTaxes" AS InvTrTestPreviewMain_TotalWithOutTaxes,
+     InvTrTestPreviewMain."Discount" AS InvTrTestPreviewMain_Discount,
+     InvTrTestPreviewMain."Tax1" AS InvTrTestPreviewMain_Tax1,
+     InvTrTestPreviewMain."Tax2" AS InvTrTestPreviewMain_Tax2,
+     InvTrTestPreviewMain."OtherChargers" AS InvTrTestPreviewMain_OtherChargers,
+     InvTrTestPreviewMain."TotalWithTaxes" AS InvTrTestPreviewMain_TotalWithTaxes,
+     InvTrTestPreviewMain."RecievedDate" AS InvTrTestPreviewMain_RecievedDate,
+     InvTrTestPreviewMain."PaymentType" AS InvTrTestPreviewMain_PaymentType,
+     InvTrTestPreviewMain."CreditPeriod" AS InvTrTestPreviewMain_CreditPeriod,
+     InvTrTestPreviewMain."PeriodEndsOn" AS InvTrTestPreviewMain_PeriodEndsOn,
+     InvTrTestPreviewMain."Remarks" AS InvTrTestPreviewMain_Remarks,
+     InvTrTestPreviewMain."DepartmentsCode" AS InvTrTestPreviewMain_DepartmentsCode,
+     InvTrTestPreviewItems."ItemCode" AS InvTrTestPreviewItems_ItemCode,
+     InvTrTestPreviewItems."ItemName" AS InvTrTestPreviewItems_ItemName,
+     InvTrTestPreviewItems."UnitPurchase" AS InvTrTestPreviewItems_UnitPurchase,
+     InvTrTestPreviewItems."Quantity" AS InvTrTestPreviewItems_Quantity,
+     InvTrTestPreviewItems."PurchasePrice" AS InvTrTestPreviewItems_PurchasePrice,
+     InvTrTestPreviewItems."ItemPriceAmount" AS InvTrTestPreviewItems_ItemPriceAmount,
+     InvTrTestPreviewItems."ExpireDate" AS InvTrTestPreviewItems_ExpireDate,
+     InvTrTestPreviewMain."SupplierCode" AS InvTrTestPreviewMain_SupplierCode,
+     InvTrTestPreviewMain."TransactionID" AS InvTrTestPreviewMain_TransactionID,
+     Taxes."Tax1" AS Taxes_Tax1,
+     Taxes."Tax2" AS Taxes_Tax2,
+     Taxes."Other" AS Taxes_Other
+FROM
+     "dbo"."InvTrTestPreviewItems" InvTrTestPreviewItems INNER JOIN "dbo"."InvTrTestPreviewMain" InvTrTestPreviewMain ON InvTrTestPreviewItems."TransactionID" = InvTrTestPreviewMain."TransactionID",
+     "dbo"."ClientCompany" ClientCompany,
+     "dbo"."Taxes" Taxes
+WHERE
+     InvTrTestPreviewMain."TransactionID" = $P{GRNID}
+ORDER BY
+     InvTrTestPreviewItems."ItemName" ASC]]>
+	</queryString>
+	<field name="ClientCompany_Companyname" class="java.lang.String"/>
+	<field name="ClientCompany_Address" class="java.lang.String"/>
+	<field name="ClientCompany_Email" class="java.lang.String"/>
+	<field name="ClientCompany_Web" class="java.lang.String"/>
+	<field name="ClientCompany_VATRegistrationNo" class="java.lang.String"/>
+	<field name="ClientCompany_Fax" class="java.lang.String"/>
+	<field name="ClientCompany_Telephone1" class="java.lang.String"/>
+	<field name="ClientCompany_Telephone2" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_Date" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_Time" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_PreviousID" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_SupplierInvoice" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_UserID" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_TotalWithOutTaxes" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_Discount" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_Tax1" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_Tax2" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_OtherChargers" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_TotalWithTaxes" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_RecievedDate" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_PaymentType" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_CreditPeriod" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewMain_PeriodEndsOn" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_Remarks" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_DepartmentsCode" class="java.lang.String"/>
+	<field name="InvTrTestPreviewItems_ItemCode" class="java.lang.String"/>
+	<field name="InvTrTestPreviewItems_ItemName" class="java.lang.String"/>
+	<field name="InvTrTestPreviewItems_UnitPurchase" class="java.lang.String"/>
+	<field name="InvTrTestPreviewItems_Quantity" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewItems_PurchasePrice" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewItems_ItemPriceAmount" class="java.lang.Double"/>
+	<field name="InvTrTestPreviewItems_ExpireDate" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_SupplierCode" class="java.lang.String"/>
+	<field name="InvTrTestPreviewMain_TransactionID" class="java.lang.String"/>
+	<field name="Taxes_Tax1" class="java.lang.String"/>
+	<field name="Taxes_Tax2" class="java.lang.String"/>
+	<field name="Taxes_Other" class="java.lang.String"/>
+	<variable name="TotalValue" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="77">
+			<staticText>
+				<reportElement uuid="bc9d1c30-4ace-4090-b7c0-0e285a9988c8" x="91" y="22" width="260" height="24" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[This is a test preview]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1871f2ce-87e2-4110-b066-eba0858ab820" x="91" y="0" width="260" height="21" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Companyname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="eb68a57b-341b-4eb0-91ae-f1c3979ed306" key="textField" x="462" y="0" width="90" height="12" forecolor="#000000" backcolor="#000000"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="373" y="13" width="179" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="373" y="23" width="103" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Telephone2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="431" y="43" width="121" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="431" y="53" width="121" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Web}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="431" y="63" width="121" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_VATRegistrationNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="477" y="23" width="75" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Telephone1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="477" y="33" width="74" height="9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ClientCompany_Fax}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="91" y="52" width="34" height="10" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="7" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="127" y="52" width="60" height="10"/>
+				<textElement>
+					<font fontName="Monospaced" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="193" y="52" width="34" height="10" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="7" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Time]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="230" y="52" width="56" height="11"/>
+				<textElement>
+					<font fontName="Monospaced" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_Time}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="296" y="52" width="34" height="10" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="7" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="333" y="52" width="42" height="10"/>
+				<textElement>
+					<font fontName="Monospaced" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_UserID}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="10ede922-f066-4614-8d60-2e4ac62af4b4" x="2" y="0" width="80" height="52"/>
+				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="53">
+			<line>
+				<reportElement uuid="c3f11f2a-7067-488b-bfda-d805c913f6d1" x="2" y="-3" width="550" height="1" forecolor="#CCCCCC"/>
+			</line>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="2" y="2" width="96" height="14" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Transaction ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="2" y="18" width="96" height="14" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Other ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="2" y="34" width="96" height="14" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Other notes]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="102" y="2" width="60" height="14"/>
+				<textElement>
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_TransactionID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="102" y="18" width="60" height="14"/>
+				<textElement>
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_PreviousID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="102" y="34" width="60" height="14"/>
+				<textElement>
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_SupplierInvoice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="56">
+			<staticText>
+				<reportElement uuid="98d41247-81c7-4404-bdfb-02c04d34fca2" mode="Transparent" x="474" y="20" width="78" height="14" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="58296fd7-600a-4883-b841-09d0a7f14559" mode="Transparent" x="407" y="20" width="55" height="26" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Purchase price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="330f6f08-34df-40a0-9c08-154f1b78a040" mode="Transparent" x="2" y="20" width="60" height="26" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Item Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="612fcc1a-88dc-4057-8950-699b271c3f79" mode="Transparent" x="284" y="20" width="50" height="26" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7eee8662-e606-47ab-bdd3-27affd48435d" mode="Transparent" x="102" y="20" width="95" height="26" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Item Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17db1273-5a9f-4c0c-bfd6-40c234eb2a43" mode="Transparent" x="345" y="20" width="52" height="26" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Purchase unit]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c3f11f2a-7067-488b-bfda-d805c913f6d1" x="2" y="2" width="550" height="1" forecolor="#CCCCCC"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="2" y="1" width="96" height="12"/>
+				<textElement>
+					<font fontName="Monospaced" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_ItemCode}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a4c6264b-beac-4bdc-967b-bf93a5ec17b2" x="102" y="1" width="182" height="12"/>
+				<textElement>
+					<font fontName="Monospaced" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_ItemName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7062752a-ba87-4e38-a4fc-b0d75fd75085" x="345" y="1" width="52" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_UnitPurchase}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="e30c3c05-9d17-4449-aa54-0aa4d68b6d18" x="407" y="1" width="55" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_PurchasePrice}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000">
+				<reportElement uuid="f8afafef-a52b-4485-a556-cfcaace51f7a" x="284" y="1" width="50" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_Quantity}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="1" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewItems_ItemPriceAmount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="553e0134-379b-4083-a51d-008243bfd6e7" x="0" y="14" width="552" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="22">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="8a4d441d-d40b-42d9-938b-835045d3a59f" key="textField" x="345" y="5" width="185" height="11" forecolor="#000000" backcolor="#000000"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e0726d2a-cb22-4ede-964c-66b87e2c6ca2" x="2" y="5" width="210" height="11"/>
+				<textElement>
+					<font fontName="Monospaced" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[All rights reserved]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cbf74805-7a2d-478f-8e20-8b7c1d7a0e98" x="230" y="5" width="55" height="11"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{User}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement uuid="13b18532-b88b-475b-b915-eefc19dfb8d5" key="textField" x="530" y="5" width="23" height="11" forecolor="#000000" backcolor="#000000"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="119">
+			<line>
+				<reportElement uuid="d04285bf-8184-4b79-9290-e4f4f9ce7fe0" x="477" y="106" width="76" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="bc025c09-469d-4a4b-bd73-d8538175086e" x="477" y="109" width="76" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="814212cc-195b-46cf-a902-6e495b0df911" x="342" y="89" width="210" height="1"/>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="92" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_TotalWithTaxes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="53" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_Tax2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="38" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_Tax1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="23" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_Discount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="8" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_TotalWithOutTaxes}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="814212cc-195b-46cf-a902-6e495b0df911" x="342" y="3" width="210" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="98d41247-81c7-4404-bdfb-02c04d34fca2" mode="Transparent" x="342" y="8" width="128" height="12" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Monospaced" size="8" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Total (without taxes)]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="68" width="75" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvTrTestPreviewMain_OtherChargers}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="98d41247-81c7-4404-bdfb-02c04d34fca2" mode="Transparent" x="342" y="23" width="128" height="12" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Monospaced" size="8" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Discounts (Rs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98d41247-81c7-4404-bdfb-02c04d34fca2" mode="Transparent" x="342" y="92" width="128" height="12" forecolor="#000000" backcolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Monospaced" size="8" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Total (with taxes)(Rs)]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ab22ab34-9890-43d3-820e-7e31ae85ffc8" x="342" y="38" width="127" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Taxes_Tax1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="efed68af-0b05-4f69-b8e4-7c42fa3fca7a" x="342" y="68" width="127" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Taxes_Other}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="33c037d2-f462-482b-af2f-9f828bcee3fe" x="342" y="53" width="127" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Taxes_Tax2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

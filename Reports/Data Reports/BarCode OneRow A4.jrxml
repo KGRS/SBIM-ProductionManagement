@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="7" bottomMargin="7" uuid="54fab8e8-f45a-4b34-81db-b52d21fd8734">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="BarCodeImage" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ItemCode" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ItemName" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     Items."ItemCode" AS Items_ItemCode,
+     Items."ItemName" AS Items_ItemName
+FROM
+     "dbo"."Items" Items]]>
+	</queryString>
+	<field name="Items_ItemCode" class="java.lang.String"/>
+	<field name="Items_ItemName" class="java.lang.String"/>
+	<variable name="TotalValue" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="52">
+			<image>
+				<reportElement uuid="10ede922-f066-4614-8d60-2e4ac62af4b4" x="5" y="3" width="175" height="45"/>
+				<imageExpression><![CDATA[$P{BarCodeImage}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="10ede922-f066-4614-8d60-2e4ac62af4b4" x="190" y="3" width="175" height="45"/>
+				<imageExpression><![CDATA[$P{BarCodeImage}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="10ede922-f066-4614-8d60-2e4ac62af4b4" x="374" y="3" width="175" height="45"/>
+				<imageExpression><![CDATA[$P{BarCodeImage}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="15"/>
+	</pageHeader>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
