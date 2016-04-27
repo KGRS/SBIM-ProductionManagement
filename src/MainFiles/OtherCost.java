@@ -26,6 +26,7 @@ public class OtherCost extends javax.swing.JInternalFrame {
     private final String select = "--Select--";
     private final DefaultTableModel model_categoryTable;
     private final String spliter = "--";
+    private final String menuName = "Other cost";
 
     /**
      * Creates new form Department
@@ -39,6 +40,7 @@ public class OtherCost extends javax.swing.JInternalFrame {
         txtCode.requestFocus();
         model_categoryTable = (DefaultTableModel) tableViewDetails.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
+        this.setTitle(menuName);
 
         LoadDepartments();
     }
@@ -95,7 +97,6 @@ public class OtherCost extends javax.swing.JInternalFrame {
         lbl_description3 = new javax.swing.JLabel();
 
         setIconifiable(true);
-        setTitle("Other cost");
         setPreferredSize(new java.awt.Dimension(895, 365));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
