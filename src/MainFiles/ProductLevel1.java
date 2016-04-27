@@ -23,6 +23,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
     private final DefaultTableModel model_categoryTable;
+    private final DefaultTableModel model_ProductLevel1;
     private final String spliter = "--";
     private final String menuName = "Product level 1";
 
@@ -35,12 +36,12 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         rBtnCodeAll.setSelected(true);
         textProductLevel1Code.requestFocus();
         model_categoryTable = (DefaultTableModel) tableAllRawItems.getModel();
+        model_ProductLevel1 = (DefaultTableModel) tableProductLevel1.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
         LoadAllRawItems();
-//        loadEventsToCombo();
-//        loadBatchCodeToCombo();
+        LoadAllProductLevel1Items();
         loadPurUnitsToCombo();
         loadDepartmentsToCombo();
     }
@@ -551,7 +552,34 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         }
     }
 
+    private void LoadAllProductLevel1Items() {
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+            int rowCount = 0;
+            query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 ORDER BY PL1_ITEM_NAME";
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
 
+            while (reset.next()) {
+                model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
+                tableProductLevel1.setValueAt(reset.getString("DepartmentCode"), rowCount, 2);
+                rowCount++;
+            }
+            reset.close();
+            countItemsInProductLevel1ItemsTable();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
+
+    private void countItemsInProductLevel1ItemsTable() {
+        TextProLevel1ItemCount.setText(model_ProductLevel1.getRowCount() + "");
+    }
     private void btnSaveIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveIngredientActionPerformed
 //
     }//GEN-LAST:event_btnSaveIngredientActionPerformed
@@ -593,86 +621,85 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rBtnNameActionPerformed
 
     private void tableAllRawItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllRawItemsMouseClicked
-
+        formattedTextQuantity.selectAll();
+        formattedTextQuantity.requestFocus();
     }//GEN-LAST:event_tableAllRawItemsMouseClicked
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         if (rBtnCode.isSelected()) {
-            SearchStudentEventGroupByCode(txtSearch.getText());
+            SearchProductLevel1ItemByCode(txtSearch.getText());
         } else if (rBtnName.isSelected()) {
-            SearchStudentEventGroupByName(txtSearch.getText());
+            SearchProductLevel1ItemByName(txtSearch.getText());
         }
     }//GEN-LAST:event_txtSearchKeyReleased
 
-    private void SearchStudentEventGroupByCode(String CategoryCode) {
+    private void SearchProductLevel1ItemByCode(String ItemCode) {
         try {
             ResultSet reset;
             Statement stmt;
             String query;
             int rowCount = 0;
-            RefreshTable();
+            RefreshProductLevel1Table();
 
-            if (!CategoryCode.equals("")) {
-                query = "SELECT * FROM SIUnits WHERE UnitCode LIKE '" + CategoryCode + "%'";
+            if (!ItemCode.equals("")) {
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             } else {
-                query = "SELECT * FROM SIUnits  WHERE UnitCode LIKE '" + CategoryCode + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-
-                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableAllRawItems.setValueAt(reset.getString("UnitCode"), rowCount, 0);
-                tableAllRawItems.setValueAt(reset.getString("UnitName"), rowCount, 1);
-                tableAllRawItems.setValueAt(reset.getString("PurchaseMeasurement"), rowCount, 2);
-                tableAllRawItems.setValueAt(reset.getString("IssueMeasurement"), rowCount, 3);
+                model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
+                tableProductLevel1.setValueAt(reset.getString("DepartmentCode"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
+            countItemsInProductLevel1ItemsTable();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
 
-    private void SearchStudentEventGroupByName(String CategoryName) {
+    private void SearchProductLevel1ItemByName(String ItemName) {
         try {
             ResultSet reset;
             Statement stmt;
             String query;
             int rowCount = 0;
-            RefreshTable();
+            RefreshProductLevel1Table();
 
-            if (!CategoryName.equals("")) {
-                query = "SELECT * FROM SIUnits WHERE UnitName LIKE '%" + CategoryName + "%'";
+            if (!ItemName.equals("")) {
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemName + "%'";
             } else {
-                query = "SELECT * FROM SIUnits WHERE UnitName LIKE '%" + CategoryName + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-
-                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableAllRawItems.setValueAt(reset.getString("UnitCode"), rowCount, 0);
-                tableAllRawItems.setValueAt(reset.getString("UnitName"), rowCount, 1);
-                tableAllRawItems.setValueAt(reset.getString("PurchaseMeasurement"), rowCount, 2);
-                tableAllRawItems.setValueAt(reset.getString("IssueMeasurement"), rowCount, 3);
+                model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
+                tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
+                tableProductLevel1.setValueAt(reset.getString("DepartmentCode"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
+            countItemsInProductLevel1ItemsTable();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
 
-    private void RefreshTable() {
+    private void RefreshProductLevel1Table() {
         try {
-            int row = model_categoryTable.getRowCount();
+            int row = model_ProductLevel1.getRowCount();
             for (int j = 0; j < row; j++) {
-                model_categoryTable.removeRow(0);
+                model_ProductLevel1.removeRow(0);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -701,8 +728,84 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rBtnNameAllActionPerformed
 
     private void txtSearchRawItemsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchRawItemsKeyReleased
-        // TODO add your handling code here:
+        if (rBtnCodeAll.isSelected()) {
+            SearchAllItemByCode(txtSearchRawItems.getText());
+        } else if (rBtnNameAll.isSelected()) {
+            SearchAllItemByName(txtSearchRawItems.getText());
+        }
     }//GEN-LAST:event_txtSearchRawItemsKeyReleased
+
+    private void SearchAllItemByCode(String ItemCode) {
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+            int rowCount = 0;
+            RefreshAllRawItemsTable();
+
+            if (!ItemCode.equals("")) {
+                query = "SELECT ItemCode, ItemName, UnitPurchase FROM Items WHERE Visibility = 'Yes' AND ItemCode LIKE '" + ItemCode + "%'";
+            } else {
+                query = "SELECT ItemCode, ItemName, UnitPurchase FROM Items WHERE Visibility = 'Yes' AND ItemCode LIKE '" + ItemCode + "%'";
+            }
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            while (reset.next()) {
+                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
+                tableAllRawItems.setValueAt(reset.getString("ItemCode"), rowCount, 0);
+                tableAllRawItems.setValueAt(reset.getString("ItemName"), rowCount, 1);
+                tableAllRawItems.setValueAt(reset.getString("UnitPurchase"), rowCount, 2);
+                rowCount++;
+            }
+            reset.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
+
+    private void SearchAllItemByName(String ItemName) {
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+            int rowCount = 0;
+            RefreshAllRawItemsTable();
+
+            if (!ItemName.equals("")) {
+                query = "SELECT ItemCode, ItemName, UnitPurchase FROM Items WHERE Visibility = 'Yes' AND ItemName LIKE '%" + ItemName + "%'";
+            } else {
+                query = "SELECT ItemCode, ItemName, UnitPurchase FROM Items  WHERE Visibility = 'Yes' AND ItemName LIKE '%" + ItemName + "%'";
+            }
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            while (reset.next()) {
+                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
+                tableAllRawItems.setValueAt(reset.getString("ItemCode"), rowCount, 0);
+                tableAllRawItems.setValueAt(reset.getString("ItemName"), rowCount, 1);
+                tableAllRawItems.setValueAt(reset.getString("UnitPurchase"), rowCount, 2);
+                rowCount++;
+            }
+            reset.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
+
+    private void RefreshAllRawItemsTable() {
+        try {
+            int row = model_categoryTable.getRowCount();
+            for (int j = 0; j < row; j++) {
+                model_categoryTable.removeRow(0);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
         productLevel1.toFront();

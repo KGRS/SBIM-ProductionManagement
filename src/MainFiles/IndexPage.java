@@ -55,9 +55,10 @@ public class IndexPage extends javax.swing.JFrame {
 
     public static Workflow department = null;
     public static Process subDepartment = null;
-    public static Employee employee = null;
     public static OtherCost otherCost = null;
+    public static ProcessExceptions processExceptions = null;
     public static ProductLevel1 productLevel1 = null;
+    public static Employee employee = null;
 
     public static DesignationTree createStudentEventGroup = null;
     public static EmployeeTree allocateStudentsForEventGroup = null;
@@ -91,7 +92,7 @@ public class IndexPage extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(projectPath + "/pictures/frameIcon/titleIcon.png"));        
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(projectPath + "/pictures/frameIcon/titleIcon.png"));
 
         LabelBackGroundPicture.setSize(screenSize);
         pnl_LeftPanel.revalidate();
@@ -142,6 +143,7 @@ public class IndexPage extends javax.swing.JFrame {
         menuProcess = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuOtherCost = new javax.swing.JMenuItem();
+        menuProcessExceptions = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuProductLevel1 = new javax.swing.JMenuItem();
         menuProductLevel2 = new javax.swing.JMenuItem();
@@ -355,6 +357,15 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         TabMenuMainFiles.add(menuOtherCost);
+
+        menuProcessExceptions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        menuProcessExceptions.setText("Process exceptions");
+        menuProcessExceptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProcessExceptionsActionPerformed(evt);
+            }
+        });
+        TabMenuMainFiles.add(menuProcessExceptions);
         TabMenuMainFiles.add(jSeparator2);
 
         menuProductLevel1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
@@ -736,7 +747,7 @@ public class IndexPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
-    
+
     private void LoadHeading() {
         try {
             Statement stmt;
@@ -746,7 +757,7 @@ public class IndexPage extends javax.swing.JFrame {
                 String MODULE_NAME = rset.getString("MODULE_NAME");
                 String VERSION = rset.getString("VERSION");
                 String BUSINESS_NAME = rset.getString("BUSINESS_NAME");
-                
+
                 String heading = MODULE_NAME + " " + VERSION + " - " + BUSINESS_NAME;
                 this.setTitle(heading);
             }
@@ -1284,6 +1295,18 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuProductLevel1ActionPerformed
 
+    private void menuProcessExceptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessExceptionsActionPerformed
+        if (processExceptions != null) {
+            if (!processExceptions.isVisible()) {
+                processExceptions.setVisible(true);
+            }
+        } else {
+            processExceptions = new ProcessExceptions();
+            dskPane_RightPanel.add(processExceptions);
+            processExceptions.setVisible(true);
+        }
+    }//GEN-LAST:event_menuProcessExceptionsActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1387,6 +1410,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuOtherCost;
     public static javax.swing.JMenuItem menuProcess;
+    private javax.swing.JMenuItem menuProcessExceptions;
     private javax.swing.JMenuItem menuProductLevel1;
     public static javax.swing.JMenuItem menuProductLevel2;
     private javax.swing.JMenuItem menuUserPrivilege;
