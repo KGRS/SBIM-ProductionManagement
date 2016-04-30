@@ -336,14 +336,32 @@ public class LoginPage extends javax.swing.JFrame {
         try {
             String userName = textUserName.getText();
             Statement stmtGetLoginDetails = ConnectSql.conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rsetGetLoginDetails = stmtGetLoginDetails.executeQuery("Select USER_NAME"
-                    + ", USER_PASSWORD from UnAndPw WHERE USER_NAME = '" + userName + "'");
+            ResultSet rsetGetLoginDetails = stmtGetLoginDetails.executeQuery("SELECT\n"
+                    + "     UnAndPw.\"EMPLOYEE_CODE\" AS UnAndPw_EMPLOYEE_CODE,\n"
+                    + "     UnAndPw.\"USER_NAME\" AS UnAndPw_USER_NAME,\n"
+                    + "     UnAndPw.\"USER_PASSWORD\" AS UnAndPw_USER_PASSWORD,\n"
+                    + "     Departments.\"DepartmentName\" AS Departments_DepartmentName,\n"
+                    + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME,\n"
+                    + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
+                    + "     Employees.\"SUB_DEPARTMENT_CODE\" AS Employees_SUB_DEPARTMENT_CODE,\n"
+                    + "     Departments.\"BranchCode\" AS Departments_BranchCode,\n"
+                    + "     Branches.\"BranchName\" AS Branches_BranchName\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"Employees\" Employees INNER JOIN \"dbo\".\"UnAndPw\" UnAndPw ON Employees.\"EMPLOYEE_CODE\" = UnAndPw.\"EMPLOYEE_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON Employees.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"Departments\" Departments ON SubDepartments.\"DepartmentCode\" = Departments.\"DepartmentCode\"\n"
+                    + "     INNER JOIN \"dbo\".\"Branches\" Branches ON Departments.\"BranchCode\" = Branches.\"BranchCode\"\n"
+                    + "WHERE UnAndPw.\"USER_NAME\" = '"+userName+"'");
 
             if (rsetGetLoginDetails.next()) {
                 String password = new String(textPassword.getPassword());
-                String dbPassword = rsetGetLoginDetails.getString("USER_PASSWORD");
+                String dbPassword = rsetGetLoginDetails.getString("UnAndPw_USER_PASSWORD");
+                String departmentCode = rsetGetLoginDetails.getString("SubDepartments_DepartmentCode");
+                String subDepartmentCode = rsetGetLoginDetails.getString("Employees_SUB_DEPARTMENT_CODE");
                 if (dbPassword.equals(password)) {
                     IndexPage.user = textUserName.getText().trim();
+                    IndexPage.departmentCode = departmentCode;
+                    IndexPage.subDepartmentCode = subDepartmentCode;
                     IndexPage mainpage = new IndexPage();
                     mainpage.setExtendedState(Frame.MAXIMIZED_BOTH);
                     mainpage.setVisible(true);

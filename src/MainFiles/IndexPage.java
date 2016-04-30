@@ -49,6 +49,8 @@ public class IndexPage extends javax.swing.JFrame {
 
     private final String projectPath = System.getProperty("user.dir");
     public static String user = "";
+    public static String departmentCode = "";
+    public static String subDepartmentCode = "";
     public static String time = "";
     public static URL url = null;
     public static Date SYSTEM_DATE;
@@ -101,6 +103,12 @@ public class IndexPage extends javax.swing.JFrame {
 
         String LogedUser = IndexPage.user;
         LabelUser.setText(LogedUser);
+        
+        String LogedUserDepartmentCode = IndexPage.departmentCode;
+        labelDepartmentCode.setText(LogedUserDepartmentCode);
+        
+        String LogedUserSubDepartmentCode = IndexPage.subDepartmentCode;
+        labelSubDepartmentCode.setText(LogedUserSubDepartmentCode);
 
         Informations.setTimeAnd_date();
 
@@ -135,6 +143,9 @@ public class IndexPage extends javax.swing.JFrame {
         TextCompanyName = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         ButtonClickHere = new javax.swing.JButton();
+        LabelDate3 = new javax.swing.JLabel();
+        labelDepartmentCode = new javax.swing.JLabel();
+        labelSubDepartmentCode = new javax.swing.JLabel();
         dskPane_RightPanel = new javax.swing.JDesktopPane();
         LabelBackGroundPicture = new javax.swing.JLabel();
         mnBar_menuBar = new javax.swing.JMenuBar();
@@ -258,6 +269,24 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
 
+        LabelDate3.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        LabelDate3.setForeground(new java.awt.Color(102, 102, 102));
+        LabelDate3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        LabelDate3.setText("You are at");
+        LabelDate3.setMaximumSize(new java.awt.Dimension(34, 25));
+
+        labelDepartmentCode.setForeground(new java.awt.Color(102, 102, 102));
+        labelDepartmentCode.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelDepartmentCode.setText("Department");
+        labelDepartmentCode.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
+        labelDepartmentCode.setMaximumSize(new java.awt.Dimension(34, 25));
+
+        labelSubDepartmentCode.setForeground(new java.awt.Color(102, 102, 102));
+        labelSubDepartmentCode.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelSubDepartmentCode.setText("Sub department");
+        labelSubDepartmentCode.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
+        labelSubDepartmentCode.setMaximumSize(new java.awt.Dimension(34, 25));
+
         javax.swing.GroupLayout pnl_LeftPanelLayout = new javax.swing.GroupLayout(pnl_LeftPanel);
         pnl_LeftPanel.setLayout(pnl_LeftPanelLayout);
         pnl_LeftPanelLayout.setHorizontalGroup(
@@ -272,7 +301,10 @@ public class IndexPage extends javax.swing.JFrame {
                     .addComponent(PanelCompanyLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TextCompanyName)
                     .addComponent(ButtonClickHere, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabelDate3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelDepartmentCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelSubDepartmentCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnl_LeftPanelLayout.setVerticalGroup(
@@ -282,11 +314,17 @@ public class IndexPage extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonClickHere)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 296, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
                 .addComponent(LabelDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LabelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(49, 49, 49)
+                .addComponent(LabelDate3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelDepartmentCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelSubDepartmentCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(LabelDate, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LabelTime, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1354,6 +1392,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JLabel LabelClientLogo;
     public static javax.swing.JLabel LabelDate;
     private javax.swing.JLabel LabelDate2;
+    private javax.swing.JLabel LabelDate3;
     public static javax.swing.JLabel LabelTime;
     private javax.swing.JLabel LabelUser;
     private javax.swing.JMenuItem MenuAbout;
@@ -1407,6 +1446,8 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator9;
+    public static javax.swing.JLabel labelDepartmentCode;
+    public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuOtherCost;
     public static javax.swing.JMenuItem menuProcess;
