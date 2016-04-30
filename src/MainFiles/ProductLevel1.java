@@ -7,6 +7,8 @@ package MainFiles;
 
 import static MainFiles.IndexPage.productLevel1;
 import db.ConnectSql;
+import functions.ValidateFields;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class ProductLevel1 extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
-    private final DefaultTableModel model_categoryTable;
+    private final DefaultTableModel model_AllRawItems;
     private final DefaultTableModel model_ProductLevel1;
     private final DefaultTableModel model_IngredientItemTable;
     private final String spliter = "--";
@@ -37,7 +39,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         rBtnCode.setSelected(true);
         rBtnCodeAll.setSelected(true);
         textProductLevel1Code.requestFocus();
-        model_categoryTable = (DefaultTableModel) tableAllRawItems.getModel();
+        model_AllRawItems = (DefaultTableModel) tableAllRawItems.getModel();
         model_ProductLevel1 = (DefaultTableModel) tableProductLevel1.getModel();
         model_IngredientItemTable = (DefaultTableModel) tableIngredientRawItems.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
@@ -61,7 +63,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         panel1 = new javax.swing.JPanel();
-        btnSaveIngredient = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -93,18 +94,20 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         txtSearch = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableProductLevel1 = new javax.swing.JTable();
-        btnSaveProLve1Item = new javax.swing.JButton();
-        buttonDeleteProLve1Item = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         TextProLevel1ItemCount = new javax.swing.JTextField();
         lbl_description3 = new javax.swing.JLabel();
         cmbPurchaseUnit = new javax.swing.JComboBox();
+        lbl_description4 = new javax.swing.JLabel();
+        comboVisibility = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         buttonAddSelected = new javax.swing.JButton();
         buttonRemoveSelected = new javax.swing.JButton();
         lbl_accountType5 = new javax.swing.JLabel();
         formattedTextQuantity = new javax.swing.JFormattedTextField();
         buttonViewCost = new javax.swing.JButton();
+        btnSaveProLve1Item = new javax.swing.JButton();
+        buttonDeleteProLve1Item = new javax.swing.JButton();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1141, 666));
@@ -136,16 +139,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         });
         panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSaveIngredient.setMnemonic('s');
-        btnSaveIngredient.setText("Save");
-        btnSaveIngredient.setActionCommand("Delete");
-        btnSaveIngredient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveIngredientActionPerformed(evt);
-            }
-        });
-        panel1.add(btnSaveIngredient, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 590, 100, -1));
-
         btnRefresh.setMnemonic('d');
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +146,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 btnRefreshActionPerformed(evt);
             }
         });
-        panel1.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 590, 90, -1));
+        panel1.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 590, 70, -1));
 
         btnExit.setMnemonic('e');
         btnExit.setText("Exit");
@@ -167,7 +160,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 btnExitKeyPressed(evt);
             }
         });
-        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 590, 90, -1));
+        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 590, 70, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "All raw items", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
@@ -332,10 +325,42 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         comboSubDepartment.setToolTipText("");
+        comboSubDepartment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboSubDepartmentKeyPressed(evt);
+            }
+        });
         jPanel3.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 300, -1));
+
+        textPrintName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textPrintNameKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                textPrintNameKeyReleased(evt);
+            }
+        });
         jPanel3.add(textPrintName, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, 300, -1));
+
+        textProductLevel1Name.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textProductLevel1NameKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                textProductLevel1NameKeyReleased(evt);
+            }
+        });
         jPanel3.add(textProductLevel1Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 300, -1));
-        jPanel3.add(textProductLevel1Code, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 240, -1));
+
+        textProductLevel1Code.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textProductLevel1CodeKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                textProductLevel1CodeKeyReleased(evt);
+            }
+        });
+        jPanel3.add(textProductLevel1Code, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 160, -1));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Search product level 1 by");
@@ -408,12 +433,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 540, 190));
 
-        btnSaveProLve1Item.setText("Save");
-        jPanel3.add(btnSaveProLve1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 230, 90, -1));
-
-        buttonDeleteProLve1Item.setText("Delete");
-        jPanel3.add(buttonDeleteProLve1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 230, 90, -1));
-
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
         jLabel2.setText("Item count");
         jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 70, 20));
@@ -424,11 +443,28 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         jPanel3.add(TextProLevel1ItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 20, 50, -1));
 
         lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description3.setText("Sub department *");
-        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 100, 20));
+        lbl_description3.setText("Visibility *");
+        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 100, 20));
 
         cmbPurchaseUnit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        cmbPurchaseUnit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cmbPurchaseUnitKeyPressed(evt);
+            }
+        });
         jPanel3.add(cmbPurchaseUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 140, 300, -1));
+
+        lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description4.setText("Sub department *");
+        jPanel3.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 100, 20));
+
+        comboVisibility.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Yes", "No" }));
+        comboVisibility.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboVisibilityKeyPressed(evt);
+            }
+        });
+        jPanel3.add(comboVisibility, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 160, -1));
 
         panel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1090, 270));
 
@@ -507,6 +543,17 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         buttonViewCost.setText("View cost");
         panel1.add(buttonViewCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, 100, -1));
 
+        btnSaveProLve1Item.setText("Save");
+        btnSaveProLve1Item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveProLve1ItemActionPerformed(evt);
+            }
+        });
+        panel1.add(btnSaveProLve1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 590, 70, -1));
+
+        buttonDeleteProLve1Item.setText("Delete");
+        panel1.add(buttonDeleteProLve1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 590, 70, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -577,7 +624,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
+                model_AllRawItems.addRow(new Object[model_AllRawItems.getColumnCount()]);
                 tableAllRawItems.setValueAt(reset.getString("ItemCode"), rowCount, 0);
                 tableAllRawItems.setValueAt(reset.getString("ItemName"), rowCount, 1);
                 tableAllRawItems.setValueAt(reset.getString("UnitPurchase"), rowCount, 2);
@@ -622,14 +669,69 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private void countItemsInIngredientItemsTable() {
         textIngredientItemCount.setText(model_IngredientItemTable.getRowCount() + "");
     }
-    private void btnSaveIngredientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveIngredientActionPerformed
-//
-    }//GEN-LAST:event_btnSaveIngredientActionPerformed
-
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-//        CheckBeforeDelete();
+        FullRefresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void FullRefresh() {
+        int x = JOptionPane.showConfirmDialog(this, "Refresh '" + menuName + "' window?", "Refresh", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION) {
+            textProductLevel1Code.setText("");
+            textProductLevel1Name.setText("");
+            textPrintName.setText("");
+            formattedTextQuantity.setText("0.000");
+
+            try {
+                int rowj = model_ProductLevel1.getRowCount();
+                for (int j = 0; j < rowj; j++) {
+                    model_ProductLevel1.removeRow(0);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "please contact for support.");
+            }
+
+            try {
+                int rowj = model_IngredientItemTable.getRowCount();
+                for (int j = 0; j < rowj; j++) {
+                    model_IngredientItemTable.removeRow(0);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "please contact for support.");
+            }
+
+            try {
+                int row = model_AllRawItems.getRowCount();
+                for (int j = 0; j < row; j++) {
+                    model_AllRawItems.removeRow(0);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+
+            LoadAllRawItems();
+            LoadAllProductLevel1Items();
+            loadPurUnitsToCombo();
+            loadSubDepartmentsToCombo();
+            comboVisibility.setSelectedIndex(0);
+            textIngredientItemCount.setText("0");
+        }
+    }
+
+//    private void RefreshIngredientItemTable() {
+//        try {
+//            int rowj = model_IngredientItemTable.getRowCount();
+//            for (int j = 0; j < rowj; j++) {
+//                model_IngredientItemTable.removeRow(0);
+//            }
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "please contact for support.");
+//        }
+//    }
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         exit();
@@ -684,9 +786,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             RefreshProductLevel1Table();
 
             if (!ItemCode.equals("")) {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             } else {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -695,7 +797,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
-                tableProductLevel1.setValueAt(reset.getString("DepartmentCode"), rowCount, 2);
+                tableProductLevel1.setValueAt(reset.getString("SUB_DEPARTMENT_CODE"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -715,9 +817,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             RefreshProductLevel1Table();
 
             if (!ItemName.equals("")) {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemName + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
             } else {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, DepartmentCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemName + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -726,7 +828,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
-                tableProductLevel1.setValueAt(reset.getString("DepartmentCode"), rowCount, 2);
+                tableProductLevel1.setValueAt(reset.getString("SUB_DEPARTMENT_CODE"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -751,7 +853,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
     private void panel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel1MouseClicked
         if (SwingUtilities.isRightMouseButton(evt) || evt.isControlDown()) {
-            Refresh();
+            FullRefresh();
         }
     }//GEN-LAST:event_panel1MouseClicked
 
@@ -794,7 +896,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
+                model_AllRawItems.addRow(new Object[model_AllRawItems.getColumnCount()]);
                 tableAllRawItems.setValueAt(reset.getString("ItemCode"), rowCount, 0);
                 tableAllRawItems.setValueAt(reset.getString("ItemName"), rowCount, 1);
                 tableAllRawItems.setValueAt(reset.getString("UnitPurchase"), rowCount, 2);
@@ -824,7 +926,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-                model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
+                model_AllRawItems.addRow(new Object[model_AllRawItems.getColumnCount()]);
                 tableAllRawItems.setValueAt(reset.getString("ItemCode"), rowCount, 0);
                 tableAllRawItems.setValueAt(reset.getString("ItemName"), rowCount, 1);
                 tableAllRawItems.setValueAt(reset.getString("UnitPurchase"), rowCount, 2);
@@ -839,9 +941,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
     private void RefreshAllRawItemsTable() {
         try {
-            int row = model_categoryTable.getRowCount();
+            int row = model_AllRawItems.getRowCount();
             for (int j = 0; j < row; j++) {
-                model_categoryTable.removeRow(0);
+                model_AllRawItems.removeRow(0);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -899,15 +1001,18 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_buttonCalculateActionPerformed
 
     private void tableProductLevel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductLevel1MouseClicked
-        String Code, Name, UnitCode = "", UnitName = "", subDepartmentCode, subDepartmentName = "";
+        String Code, Name, UnitCode = "", UnitName = "", subDepartmentCode
+                , subDepartmentName = "", printName = "", visibility = "";
 
         Code = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 0).toString();
         Name = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 1).toString();
         subDepartmentCode = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 2).toString();
 
+        int rowCount = 0;
+
         try {
-            ResultSet reset;
-            Statement stmt;
+            ResultSet reset, resetForIngredientItems;
+            Statement stmt, stmtForIngredientItems;
             String query;
             query = "SELECT\n"
                     + "     ProductLevel1.\"PL1_ITEM_CODE\" AS ProductLevel1_PL1_ITEM_CODE,\n"
@@ -915,6 +1020,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                     + "     ProductLevel1.\"PL1_ITEM_PRINT_NAME\" AS ProductLevel1_PL1_ITEM_PRINT_NAME,\n"
                     + "     ProductLevel1.\"UnitCode\" AS ProductLevel1_UnitCode,\n"
                     + "     ProductLevel1.\"SUB_DEPARTMENT_CODE\" AS ProductLevel1_SUB_DEPARTMENT_CODE,\n"
+                    + "     ProductLevel1.\"VISIBILITY\" AS ProductLevel1_VISIBILITY,\n"
                     + "     ProductLevel1RawItems.\"PL1_ITEM_CODE\" AS ProductLevel1RawItems_PL1_ITEM_CODE,\n"
                     + "     ProductLevel1RawItems.\"PL1_ITEM_QUANTITY\" AS ProductLevel1RawItems_PL1_ITEM_QUANTITY,\n"
                     + "     ProductLevel1RawItems.\"ItemCode\" AS ProductLevel1RawItems_ItemCode,\n"
@@ -924,20 +1030,41 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                     + "     SIUnits.\"IssueMeasurement\" AS SIUnits_IssueMeasurement,\n"
                     + "     SIUnits.\"BaseUnitCode\" AS SIUnits_BaseUnitCode,\n"
                     + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME,\n"
-                    + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode\n"
+                    + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
+                    + "     Items.\"ItemName\" AS Items_ItemName,\n"
+                    + "     Items.\"UnitPurchase\" AS Items_UnitPurchase\n"
                     + "FROM\n"
                     + "     \"dbo\".\"ProductLevel1RawItems\" ProductLevel1RawItems INNER JOIN \"dbo\".\"ProductLevel1\" ProductLevel1 ON ProductLevel1RawItems.\"PL1_ITEM_CODE\" = ProductLevel1.\"PL1_ITEM_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"SIUnits\" SIUnits ON ProductLevel1.\"UnitCode\" = SIUnits.\"UnitCode\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON ProductLevel1.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
-                    + "WHERE ProductLevel1.\"PL1_ITEM_CODE\" = '"+Code+"'";
+                    + "     INNER JOIN \"dbo\".\"Items\" Items ON ProductLevel1RawItems.\"ItemCode\" = Items.\"ItemCode\"\n"
+                    + "WHERE\n"
+                    + "     ProductLevel1.\"PL1_ITEM_CODE\" = '" + Code + "'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmtForIngredientItems = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
             reset = stmt.executeQuery(query);
+            resetForIngredientItems = stmtForIngredientItems.executeQuery(query);
 
             if (reset.next()) {
+                printName = reset.getString("ProductLevel1_PL1_ITEM_PRINT_NAME");
                 subDepartmentName = reset.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                 UnitCode = reset.getString("ProductLevel1_UnitCode");
                 UnitName = reset.getString("SIUnits_UnitName");
+                visibility = reset.getString("ProductLevel1_VISIBILITY");
+
+                model_IngredientItemTable.setRowCount(0);
             }
+
+            while (resetForIngredientItems.next()) {
+                model_IngredientItemTable.addRow(new Object[model_IngredientItemTable.getColumnCount()]);
+                tableIngredientRawItems.setValueAt(resetForIngredientItems.getString("ProductLevel1RawItems_ItemCode"), rowCount, 0);
+                tableIngredientRawItems.setValueAt(resetForIngredientItems.getString("Items_ItemName"), rowCount, 1);
+                tableIngredientRawItems.setValueAt(resetForIngredientItems.getString("Items_UnitPurchase"), rowCount, 2);
+                tableIngredientRawItems.setValueAt(resetForIngredientItems.getString("ProductLevel1RawItems_QUANTITY"), rowCount, 3);
+                rowCount++;
+            }
+            countItemsInIngredientItemsTable();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -945,10 +1072,212 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         textProductLevel1Code.setText(Code);
         textProductLevel1Name.setText(Name);
-        textPrintName.setText(Name);
+        textPrintName.setText(printName);
         cmbPurchaseUnit.setSelectedItem(UnitName + "--" + UnitCode);
         comboSubDepartment.setSelectedItem(subDepartmentName + "--" + subDepartmentCode);
+        comboVisibility.setSelectedItem(visibility);
     }//GEN-LAST:event_tableProductLevel1MouseClicked
+
+    private void btnSaveProLve1ItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveProLve1ItemActionPerformed
+        SaveProLve1Item();
+    }//GEN-LAST:event_btnSaveProLve1ItemActionPerformed
+
+    private void textProductLevel1NameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textProductLevel1NameKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String name = textProductLevel1Name.getText();
+            if (!name.isEmpty()) {
+                textPrintName.setText(String.valueOf(name));
+                textPrintName.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_textProductLevel1NameKeyPressed
+
+    private void textProductLevel1CodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textProductLevel1CodeKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String code = textProductLevel1Code.getText();
+            if (!code.isEmpty()) {
+                textProductLevel1Name.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_textProductLevel1CodeKeyPressed
+
+    private void textPrintNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textPrintNameKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String printName = textPrintName.getText();
+            if (!printName.isEmpty()) {
+                cmbPurchaseUnit.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_textPrintNameKeyPressed
+
+    private void comboSubDepartmentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboSubDepartmentKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String subDepartment = comboSubDepartment.getSelectedItem().toString();
+            if (!subDepartment.equals(select)) {
+                comboVisibility.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_comboSubDepartmentKeyPressed
+
+    private void cmbPurchaseUnitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPurchaseUnitKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String purchaseUnit = comboSubDepartment.getSelectedItem().toString();
+            if (!purchaseUnit.equals(select)) {
+                comboSubDepartment.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_cmbPurchaseUnitKeyPressed
+
+    private void comboVisibilityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboVisibilityKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtSearchRawItems.requestFocus();
+        }
+    }//GEN-LAST:event_comboVisibilityKeyPressed
+
+    private void textProductLevel1CodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textProductLevel1CodeKeyReleased
+        ValidateFields.CheckForItemCodes(textProductLevel1Code);
+    }//GEN-LAST:event_textProductLevel1CodeKeyReleased
+
+    private void textProductLevel1NameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textProductLevel1NameKeyReleased
+         ValidateFields.CheckForOtherFields(textProductLevel1Name);
+    }//GEN-LAST:event_textProductLevel1NameKeyReleased
+
+    private void textPrintNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textPrintNameKeyReleased
+        ValidateFields.CheckForOtherFields(textPrintName);
+    }//GEN-LAST:event_textPrintNameKeyReleased
+
+    private void SaveProLve1Item() {
+        String Code, Name, printName, visibility;
+        int ingredientRawItemsRowCount = tableIngredientRawItems.getRowCount();
+        if (!cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select)) {
+            Code = textProductLevel1Code.getText();
+            Name = textProductLevel1Name.getText();
+            printName = textPrintName.getText();
+            String UnitCode[] = cmbPurchaseUnit.getSelectedItem().toString().split("--");
+            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
+            visibility = comboVisibility.getSelectedItem().toString();
+            if (!Code.isEmpty() && !Name.isEmpty() && !printName.isEmpty()) {
+                if (ingredientRawItemsRowCount > 0) {
+                    try {
+                        java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                        String query = "select PL1_ITEM_CODE From ProductLevel1 where PL1_ITEM_CODE = '" + Code + "'";
+                        ResultSet rset = stmt.executeQuery(query);
+
+                        if (rset.next()) {
+                            int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + Name + "' details?", "Update '" + Name + "'?", JOptionPane.YES_NO_OPTION);
+                            if (x == JOptionPane.YES_OPTION) {
+                                String UpdateQuery = "UPDATE [ProductLevel1]\n"
+                                        + "   SET \n"
+                                        + "      [PL1_ITEM_NAME] = '" + Name + "'\n"
+                                        + "      ,[PL1_ITEM_PRINT_NAME] = '" + printName + "'\n"
+                                        + "      ,[UnitCode] = '" + UnitCode[1] + "'\n"
+                                        + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCode[1] + "'\n"
+                                        + "      ,[VISIBILITY] = '" + visibility + "'\n"
+                                        + " WHERE [PL1_ITEM_CODE] = '" + Code + "'";
+                                stmt.execute(UpdateQuery);
+                                deleteExsistsRawItemsBeforeSave();
+                                JOptionPane.showMessageDialog(this, "'" + Name + "' details are updated.");
+                            } else if (x == JOptionPane.NO_OPTION) {
+                                textProductLevel1Code.requestFocus();
+                            }
+                        } else if (!rset.next()) {
+                            String UpdateQuery = "INSERT INTO [ProductLevel1]\n"
+                                    + "           ([PL1_ITEM_CODE]\n"
+                                    + "           ,[PL1_ITEM_NAME]\n"
+                                    + "           ,[PL1_ITEM_PRINT_NAME]\n"
+                                    + "           ,[UnitCode]\n"
+                                    + "           ,[SUB_DEPARTMENT_CODE]\n"
+                                    + "           ,[VISIBILITY])\n"
+                                    + "     VALUES\n"
+                                    + "           ('" + Code + "'\n"
+                                    + "           ,'" + Name + "'\n"
+                                    + "           ,'" + printName + "'\n"
+                                    + "           ,'" + UnitCode[1] + "'\n"
+                                    + "           ,'" + subDepartmentCode[1] + "'\n"                                    
+                                    + "           ,'" + visibility + "')";
+                            stmt.execute(UpdateQuery);
+                            deleteExsistsRawItemsBeforeSave();
+                            JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
+                        }
+                        rset.close();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Please contact for support.");
+                    } catch (HeadlessException ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Please contact for support.");
+                    }
+                } else if (ingredientRawItemsRowCount == 0) {
+                    JOptionPane.showMessageDialog(this, "Raw items are not inserted.", "No raw items", JOptionPane.OK_OPTION);
+                }
+
+            } else if (Code.isEmpty() || Name.isEmpty() || printName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
+                textProductLevel1Code.requestFocus();
+            }
+        } else if (cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select)) {
+            JOptionPane.showMessageDialog(this, "Manufacture unit or sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
+            cmbPurchaseUnit.requestFocus();
+        }
+    }
+
+    private void deleteExsistsRawItemsBeforeSave() {
+        try {
+            String Code = textProductLevel1Code.getText();
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement Checkstmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            String Checkquery = "select PL1_ITEM_CODE From ProductLevel1RawItems where PL1_ITEM_CODE = '" + Code + "'";
+            ResultSet Checkrset = Checkstmt.executeQuery(Checkquery);
+
+            while (Checkrset.next()) {
+                String query = "delete From ProductLevel1RawItems where PL1_ITEM_CODE = '" + Code + "'";
+                stmt.execute(query);
+            }
+            saveRawItems();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
+
+    private void saveRawItems() {
+        String ItemCode, Code;
+        double Quantity;
+        int setFor, RowCount = tableIngredientRawItems.getRowCount();
+        Code = textProductLevel1Code.getText();
+        try {
+            java.sql.Statement stmtItems = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            for (int i = 0; i < RowCount; i++) {
+                ItemCode = tableIngredientRawItems.getValueAt(i, 0).toString();
+                Quantity = roundThreeDecimals(Double.parseDouble(tableIngredientRawItems.getValueAt(i, 3).toString()));
+
+                setFor = setForPicker.getValue();
+
+                String ItemInsertQuery = "INSERT INTO [ProductLevel1RawItems]\n"
+                        + "           ([PL1_ITEM_CODE]\n"
+                        + "           ,[PL1_ITEM_QUANTITY]\n"
+                        + "           ,[ItemCode]\n"
+                        + "           ,[QUANTITY])\n"
+                        + "     VALUES\n"
+                        + "           ('" + Code + "'\n"
+                        + "           ,'" + setFor + "'\n"
+                        + "           ,'" + ItemCode + "'\n"
+                        + "           ,'" + Quantity + "')";
+                stmtItems.execute(ItemInsertQuery);
+            }
+            FullRefresh();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
 
     private void FirstCheckBeforeAddToSecondTable() {
         int SelectedRowCount = tableAllRawItems.getSelectedRowCount();
@@ -983,8 +1312,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
     private void AddToSecondTable() {
         String ItemCode, ItemName, PurchaseUnitCode;
-        double Quantity, calculatedQuantity;
-        int setFor;
+        double Quantity;
         int getSelectedRowAtFirstTable = tableAllRawItems.getSelectedRow();
         if (!formattedTextQuantity.getText().equals("")) {
             try {
@@ -993,8 +1321,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 PurchaseUnitCode = tableAllRawItems.getValueAt(getSelectedRowAtFirstTable, 2).toString();
 
                 Quantity = roundThreeDecimals(Double.parseDouble(formattedTextQuantity.getText()));
-//                setFor = (Integer) setForPicker.getValue();
-//                calculatedQuantity = setFor * Quantity;
 
                 if (Quantity > 0) {
                     model_IngredientItemTable.addRow(new Object[]{ItemCode, ItemName, PurchaseUnitCode, Quantity});
@@ -1031,33 +1357,11 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         return Double.valueOf(threeDForm.format(d));
     }
 
-    private void Refresh() {
-        RefreshTableAndLoadAgain();
-        textPrintName.setText("");
-        textProductLevel1Name.setText("");
-        txtSearch.setText("");
-        textProductLevel1Code.setText("");
-        setForPicker.resetKeyboardActions();
-    }
-
-    private void RefreshTableAndLoadAgain() {
-        try {
-            int row = model_categoryTable.getRowCount();
-            for (int j = 0; j < row; j++) {
-                model_categoryTable.removeRow(0);
-            }
-            LoadAllRawItems();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField TextProLevel1ItemCount;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnRefresh;
-    private javax.swing.JButton btnSaveIngredient;
     private javax.swing.JButton btnSaveProLve1Item;
     private javax.swing.JButton buttonAddSelected;
     private javax.swing.JButton buttonCalculate;
@@ -1068,6 +1372,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JButton buttonViewCost;
     private javax.swing.JComboBox cmbPurchaseUnit;
     private javax.swing.JComboBox comboSubDepartment;
+    private javax.swing.JComboBox comboVisibility;
     private javax.swing.JFormattedTextField formattedTextQuantity;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1085,6 +1390,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_accountType6;
     private javax.swing.JLabel lbl_description2;
     private javax.swing.JLabel lbl_description3;
+    private javax.swing.JLabel lbl_description4;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JRadioButton rBtnCode;
