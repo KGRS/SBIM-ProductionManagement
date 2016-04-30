@@ -58,7 +58,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static OtherCost otherCost = null;
     public static ProcessExceptions processExceptions = null;
     public static ProductLevel1 productLevel1 = null;
-    public static Employee employee = null;
+    public static ProductLevel2 productLevel2 = null;
 
     public static DesignationTree createStudentEventGroup = null;
     public static EmployeeTree allocateStudentsForEventGroup = null;
@@ -873,14 +873,14 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     }//GEN-LAST:event_MenuReportsActionPerformed
 
     private void menuProductLevel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProductLevel2ActionPerformed
-        if (employee != null) {
-            if (!employee.isVisible()) {
-                employee.setVisible(true);
+        if (productLevel2 != null) {
+            if (!productLevel2.isVisible()) {
+                productLevel2.setVisible(true);
             }
         } else {
-            employee = new Employee();
-            dskPane_RightPanel.add(employee);
-            employee.setVisible(true);
+            productLevel2 = new ProductLevel2();
+            dskPane_RightPanel.add(productLevel2);
+            productLevel2.setVisible(true);
         }
     }//GEN-LAST:event_menuProductLevel2ActionPerformed
 
