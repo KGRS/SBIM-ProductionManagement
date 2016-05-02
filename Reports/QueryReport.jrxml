@@ -5,24 +5,31 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     Suppliers."SupplierName" AS Suppliers_SupplierName,
-     Suppliers."SupplierCode" AS Suppliers_SupplierCode,
-     PurchaseOrderMain."PODate" AS PurchaseOrderMain_PODate,
-     PurchaseOrderMain."POID" AS PurchaseOrderMain_POID,
-     PurchaseOrderMain."SupplierCode" AS PurchaseOrderMain_SupplierCode,
-     PurchaseOrderMain."IsPending" AS PurchaseOrderMain_IsPending
+     UnAndPw."EMPLOYEE_CODE" AS UnAndPw_EMPLOYEE_CODE,
+     UnAndPw."USER_NAME" AS UnAndPw_USER_NAME,
+     UnAndPw."USER_PASSWORD" AS UnAndPw_USER_PASSWORD,
+     Departments."DepartmentName" AS Departments_DepartmentName,
+     SubDepartments."SUB_DEPARTMENT_NAME" AS SubDepartments_SUB_DEPARTMENT_NAME,
+     SubDepartments."DepartmentCode" AS SubDepartments_DepartmentCode,
+     Employees."SUB_DEPARTMENT_CODE" AS Employees_SUB_DEPARTMENT_CODE,
+     Departments."BranchCode" AS Departments_BranchCode,
+     Branches."BranchName" AS Branches_BranchName
 FROM
-     "dbo"."Suppliers" Suppliers INNER JOIN "dbo"."PurchaseOrderMain" PurchaseOrderMain ON Suppliers."SupplierCode" = PurchaseOrderMain."SupplierCode"
-WHERE Suppliers."SupplierName" LIKE 'a%' AND
-      PurchaseOrderMain."IsPending" = 'Yes'
-]]>
+     "dbo"."Employees" Employees INNER JOIN "dbo"."UnAndPw" UnAndPw ON Employees."EMPLOYEE_CODE" = UnAndPw."EMPLOYEE_CODE"
+     INNER JOIN "dbo"."SubDepartments" SubDepartments ON Employees."SUB_DEPARTMENT_CODE" = SubDepartments."SUB_DEPARTMENT_CODE"
+     INNER JOIN "dbo"."Departments" Departments ON SubDepartments."DepartmentCode" = Departments."DepartmentCode"
+     INNER JOIN "dbo"."Branches" Branches ON Departments."BranchCode" = Branches."BranchCode"
+WHERE UnAndPw."USER_NAME" = '']]>
 	</queryString>
-	<field name="Suppliers_SupplierName" class="java.lang.String"/>
-	<field name="Suppliers_SupplierCode" class="java.lang.String"/>
-	<field name="PurchaseOrderMain_PODate" class="java.lang.String"/>
-	<field name="PurchaseOrderMain_POID" class="java.lang.String"/>
-	<field name="PurchaseOrderMain_SupplierCode" class="java.lang.String"/>
-	<field name="PurchaseOrderMain_IsPending" class="java.lang.String"/>
+	<field name="UnAndPw_EMPLOYEE_CODE" class="java.lang.String"/>
+	<field name="UnAndPw_USER_NAME" class="java.lang.String"/>
+	<field name="UnAndPw_USER_PASSWORD" class="java.lang.String"/>
+	<field name="Departments_DepartmentName" class="java.lang.String"/>
+	<field name="SubDepartments_SUB_DEPARTMENT_NAME" class="java.lang.String"/>
+	<field name="SubDepartments_DepartmentCode" class="java.lang.String"/>
+	<field name="Employees_SUB_DEPARTMENT_CODE" class="java.lang.String"/>
+	<field name="Departments_BranchCode" class="java.lang.String"/>
+	<field name="Branches_BranchName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
