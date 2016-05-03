@@ -98,8 +98,6 @@ public class Process extends javax.swing.JInternalFrame {
         lbl_description1 = new javax.swing.JLabel();
         cmbDepartment = new javax.swing.JComboBox();
         lbl_description2 = new javax.swing.JLabel();
-        cmbProductLevel1Item = new javax.swing.JComboBox();
-        lbl_description3 = new javax.swing.JLabel();
         formatedTextAllocatedTime = new javax.swing.JFormattedTextField();
         lbl_description4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -136,7 +134,7 @@ public class Process extends javax.swing.JInternalFrame {
         panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lbl_category.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category.setText("Workflow");
+        lbl_category.setText("Workflow *");
         panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 110, 20));
 
         textCode.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -190,7 +188,7 @@ public class Process extends javax.swing.JInternalFrame {
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Remarks");
-        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 100, 20));
+        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 100, 20));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Search process by");
@@ -282,11 +280,11 @@ public class Process extends javax.swing.JInternalFrame {
         panel1.add(cmbWorkflow, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 60, 210, -1));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category1.setText("Process code");
+        lbl_category1.setText("Process code *");
         panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 100, 110, 20));
 
         lbl_description1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description1.setText("Process name");
+        lbl_description1.setText("Process name *");
         panel1.add(lbl_description1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 110, 20));
 
         cmbDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
@@ -294,29 +292,23 @@ public class Process extends javax.swing.JInternalFrame {
         panel1.add(cmbDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 210, -1));
 
         lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description2.setText("Department");
+        lbl_description2.setText("Sub department *");
         panel1.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 100, 20));
 
-        cmbProductLevel1Item.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        panel1.add(cmbProductLevel1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 210, -1));
-
-        lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description3.setText("Product level 1 item");
-        panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 110, 20));
-
-        formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        formatedTextAllocatedTime.setText("1.00");
-        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 110, -1));
+        formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        formatedTextAllocatedTime.setText("30");
+        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 110, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description4.setText("Allocated time (hours)");
-        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 110, 20));
+        lbl_description4.setText("Allocated time (minute) *");
+        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 120, 20));
 
         textAreaRemarks.setColumns(20);
         textAreaRemarks.setRows(5);
         jScrollPane2.setViewportView(textAreaRemarks);
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, 210, 80));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 210, 120));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -655,7 +647,6 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbDepartment;
-    private javax.swing.JComboBox cmbProductLevel1Item;
     private javax.swing.JComboBox cmbWorkflow;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JScrollPane jScrollPane1;
@@ -666,7 +657,6 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_description1;
     private javax.swing.JLabel lbl_description2;
-    private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description4;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;

@@ -100,6 +100,8 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         cmbPurchaseUnit = new javax.swing.JComboBox();
         lbl_description4 = new javax.swing.JLabel();
         comboVisibility = new javax.swing.JComboBox();
+        lbl_description5 = new javax.swing.JLabel();
+        comboProcess = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         buttonAddSelected = new javax.swing.JButton();
         buttonRemoveSelected = new javax.swing.JButton();
@@ -321,16 +323,25 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description2.setText("Manufacture unit *");
-        jPanel3.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 120, 20));
+        jPanel3.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 120, 20));
 
         comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         comboSubDepartment.setToolTipText("");
+        comboSubDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                comboSubDepartmentPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
         comboSubDepartment.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 comboSubDepartmentKeyPressed(evt);
             }
         });
-        jPanel3.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 300, -1));
+        jPanel3.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 140, 300, -1));
 
         textPrintName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -444,7 +455,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description3.setText("Visibility *");
-        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 100, 20));
+        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 220, 70, 20));
 
         cmbPurchaseUnit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         cmbPurchaseUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -452,11 +463,11 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 cmbPurchaseUnitKeyPressed(evt);
             }
         });
-        jPanel3.add(cmbPurchaseUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 140, 300, -1));
+        jPanel3.add(cmbPurchaseUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 100, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description4.setText("Sub department *");
-        jPanel3.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 100, 20));
+        lbl_description4.setText("Process *");
+        jPanel3.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 90, 20));
 
         comboVisibility.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Yes", "No" }));
         comboVisibility.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -464,7 +475,19 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 comboVisibilityKeyPressed(evt);
             }
         });
-        jPanel3.add(comboVisibility, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 160, -1));
+        jPanel3.add(comboVisibility, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 220, 100, -1));
+
+        lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description5.setText("Sub department *");
+        jPanel3.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 100, 20));
+
+        comboProcess.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        comboProcess.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboProcessKeyPressed(evt);
+            }
+        });
+        jPanel3.add(comboProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 300, -1));
 
         panel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1090, 270));
 
@@ -613,6 +636,29 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         }
     }
 
+    private void loadProcessToCombo() {
+        try {
+            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select PROCESS_CODE, PROCESS_NAME From Process WHERE SUB_DEPARTMENT_CODE = '"+subDepartmentCode[1]+"' order by PROCESS_NAME";
+            ResultSet rset = stmt.executeQuery(query);
+
+            comboProcess.removeAllItems();
+            comboProcess.insertItemAt("--Select--", 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboProcess.insertItemAt(rset.getString("PROCESS_NAME") + "--" + rset.getString("PROCESS_CODE"), position); // 
+                    position++;
+                } while (rset.next());
+            }
+            comboProcess.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+        }
+    }
+
     private void LoadAllRawItems() {
         try {
             ResultSet reset;
@@ -717,6 +763,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             loadPurUnitsToCombo();
             loadSubDepartmentsToCombo();
             comboVisibility.setSelectedIndex(0);
+            comboProcess.setSelectedIndex(0);
             textIngredientItemCount.setText("0");
         }
     }
@@ -1001,8 +1048,8 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_buttonCalculateActionPerformed
 
     private void tableProductLevel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductLevel1MouseClicked
-        String Code, Name, UnitCode = "", UnitName = "", subDepartmentCode
-                , subDepartmentName = "", printName = "", visibility = "";
+        loadProcessToCombo();
+        String Code, Name, UnitCode = "", UnitName = "", subDepartmentCode, subDepartmentName = "", printName = "", visibility = "", processCode = "", processName = "";
 
         Code = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 0).toString();
         Name = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 1).toString();
@@ -1032,11 +1079,14 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                     + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME,\n"
                     + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
                     + "     Items.\"ItemName\" AS Items_ItemName,\n"
-                    + "     Items.\"UnitPurchase\" AS Items_UnitPurchase\n"
+                    + "     Items.\"UnitPurchase\" AS Items_UnitPurchase,\n"
+                    + "     Process.\"PROCESS_NAME\" AS Process_PROCESS_NAME,\n"
+                    + "     ProductLevel1.\"PROCESS_CODE\" AS ProductLevel1_PROCESS_CODE\n"
                     + "FROM\n"
                     + "     \"dbo\".\"ProductLevel1RawItems\" ProductLevel1RawItems INNER JOIN \"dbo\".\"ProductLevel1\" ProductLevel1 ON ProductLevel1RawItems.\"PL1_ITEM_CODE\" = ProductLevel1.\"PL1_ITEM_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"SIUnits\" SIUnits ON ProductLevel1.\"UnitCode\" = SIUnits.\"UnitCode\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON ProductLevel1.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"Process\" Process ON ProductLevel1.\"PROCESS_CODE\" = Process.\"PROCESS_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"Items\" Items ON ProductLevel1RawItems.\"ItemCode\" = Items.\"ItemCode\"\n"
                     + "WHERE\n"
                     + "     ProductLevel1.\"PL1_ITEM_CODE\" = '" + Code + "'";
@@ -1051,6 +1101,8 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 subDepartmentName = reset.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                 UnitCode = reset.getString("ProductLevel1_UnitCode");
                 UnitName = reset.getString("SIUnits_UnitName");
+                processCode = reset.getString("ProductLevel1_PROCESS_CODE");
+                processName = reset.getString("Process_PROCESS_NAME");
                 visibility = reset.getString("ProductLevel1_VISIBILITY");
 
                 model_IngredientItemTable.setRowCount(0);
@@ -1076,6 +1128,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         cmbPurchaseUnit.setSelectedItem(UnitName + "--" + UnitCode);
         comboSubDepartment.setSelectedItem(subDepartmentName + "--" + subDepartmentCode);
         comboVisibility.setSelectedItem(visibility);
+        comboProcess.setSelectedItem(processName + "--" + processCode);
     }//GEN-LAST:event_tableProductLevel1MouseClicked
 
     private void btnSaveProLve1ItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveProLve1ItemActionPerformed
@@ -1105,7 +1158,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String printName = textPrintName.getText();
             if (!printName.isEmpty()) {
-                cmbPurchaseUnit.requestFocus();
+                comboSubDepartment.requestFocus();
             }
         }
     }//GEN-LAST:event_textPrintNameKeyPressed
@@ -1114,7 +1167,8 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String subDepartment = comboSubDepartment.getSelectedItem().toString();
             if (!subDepartment.equals(select)) {
-                comboVisibility.requestFocus();
+                loadProcessToCombo();
+                comboProcess.requestFocus();
             }
         }
     }//GEN-LAST:event_comboSubDepartmentKeyPressed
@@ -1123,7 +1177,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String purchaseUnit = comboSubDepartment.getSelectedItem().toString();
             if (!purchaseUnit.equals(select)) {
-                comboSubDepartment.requestFocus();
+                comboVisibility.requestFocus();
             }
         }
     }//GEN-LAST:event_cmbPurchaseUnitKeyPressed
@@ -1139,22 +1193,40 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_textProductLevel1CodeKeyReleased
 
     private void textProductLevel1NameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textProductLevel1NameKeyReleased
-         ValidateFields.CheckForOtherFields(textProductLevel1Name);
+        ValidateFields.CheckForOtherFields(textProductLevel1Name);
     }//GEN-LAST:event_textProductLevel1NameKeyReleased
 
     private void textPrintNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textPrintNameKeyReleased
         ValidateFields.CheckForOtherFields(textPrintName);
     }//GEN-LAST:event_textPrintNameKeyReleased
 
+    private void comboSubDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
+        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+        if (!subDepartment.equals(select)) {
+            loadProcessToCombo();
+            comboProcess.requestFocus();
+        }
+    }//GEN-LAST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
+
+    private void comboProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboProcessKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String Process = comboProcess.getSelectedItem().toString();
+            if (!Process.equals(select)) {
+                cmbPurchaseUnit.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_comboProcessKeyPressed
+
     private void SaveProLve1Item() {
         String Code, Name, printName, visibility;
         int ingredientRawItemsRowCount = tableIngredientRawItems.getRowCount();
-        if (!cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select)) {
+        if (!cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select) && !comboProcess.getSelectedItem().equals(select)) {
             Code = textProductLevel1Code.getText();
             Name = textProductLevel1Name.getText();
             printName = textPrintName.getText();
             String UnitCode[] = cmbPurchaseUnit.getSelectedItem().toString().split("--");
             String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
+            String processCode[] = comboProcess.getSelectedItem().toString().split("--");
             visibility = comboVisibility.getSelectedItem().toString();
             if (!Code.isEmpty() && !Name.isEmpty() && !printName.isEmpty()) {
                 if (ingredientRawItemsRowCount > 0) {
@@ -1173,6 +1245,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                                         + "      ,[UnitCode] = '" + UnitCode[1] + "'\n"
                                         + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCode[1] + "'\n"
                                         + "      ,[VISIBILITY] = '" + visibility + "'\n"
+                                        + "      ,[PROCESS_CODE] = '" + processCode[1] + "'\n"
                                         + " WHERE [PL1_ITEM_CODE] = '" + Code + "'";
                                 stmt.execute(UpdateQuery);
                                 deleteExsistsRawItemsBeforeSave();
@@ -1181,23 +1254,26 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                                 textProductLevel1Code.requestFocus();
                             }
                         } else if (!rset.next()) {
-                            String UpdateQuery = "INSERT INTO [ProductLevel1]\n"
+                            String InsertQuery = "INSERT INTO [ProductLevel1]\n"
                                     + "           ([PL1_ITEM_CODE]\n"
                                     + "           ,[PL1_ITEM_NAME]\n"
                                     + "           ,[PL1_ITEM_PRINT_NAME]\n"
                                     + "           ,[UnitCode]\n"
                                     + "           ,[SUB_DEPARTMENT_CODE]\n"
-                                    + "           ,[VISIBILITY])\n"
+                                    + "           ,[VISIBILITY]\n"
+                                    + "           ,[PROCESS_CODE])\n"
                                     + "     VALUES\n"
                                     + "           ('" + Code + "'\n"
                                     + "           ,'" + Name + "'\n"
                                     + "           ,'" + printName + "'\n"
                                     + "           ,'" + UnitCode[1] + "'\n"
-                                    + "           ,'" + subDepartmentCode[1] + "'\n"                                    
-                                    + "           ,'" + visibility + "')";
-                            stmt.execute(UpdateQuery);
+                                    + "           ,'" + subDepartmentCode[1] + "'\n"
+                                    + "           ,'" + visibility + "'\n"
+                                    + "           ,'" + processCode[1] + "')";
+                            stmt.execute(InsertQuery);
                             deleteExsistsRawItemsBeforeSave();
                             JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
+                            FullRefresh();
                         }
                         rset.close();
                     } catch (SQLException ex) {
@@ -1215,8 +1291,8 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
                 textProductLevel1Code.requestFocus();
             }
-        } else if (cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select)) {
-            JOptionPane.showMessageDialog(this, "Manufacture unit or sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
+        } else if (cmbPurchaseUnit.getSelectedItem().equals(select) || comboSubDepartment.getSelectedItem().equals(select) || comboProcess.getSelectedItem().equals(select)) {
+            JOptionPane.showMessageDialog(this, "Manufacture unit or sub department or process is not selected.", "Not selected", JOptionPane.OK_OPTION);
             cmbPurchaseUnit.requestFocus();
         }
     }
@@ -1269,7 +1345,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                         + "           ,'" + Quantity + "')";
                 stmtItems.execute(ItemInsertQuery);
             }
-            FullRefresh();
+//            FullRefresh();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -1371,6 +1447,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JButton buttonRemoveSelected;
     private javax.swing.JButton buttonViewCost;
     private javax.swing.JComboBox cmbPurchaseUnit;
+    private javax.swing.JComboBox comboProcess;
     private javax.swing.JComboBox comboSubDepartment;
     private javax.swing.JComboBox comboVisibility;
     private javax.swing.JFormattedTextField formattedTextQuantity;
@@ -1391,6 +1468,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_description2;
     private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description4;
+    private javax.swing.JLabel lbl_description5;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JRadioButton rBtnCode;
