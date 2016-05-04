@@ -61,6 +61,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static ProcessExceptions processExceptions = null;
     public static ProductLevel1 productLevel1 = null;
     public static ProductLevel2 productLevel2 = null;
+    public static JobFixed jobFixed = null;
 
     public static DesignationTree createStudentEventGroup = null;
     public static EmployeeTree allocateStudentsForEventGroup = null;
@@ -158,6 +159,8 @@ public class IndexPage extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuProductLevel1 = new javax.swing.JMenuItem();
         menuProductLevel2 = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        menuFixedJobs = new javax.swing.JMenuItem();
         TabMenuTransactions = new javax.swing.JMenu();
         MenuCreateStudentEventGroup = new javax.swing.JMenuItem();
         menuEmployeeTree = new javax.swing.JMenuItem();
@@ -423,6 +426,16 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         TabMenuMainFiles.add(menuProductLevel2);
+        TabMenuMainFiles.add(jSeparator4);
+
+        menuFixedJobs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_MASK));
+        menuFixedJobs.setText("Fixed jobs");
+        menuFixedJobs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFixedJobsActionPerformed(evt);
+            }
+        });
+        TabMenuMainFiles.add(menuFixedJobs);
 
         mnBar_menuBar.add(TabMenuMainFiles);
 
@@ -1345,6 +1358,18 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuProcessExceptionsActionPerformed
 
+    private void menuFixedJobsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFixedJobsActionPerformed
+        if (jobFixed != null) {
+            if (!jobFixed.isVisible()) {
+                jobFixed.setVisible(true);
+            }
+        } else {
+            jobFixed = new JobFixed();
+            dskPane_RightPanel.add(jobFixed);
+            jobFixed.setVisible(true);
+        }
+    }//GEN-LAST:event_menuFixedJobsActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1443,12 +1468,14 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     public static javax.swing.JLabel labelDepartmentCode;
     public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
+    private javax.swing.JMenuItem menuFixedJobs;
     private javax.swing.JMenuItem menuOtherCost;
     public static javax.swing.JMenuItem menuProcess;
     private javax.swing.JMenuItem menuProcessExceptions;
