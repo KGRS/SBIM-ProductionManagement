@@ -77,9 +77,9 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
         tableIngredientRawItems = new javax.swing.JTable();
         textIngredientItemCount = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        setForPicker = new com.toedter.components.JSpinField();
         buttonCalculate = new javax.swing.JButton();
         lbl_accountType6 = new javax.swing.JLabel();
+        setForPicker = new javax.swing.JSpinner();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         lbl_accountType1 = new javax.swing.JLabel();
@@ -282,15 +282,6 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
         jLabel1.setText("Ingredient items count");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 120, 20));
 
-        setForPicker.setMinimum(1);
-        setForPicker.setOpaque(false);
-        setForPicker.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                setForPickerKeyPressed(evt);
-            }
-        });
-        jPanel2.add(setForPicker, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 60, -1));
-
         buttonCalculate.setText("Calculate");
         buttonCalculate.setOpaque(false);
         buttonCalculate.addActionListener(new java.awt.event.ActionListener() {
@@ -303,6 +294,9 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
         lbl_accountType6.setForeground(new java.awt.Color(102, 102, 102));
         lbl_accountType6.setText("Set for");
         jPanel2.add(lbl_accountType6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 40, 20));
+
+        setForPicker.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        jPanel2.add(setForPicker, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 50, -1));
 
         panel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 310, 550, 260));
 
@@ -751,6 +745,7 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
             loadProcessToCombo();
             comboVisibility.setSelectedIndex(0);
             textIngredientItemCount.setText("0");
+            setForPicker.setValue(1);
         }
     }
 
@@ -1010,12 +1005,6 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_buttonAddSelectedKeyPressed
 
-    private void setForPickerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_setForPickerKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            buttonCalculate.requestFocus();
-        }
-    }//GEN-LAST:event_setForPickerKeyPressed
-
     private void buttonCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCalculateActionPerformed
         actionOfAdd();
     }//GEN-LAST:event_buttonCalculateActionPerformed
@@ -1107,6 +1096,7 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
         comboDepartment.setSelectedItem(DepartmentName + "--" + DepartmentCode);
         comboVisibility.setSelectedItem(visibility);
         comboProcess.setSelectedItem(processName + "--" + processCode);
+        setForPicker.setValue(1);
     }//GEN-LAST:event_tableProductLevel2MouseClicked
 
     private void btnSaveProLve1ItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveProLve1ItemActionPerformed
@@ -1290,7 +1280,7 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
                 pl1Code = tableIngredientRawItems.getValueAt(i, 0).toString();
                 pl1Quantity = roundThreeDecimals(Double.parseDouble(tableIngredientRawItems.getValueAt(i, 3).toString()));
 
-                setFor = setForPicker.getValue();
+                setFor = (Integer) setForPicker.getValue();
 
                 String ItemInsertQuery = "INSERT INTO [ProductLevel2RawItems]\n"
                         + "           ([PL2_ITEM_CODE]\n"
@@ -1382,7 +1372,7 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
         try {
             Quantity = roundThreeDecimals(Double.parseDouble(formattedTextQuantity.getText()));
             setFor = (Integer) setForPicker.getValue();
-            calculatedQuantity = roundThreeDecimals(setFor * Quantity);
+            calculatedQuantity = roundThreeDecimals(Quantity/setFor);
             formattedTextQuantity.setText(String.valueOf(calculatedQuantity));
             AddToSecondTable();
         } catch (Exception ex) {
@@ -1438,7 +1428,7 @@ public class ProductLevel2 extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton rBtnCodeAll;
     private javax.swing.JRadioButton rBtnName;
     private javax.swing.JRadioButton rBtnNameAll;
-    private com.toedter.components.JSpinField setForPicker;
+    private javax.swing.JSpinner setForPicker;
     private javax.swing.JTable tableAllRawItems;
     private javax.swing.JTable tableIngredientRawItems;
     private javax.swing.JTable tableProductLevel2;
