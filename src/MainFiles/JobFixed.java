@@ -7,6 +7,7 @@ package MainFiles;
 
 import static MainFiles.IndexPage.jobFixed;
 import db.ConnectSql;
+import functions.DocNumGenerator;
 import functions.ValidateFields;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -27,6 +28,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private final DefaultTableModel model_categoryTable;
     private final String spliter = "--";
     private final String menuName = "Fixed Job";
+    private DocNumGenerator AutoID;
+    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "";
+    int itemCount = 0, allocateTime = 0, employeeCount = 0;
 
     /**
      * Creates new form Department
@@ -37,28 +41,33 @@ public class JobFixed extends javax.swing.JInternalFrame {
         buttonGroup1.add(rBtnCode);
         buttonGroup1.add(rBtnName);
         rBtnCode.setSelected(true);
-        textCode.requestFocus();
+        textFixedJobCode.requestFocus();
         model_categoryTable = (DefaultTableModel) tableViewDetails.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
-        LoadDepartments();
+        getItemLevel();
+        loadAllJobsToTable();
     }
 
-    private void LoadDepartments() {
+    private void loadAllJobsToTable() {
         try {
             ResultSet reset;
             Statement stmt;
             String query;
             int rowCount = 0;
-            query = "SELECT * FROM departments ORDER BY DEPARTMENT_NAME";
+            RefreshTable();
+
+            query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed ORDER BY JOB_FIXED_ID";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL"), rowCount, 2);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                 rowCount++;
             }
             reset.close();
@@ -66,6 +75,51 @@ public class JobFixed extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
+    }
+
+    private void ProductLevelItem(int level) {
+        if (level == 1) {
+            try {
+                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                String query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME FROM ProductLevel1 ORDER BY PL1_ITEM_NAME";
+                ResultSet rset = stmt.executeQuery(query);
+
+                cmbProductLevelItem.removeAllItems();
+                cmbProductLevelItem.insertItemAt("--Select--", 0);
+                int position = 1;
+                if (rset.next()) {
+                    do {
+                        cmbProductLevelItem.insertItemAt(rset.getString("PL1_ITEM_NAME") + "--" + rset.getString("PL1_ITEM_CODE"), position); // 
+                        position++;
+                    } while (rset.next());
+                }
+                cmbProductLevelItem.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        } else if (level == 2) {
+            try {
+                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                String query = "SELECT PL2_ITEM_CODE, PL2_ITEM_NAME FROM ProductLevel2 ORDER BY PL2_ITEM_NAME";
+                ResultSet rset = stmt.executeQuery(query);
+
+                cmbProductLevelItem.removeAllItems();
+                cmbProductLevelItem.insertItemAt("--Select--", 0);
+                int position = 1;
+                if (rset.next()) {
+                    do {
+                        cmbProductLevelItem.insertItemAt(rset.getString("PL2_ITEM_NAME") + "--" + rset.getString("PL2_ITEM_CODE"), position); // 
+                        position++;
+                    } while (rset.next());
+                }
+                cmbProductLevelItem.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        }
+
     }
 
     /**
@@ -80,8 +134,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         panel1 = new javax.swing.JPanel();
         lbl_category = new javax.swing.JLabel();
-        textCode = new javax.swing.JTextField();
-        txtProcessName = new javax.swing.JTextField();
+        textFixedJobCode = new javax.swing.JTextField();
+        textFixedJobName = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         lbl_description = new javax.swing.JLabel();
@@ -93,10 +147,10 @@ public class JobFixed extends javax.swing.JInternalFrame {
         tableViewDetails = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        cmbWorkflow = new javax.swing.JComboBox();
+        cmbProductLevel = new javax.swing.JComboBox();
         lbl_category1 = new javax.swing.JLabel();
         lbl_description1 = new javax.swing.JLabel();
-        cmbDepartment = new javax.swing.JComboBox();
+        cmbProductLevelItem = new javax.swing.JComboBox();
         lbl_description2 = new javax.swing.JLabel();
         formatedTextAllocatedTime = new javax.swing.JFormattedTextField();
         lbl_description4 = new javax.swing.JLabel();
@@ -141,35 +195,37 @@ public class JobFixed extends javax.swing.JInternalFrame {
         lbl_category.setText("Product level *");
         panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 100, 20));
 
-        textCode.addFocusListener(new java.awt.event.FocusAdapter() {
+        textFixedJobCode.setEditable(false);
+        textFixedJobCode.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        textFixedJobCode.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                textCodeFocusGained(evt);
+                textFixedJobCodeFocusGained(evt);
             }
         });
-        textCode.addKeyListener(new java.awt.event.KeyAdapter() {
+        textFixedJobCode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                textCodeKeyPressed(evt);
+                textFixedJobCodeKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                textCodeKeyReleased(evt);
+                textFixedJobCodeKeyReleased(evt);
             }
         });
-        panel1.add(textCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 60, 130, 20));
+        panel1.add(textFixedJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 60, 130, 20));
 
-        txtProcessName.addFocusListener(new java.awt.event.FocusAdapter() {
+        textFixedJobName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtProcessNameFocusGained(evt);
+                textFixedJobNameFocusGained(evt);
             }
         });
-        txtProcessName.addKeyListener(new java.awt.event.KeyAdapter() {
+        textFixedJobName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtProcessNameKeyPressed(evt);
+                textFixedJobNameKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtProcessNameKeyReleased(evt);
+                textFixedJobNameKeyReleased(evt);
             }
         });
-        panel1.add(txtProcessName, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 270, 20));
+        panel1.add(textFixedJobName, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 270, 20));
 
         btnSave.setMnemonic('s');
         btnSave.setText("Save");
@@ -284,8 +340,17 @@ public class JobFixed extends javax.swing.JInternalFrame {
         panel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 170, -1));
         panel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 438, 430, -1));
 
-        cmbWorkflow.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2" }));
-        panel1.add(cmbWorkflow, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 80, -1));
+        cmbProductLevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2" }));
+        cmbProductLevel.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductLevelPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 80, -1));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category1.setText("Fixed job code *");
@@ -295,9 +360,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
         lbl_description1.setText("Fixed job name *");
         panel1.add(lbl_description1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 100, 110, 20));
 
-        cmbDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        cmbDepartment.setToolTipText("");
-        panel1.add(cmbDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 270, -1));
+        cmbProductLevelItem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        cmbProductLevelItem.setToolTipText("");
+        panel1.add(cmbProductLevelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 270, -1));
 
         lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description2.setText("Item count *");
@@ -346,88 +411,106 @@ public class JobFixed extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textCodeFocusGained
-        textCode.selectAll();
-    }//GEN-LAST:event_textCodeFocusGained
+    private void textFixedJobCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFixedJobCodeFocusGained
+        textFixedJobCode.selectAll();
+    }//GEN-LAST:event_textFixedJobCodeFocusGained
 
-    private void textCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCodeKeyPressed
+    private void textFixedJobCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFixedJobCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String text = textCode.getText();
+            String text = textFixedJobCode.getText();
             if (!text.isEmpty()) {
-                txtProcessName.requestFocus();
-                LoadAtCodes();
+                textFixedJobName.requestFocus();
             }
         }
-    }//GEN-LAST:event_textCodeKeyPressed
+    }//GEN-LAST:event_textFixedJobCodeKeyPressed
 
-    private void LoadAtCodes() {
-        String CategoryCode = textCode.getText();
-        try {
-            ResultSet reset;
-            Statement stmt;
-            String query;
-            query = "SELECT * FROM departments where DEPARTMENT_CODE = '" + CategoryCode + "'";
-            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            reset = stmt.executeQuery(query);
+    private void textFixedJobCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFixedJobCodeKeyReleased
+        ValidateFields.CheckForCodes(textFixedJobCode);
+    }//GEN-LAST:event_textFixedJobCodeKeyReleased
 
-            if (reset.next()) {
-                txtProcessName.setText(reset.getString("DEPARTMENT_NAME"));
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
-    }
+    private void textFixedJobNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFixedJobNameFocusGained
+        textFixedJobName.selectAll();
+    }//GEN-LAST:event_textFixedJobNameFocusGained
 
-    private void textCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCodeKeyReleased
-        ValidateFields.CheckForCodes(textCode);
-    }//GEN-LAST:event_textCodeKeyReleased
-
-    private void txtProcessNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProcessNameFocusGained
-        txtProcessName.selectAll();
-    }//GEN-LAST:event_txtProcessNameFocusGained
-
-    private void txtProcessNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProcessNameKeyPressed
+    private void textFixedJobNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFixedJobNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String text = txtProcessName.getText();
+            String text = textFixedJobName.getText();
             if (!text.isEmpty()) {
                 btnSave.requestFocus();
             }
         }
-    }//GEN-LAST:event_txtProcessNameKeyPressed
+    }//GEN-LAST:event_textFixedJobNameKeyPressed
 
-    private void txtProcessNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProcessNameKeyReleased
-        ValidateFields.CheckForOtherFields(txtProcessName);
-    }//GEN-LAST:event_txtProcessNameKeyReleased
+    private void textFixedJobNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFixedJobNameKeyReleased
+        ValidateFields.CheckForOtherFields(textFixedJobName);
+    }//GEN-LAST:event_textFixedJobNameKeyReleased
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         CheckBeforeSave();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void CheckBeforeSave() {
-        String CategoryCode = textCode.getText().toUpperCase();
-        String CategoryName = txtProcessName.getText();
-        if (!CategoryCode.isEmpty() && !CategoryName.isEmpty()) {
+        Code = textFixedJobCode.getText();
+        Name = textFixedJobName.getText();
+        productLevel = cmbProductLevel.getSelectedItem().toString();
+        productLevelItemCode = cmbProductLevelItem.getSelectedItem().toString();
+        String productLevelItemCodeInArray[] = cmbProductLevelItem.getSelectedItem().toString().split("--");
+        itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
+        allocateTime = Integer.parseInt(formatedTextAllocatedTime.getText());
+        employeeCount = Integer.parseInt(spinnerEmpCount.getValue().toString());
+        remarks = textAreaRemarks.getText();
+
+        if (!Name.isEmpty() && !productLevelItemCode.equals(select)) {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select DEPARTMENT_CODE From departments where DEPARTMENT_CODE = '" + CategoryCode + "'";
+                String query = "select JOB_FIXED_ID From JobFixed where JOB_FIXED_ID = '" + Code + "'";
                 ResultSet rset = stmt.executeQuery(query);
 
                 if (rset.next()) {
-                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + CategoryCode + "' department details?", "Update department?", JOptionPane.YES_NO_OPTION);
+                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + Code + "' details?", "Update fixed job?", JOptionPane.YES_NO_OPTION);
                     if (x == JOptionPane.YES_OPTION) {
-                        String UpdateQuery = "update departments set DEPARTMENT_NAME = '" + CategoryName + "' where DEPARTMENT_CODE = '" + CategoryCode + "'";
+                        String UpdateQuery = "UPDATE [JobFixed]\n"
+                                + "   SET [JOB_FIXED_NAME] = '" + Name + "'\n"
+                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
+                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
+                                + "      ,[ITEM_COUNT] = '" + itemCount + "'\n"
+                                + "      ,[ALLOCATED_TIME] = '" + allocateTime + "'\n"
+                                + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
+                                + "      ,[REMARKS] = '" + remarks + "'\n"
+                                + " WHERE JOB_FIXED_ID = '" + Code + "'";
                         stmt.execute(UpdateQuery);
-                        JOptionPane.showMessageDialog(this, "Department details are updated.");
+                        JOptionPane.showMessageDialog(this, "'" + menuName + "' details are updated.");
                         Refresh();
                     } else if (x == JOptionPane.NO_OPTION) {
-                        textCode.requestFocus();
+                        textFixedJobCode.requestFocus();
                     }
 
                 } else if (!rset.next()) {
-                    String UpdateQuery = "insert into departments (DEPARTMENT_CODE, DEPARTMENT_NAME) values ( '" + CategoryCode + "','" + CategoryName + "') ";
-                    stmt.execute(UpdateQuery);
-                    JOptionPane.showMessageDialog(this, "New department is saved.");
+                    AutoID = new DocNumGenerator();
+                    AutoID.methodNumGen("FJOB");
+                    Code = AutoID.getDocChar() + AutoID.getDocNumber();
+                    textFixedJobCode.setText(Code);
+                    Code = textFixedJobCode.getText();
+                    String InsertQuery = "INSERT INTO [JobFixed]\n"
+                            + "           ([JOB_FIXED_ID]\n"
+                            + "           ,[JOB_FIXED_NAME]\n"
+                            + "           ,[PRODUCT_LEVEL]\n"
+                            + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
+                            + "           ,[ITEM_COUNT]\n"
+                            + "           ,[ALLOCATED_TIME]\n"
+                            + "           ,[EMPLOYEE_COUNT]\n"
+                            + "           ,[REMARKS])\n"
+                            + "     VALUES\n"
+                            + "           ('" + Code + "'\n"
+                            + "           ,'" + Name + "'\n"
+                            + "           ,'" + productLevel + "'\n"
+                            + "           ,'" + productLevelItemCodeInArray[1] + "'\n"
+                            + "           ,'" + itemCount + "'\n"
+                            + "           ,'" + allocateTime + "'\n"
+                            + "           ,'" + employeeCount + "'\n"
+                            + "           ,'" + remarks + "')";
+                    stmt.execute(InsertQuery);
+                    JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
                     Refresh();
                 }
                 rset.close();
@@ -438,76 +521,75 @@ public class JobFixed extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(this, "Please contact for support.");
             }
-        } else if (CategoryCode.isEmpty() || CategoryName.isEmpty()) {
+        } else if (Name.isEmpty() || productLevelItemCode.equals(select)) {
             JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
-            textCode.requestFocus();
+            textFixedJobName.requestFocus();
         }
     }
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        CheckBeforeDelete();
+//        CheckBeforeDelete();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void CheckBeforeDelete() {
-        String CategoryCode = textCode.getText();
-        if (!CategoryCode.isEmpty()) {
-            try {
-                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select DEPARTMENT_CODE From staff_members where DEPARTMENT_CODE = '" + CategoryCode + "'";
-                ResultSet rset = stmt.executeQuery(query);               
-
-                if (rset.next()) {
-                    JOptionPane.showMessageDialog(this, "This department is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
-                } else if (!rset.next()) {
-                    DeleteDepartment();
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            } catch (HeadlessException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            }
-        } else if (CategoryCode.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please insert a valid department code before delete.", "Empty department code", JOptionPane.OK_OPTION);
-            textCode.requestFocus();
-        }
-    }
-
-    private void DeleteDepartment() {
-        String Code = textCode.getText();
-        int x = JOptionPane.showConfirmDialog(this, "Are you sure To delete this?", "Delete department?", JOptionPane.YES_NO_OPTION);
-        if (x == JOptionPane.YES_OPTION) {
-            try {
-                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                java.sql.Statement Checkstmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-                String Checkquery = "select DEPARTMENT_CODE From departments where DEPARTMENT_CODE = '" + Code + "'";
-                ResultSet Checkrset = Checkstmt.executeQuery(Checkquery);
-
-                if (Checkrset.next()) {
-                    String query = "delete From departments where DEPARTMENT_CODE = '" + Code + "'";
-                    stmt.execute(query);
-                    JOptionPane.showMessageDialog(this, "Department is deleted.");
-                    Refresh();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid department code. Please insert a valid department code.", "Invalid department code", JOptionPane.OK_OPTION);
-                    textCode.requestFocus();
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            } catch (HeadlessException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            }
-
-        } else if (x == JOptionPane.NO_OPTION) {
-            textCode.requestFocus();
-        }
-    }
+//    private void CheckBeforeDelete() {
+//        String CategoryCode = textFixedJobCode.getText();
+//        if (!CategoryCode.isEmpty()) {
+//            try {
+//                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//                String query = "select DEPARTMENT_CODE From staff_members where DEPARTMENT_CODE = '" + CategoryCode + "'";
+//                ResultSet rset = stmt.executeQuery(query);
+//
+//                if (rset.next()) {
+//                    JOptionPane.showMessageDialog(this, "This department is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
+//                } else if (!rset.next()) {
+//                    DeleteDepartment();
+//                }
+//
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Please contact for support.");
+//            } catch (HeadlessException ex) {
+//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Please contact for support.");
+//            }
+//        } else if (CategoryCode.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please insert a valid department code before delete.", "Empty department code", JOptionPane.OK_OPTION);
+//            textFixedJobCode.requestFocus();
+//        }
+//    }
+//    private void DeleteDepartment() {
+//        String Code = textFixedJobCode.getText();
+//        int x = JOptionPane.showConfirmDialog(this, "Are you sure To delete this?", "Delete department?", JOptionPane.YES_NO_OPTION);
+//        if (x == JOptionPane.YES_OPTION) {
+//            try {
+//                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//                java.sql.Statement Checkstmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//
+//                String Checkquery = "select DEPARTMENT_CODE From departments where DEPARTMENT_CODE = '" + Code + "'";
+//                ResultSet Checkrset = Checkstmt.executeQuery(Checkquery);
+//
+//                if (Checkrset.next()) {
+//                    String query = "delete From departments where DEPARTMENT_CODE = '" + Code + "'";
+//                    stmt.execute(query);
+//                    JOptionPane.showMessageDialog(this, "Department is deleted.");
+//                    Refresh();
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "Invalid department code. Please insert a valid department code.", "Invalid department code", JOptionPane.OK_OPTION);
+//                    textFixedJobCode.requestFocus();
+//                }
+//
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Please contact for support.");
+//            } catch (HeadlessException ex) {
+//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Please contact for support.");
+//            }
+//
+//        } else if (x == JOptionPane.NO_OPTION) {
+//            textFixedJobCode.requestFocus();
+//        }
+//    }
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         exit();
@@ -544,13 +626,113 @@ public class JobFixed extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rBtnNameKeyPressed
 
     private void tableViewDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableViewDetailsMouseClicked
-        String Code, Name;
 
         Code = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 0).toString();
-        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();        
+        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();
+        productLevel = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 2).toString();
+        productLevelItemCode = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 3).toString();
 
-        textCode.setText(Code);
-        txtProcessName.setText(Name);
+        textFixedJobCode.setText(Code);
+        textFixedJobName.setText(Name);
+        cmbProductLevel.setSelectedItem(productLevel);
+
+        if (productLevel.equals("1")) {
+            try {
+                ResultSet reset;
+                Statement stmt;
+                String query;
+
+                query = "SELECT\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" AS JobFixed_JOB_FIXED_ID,\n"
+                        + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL\" AS JobFixed_PRODUCT_LEVEL,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,\n"
+                        + "     JobFixed.\"ITEM_COUNT\" AS JobFixed_ITEM_COUNT,\n"
+                        + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
+                        + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
+                        + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS,\n"
+                        + "     ProductLevel1.\"PL1_ITEM_NAME\" AS ProductLevel1_PL1_ITEM_NAME,\n"
+                        + "     ProductLevel1.\"PL1_ITEM_PRINT_NAME\" AS ProductLevel1_PL1_ITEM_PRINT_NAME,\n"
+                        + "     ProductLevel1.\"UnitCode\" AS ProductLevel1_UnitCode,\n"
+                        + "     ProductLevel1.\"SUB_DEPARTMENT_CODE\" AS ProductLevel1_SUB_DEPARTMENT_CODE,\n"
+                        + "     ProductLevel1.\"VISIBILITY\" AS ProductLevel1_VISIBILITY,\n"
+                        + "     ProductLevel1.\"PROCESS_CODE\" AS ProductLevel1_PROCESS_CODE\n"
+                        + "FROM\n"
+                        + "     \"dbo\".\"ProductLevel1\" ProductLevel1 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel1.\"PL1_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "WHERE\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
+
+                stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                reset = stmt.executeQuery(query);
+
+                if (reset.next()) {
+                    productLevelItemName = reset.getString("ProductLevel1_PL1_ITEM_NAME");
+                    itemCount = reset.getInt("JobFixed_ITEM_COUNT");
+                    allocateTime = reset.getInt("JobFixed_ALLOCATED_TIME");
+                    employeeCount = reset.getInt("JobFixed_EMPLOYEE_COUNT");
+                    remarks = reset.getString("JobFixed_REMARKS");
+                    getItemLevel();
+
+                    cmbProductLevelItem.setSelectedItem((productLevelItemName) + "--" + (productLevelItemCode));
+                    spinnerItemCount.setValue(itemCount);
+                    formatedTextAllocatedTime.setText(String.valueOf(allocateTime));
+                    spinnerEmpCount.setValue(employeeCount);
+                    textAreaRemarks.setText(remarks);
+                }
+                reset.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        } else if (productLevel.equals("2")) {
+            try {
+                ResultSet reset;
+                Statement stmt;
+                String query;
+
+                query = "SELECT\n"
+                        + "     ProductLevel2.\"PL2_ITEM_NAME\" AS ProductLevel2_PL2_ITEM_NAME,\n"
+                        + "     ProductLevel2.\"PL2_ITEM_PRINT_NAME\" AS ProductLevel2_PL2_ITEM_PRINT_NAME,\n"
+                        + "     ProductLevel2.\"UnitCode\" AS ProductLevel2_UnitCode,\n"
+                        + "     ProductLevel2.\"DepartmentCode\" AS ProductLevel2_DepartmentCode,\n"
+                        + "     ProductLevel2.\"VISIBILITY\" AS ProductLevel2_VISIBILITY,\n"
+                        + "     ProductLevel2.\"PROCESS_CODE\" AS ProductLevel2_PROCESS_CODE,\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" AS JobFixed_JOB_FIXED_ID,\n"
+                        + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL\" AS JobFixed_PRODUCT_LEVEL,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,\n"
+                        + "     JobFixed.\"ITEM_COUNT\" AS JobFixed_ITEM_COUNT,\n"
+                        + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
+                        + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
+                        + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS\n"
+                        + "FROM\n"
+                        + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel2.\"PL2_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "WHERE\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
+
+                stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                reset = stmt.executeQuery(query);
+
+                if (reset.next()) {
+                    productLevelItemName = reset.getString("ProductLevel2_PL2_ITEM_NAME");
+                    itemCount = reset.getInt("JobFixed_ITEM_COUNT");
+                    allocateTime = reset.getInt("JobFixed_ALLOCATED_TIME");
+                    employeeCount = reset.getInt("JobFixed_EMPLOYEE_COUNT");
+                    remarks = reset.getString("JobFixed_REMARKS");
+                    getItemLevel();
+
+                    cmbProductLevelItem.setSelectedItem((productLevelItemName) + "--" + (productLevelItemCode));
+                    spinnerItemCount.setValue(itemCount);
+                    formatedTextAllocatedTime.setText(String.valueOf(allocateTime));
+                    spinnerEmpCount.setValue(employeeCount);
+                    textAreaRemarks.setText(remarks);
+                }
+                reset.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        }
     }//GEN-LAST:event_tableViewDetailsMouseClicked
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -570,9 +752,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryCode.equals("")) {
-                query = "SELECT * FROM departments WHERE DEPARTMENT_CODE LIKE '" + CategoryCode + "%'";
+                query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed WHERE JOB_FIXED_ID LIKE '" + CategoryCode + "%'";
             } else {
-                query = "SELECT * FROM departments  WHERE DEPARTMENT_CODE LIKE '" + CategoryCode + "%'";
+                query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed WHERE JOB_FIXED_ID LIKE '" + CategoryCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -580,8 +762,10 @@ public class JobFixed extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL"), rowCount, 2);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                 rowCount++;
             }
             reset.close();
@@ -600,9 +784,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryName.equals("")) {
-                query = "SELECT * FROM departments WHERE DEPARTMENT_NAME LIKE '%" + CategoryName + "%'";
+                query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed WHERE JOB_FIXED_ID LIKE '%" + CategoryName + "%'";
             } else {
-                query = "SELECT * FROM departments  WHERE DEPARTMENT_NAME LIKE '%" + CategoryName + "%'";
+                query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed WHERE JOB_FIXED_ID LIKE '%" + CategoryName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -610,8 +794,10 @@ public class JobFixed extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL"), rowCount, 2);
+                tableViewDetails.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                 rowCount++;
             }
             reset.close();
@@ -643,11 +829,28 @@ public class JobFixed extends javax.swing.JInternalFrame {
         jobFixed.toFront();
     }//GEN-LAST:event_formInternalFrameIconified
 
+    private void cmbProductLevelPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductLevelPopupMenuWillBecomeInvisible
+        getItemLevel();
+    }//GEN-LAST:event_cmbProductLevelPopupMenuWillBecomeInvisible
+
+    private void getItemLevel() {
+        int level = Integer.parseInt(cmbProductLevel.getSelectedItem().toString());
+        ProductLevelItem(level);
+    }
+
     private void Refresh() {
         RefreshTableAndLoadAgain();
-        textCode.setText("");
-        txtProcessName.setText("");
+        textFixedJobCode.setText("");
+        textFixedJobName.setText("");
+        cmbProductLevel.setSelectedIndex(0);
+        cmbProductLevelItem.setSelectedIndex(0);
+        spinnerEmpCount.setValue(1);
+        formatedTextAllocatedTime.setText("30");
+        spinnerItemCount.setValue(1);
+        textAreaRemarks.setText("");
         txtSearch.setText("");
+        getItemLevel();
+        loadAllJobsToTable();
     }
 
     private void RefreshTableAndLoadAgain() {
@@ -656,7 +859,6 @@ public class JobFixed extends javax.swing.JInternalFrame {
             for (int j = 0; j < row; j++) {
                 model_categoryTable.removeRow(0);
             }
-            LoadDepartments();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -668,8 +870,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox cmbDepartment;
-    private javax.swing.JComboBox cmbWorkflow;
+    private javax.swing.JComboBox cmbProductLevel;
+    private javax.swing.JComboBox cmbProductLevelItem;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -690,13 +892,13 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JSpinner spinnerItemCount;
     private javax.swing.JTable tableViewDetails;
     private javax.swing.JTextArea textAreaRemarks;
-    private javax.swing.JTextField textCode;
-    private javax.swing.JTextField txtProcessName;
+    private javax.swing.JTextField textFixedJobCode;
+    private javax.swing.JTextField textFixedJobName;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
     private void exit() {
-         if (jobFixed != null) {
+        if (jobFixed != null) {
             jobFixed = null;
         }
         this.dispose();
