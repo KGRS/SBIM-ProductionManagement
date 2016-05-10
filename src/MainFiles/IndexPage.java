@@ -7,7 +7,7 @@ package MainFiles;
 import Transactions.UserLogins;
 import Transactions.DesignationTree;
 import reports.Attachements;
-import Transactions.EmployeeTree;
+import Transactions.JobAllocation;
 import Transactions.UserPrivilege;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
@@ -64,7 +64,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static JobFixed jobFixed = null;
 
     public static DesignationTree createStudentEventGroup = null;
-    public static EmployeeTree allocateStudentsForEventGroup = null;
+    public static JobAllocation allocateStudentsForEventGroup = null;
     public static UserPrivilege userPrivilege = null;
     public static UserLogins userLogins = null;
 
@@ -1299,7 +1299,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
                 allocateStudentsForEventGroup.setVisible(true);
             }
         } else {
-            allocateStudentsForEventGroup = new EmployeeTree();
+            allocateStudentsForEventGroup = new JobAllocation();
             dskPane_RightPanel.add(allocateStudentsForEventGroup);
             allocateStudentsForEventGroup.setVisible(true);
         }

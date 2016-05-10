@@ -330,7 +330,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
             tableViewDetails.getColumnModel().getColumn(3).setPreferredWidth(100);
         }
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 340));
+        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 380));
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {

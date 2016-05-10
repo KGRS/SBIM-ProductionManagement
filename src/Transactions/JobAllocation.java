@@ -20,14 +20,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ravindu
  */
-public class EmployeeTree extends javax.swing.JInternalFrame {
+public class JobAllocation extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
     private final DefaultTableModel model_TableStudentOfGroup;
     private final DefaultTableModel model_TableStudentOfBatch;
     private final String spliter = "--";
+    private final String menuName = "Job allocation";
 
-    public EmployeeTree() {
+    public JobAllocation() {
         initComponents();
 //        loadBatchCodeToCombo();
 
