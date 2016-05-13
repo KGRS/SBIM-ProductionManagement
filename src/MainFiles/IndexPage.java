@@ -63,8 +63,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static ProductLevel2 productLevel2 = null;
     public static JobFixed jobFixed = null;
 
-    public static DesignationTree createStudentEventGroup = null;
-    public static JobAllocation allocateStudentsForEventGroup = null;
+    public static JobAllocation jobAllocation = null;
     public static UserPrivilege userPrivilege = null;
     public static UserLogins userLogins = null;
 
@@ -444,8 +443,8 @@ public class IndexPage extends javax.swing.JFrame {
         TabMenuTransactions.setMaximumSize(new java.awt.Dimension(100, 32767));
         TabMenuTransactions.setPreferredSize(new java.awt.Dimension(80, 19));
 
-        MenuCreateStudentEventGroup.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.ALT_MASK));
-        MenuCreateStudentEventGroup.setText("Designation tree");
+        MenuCreateStudentEventGroup.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.ALT_MASK));
+        MenuCreateStudentEventGroup.setText("Job allocation");
         MenuCreateStudentEventGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MenuCreateStudentEventGroupActionPerformed(evt);
@@ -1281,28 +1280,28 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     }//GEN-LAST:event_menuOtherCostActionPerformed
 
     private void MenuCreateStudentEventGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuCreateStudentEventGroupActionPerformed
-        if (createStudentEventGroup != null) {
-            if (!createStudentEventGroup.isVisible()) {
-                createStudentEventGroup.setVisible(true);
+        if (jobAllocation != null) {
+            if (!jobAllocation.isVisible()) {
+                jobAllocation.setVisible(true);
             }
         } else {
-            createStudentEventGroup = new DesignationTree();
-            dskPane_RightPanel.add(createStudentEventGroup);
-            createStudentEventGroup.setVisible(true);
+            jobAllocation = new JobAllocation();
+            dskPane_RightPanel.add(jobAllocation);
+            jobAllocation.setVisible(true);
         }
 
     }//GEN-LAST:event_MenuCreateStudentEventGroupActionPerformed
 
     private void menuEmployeeTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmployeeTreeActionPerformed
-        if (allocateStudentsForEventGroup != null) {
-            if (!allocateStudentsForEventGroup.isVisible()) {
-                allocateStudentsForEventGroup.setVisible(true);
-            }
-        } else {
-            allocateStudentsForEventGroup = new JobAllocation();
-            dskPane_RightPanel.add(allocateStudentsForEventGroup);
-            allocateStudentsForEventGroup.setVisible(true);
-        }
+//        if (allocateStudentsForEventGroup != null) {
+//            if (!allocateStudentsForEventGroup.isVisible()) {
+//                allocateStudentsForEventGroup.setVisible(true);
+//            }
+//        } else {
+//            allocateStudentsForEventGroup = new JobAllocation();
+//            dskPane_RightPanel.add(allocateStudentsForEventGroup);
+//            allocateStudentsForEventGroup.setVisible(true);
+//        }
     }//GEN-LAST:event_menuEmployeeTreeActionPerformed
 
     private void MenuItemBlankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemBlankActionPerformed

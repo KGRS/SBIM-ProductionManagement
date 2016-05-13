@@ -5,7 +5,7 @@
  */
 package Transactions;
 
-import static MainFiles.IndexPage.createStudentEventGroup;
+//import static MainFiles.IndexPage.createStudentEventGroup;
 import db.ConnectSql;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -385,10 +385,10 @@ public class DesignationTree extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnExitKeyPressed
 
     private void exit() {
-        if (createStudentEventGroup != null) {
-            createStudentEventGroup = null;
-        }
-        this.dispose();
+//        if (createStudentEventGroup != null) {
+//            createStudentEventGroup = null;
+//        }
+//        this.dispose();
     }
     
     private void rBtnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnCodeActionPerformed

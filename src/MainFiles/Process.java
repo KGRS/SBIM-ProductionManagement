@@ -96,12 +96,14 @@ public class Process extends javax.swing.JInternalFrame {
         cmbWorkflow = new javax.swing.JComboBox();
         lbl_category1 = new javax.swing.JLabel();
         lbl_description1 = new javax.swing.JLabel();
-        cmbDepartment = new javax.swing.JComboBox();
-        lbl_description2 = new javax.swing.JLabel();
         formatedTextAllocatedTime = new javax.swing.JFormattedTextField();
         lbl_description4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         textAreaRemarks = new javax.swing.JTextArea();
+        lbl_category2 = new javax.swing.JLabel();
+        lbl_description3 = new javax.swing.JLabel();
+        cmbProductLevel = new javax.swing.JComboBox();
+        cmbProductLevelItem = new javax.swing.JComboBox();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(895, 494));
@@ -188,7 +190,7 @@ public class Process extends javax.swing.JInternalFrame {
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Remarks");
-        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 100, 20));
+        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 100, 20));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Search process by");
@@ -287,34 +289,50 @@ public class Process extends javax.swing.JInternalFrame {
         lbl_description1.setText("Process name *");
         panel1.add(lbl_description1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 110, 20));
 
-        cmbDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        cmbDepartment.setToolTipText("");
-        panel1.add(cmbDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 210, -1));
-
-        lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description2.setText("Sub department *");
-        panel1.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 100, 20));
-
         formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         formatedTextAllocatedTime.setText("30");
-        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 110, -1));
+        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 110, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description4.setText("Allocated time (minute) *");
-        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 120, 20));
+        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 120, 20));
 
         textAreaRemarks.setColumns(20);
         textAreaRemarks.setRows(5);
         jScrollPane2.setViewportView(textAreaRemarks);
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 210, 120));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, 210, 80));
+
+        lbl_category2.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_category2.setText("Product level *");
+        panel1.add(lbl_category2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 100, 20));
+
+        lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description3.setText("Product level item *");
+        panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 120, 20));
+
+        cmbProductLevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2" }));
+        cmbProductLevel.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cmbProductLevelPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 80, -1));
+
+        cmbProductLevelItem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        cmbProductLevelItem.setToolTipText("");
+        panel1.add(cmbProductLevelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,7 +450,7 @@ public class Process extends javax.swing.JInternalFrame {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 String query = "select DEPARTMENT_CODE From staff_members where DEPARTMENT_CODE = '" + CategoryCode + "'";
-                ResultSet rset = stmt.executeQuery(query);               
+                ResultSet rset = stmt.executeQuery(query);
 
                 if (rset.next()) {
                     JOptionPane.showMessageDialog(this, "This department is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
@@ -525,7 +543,7 @@ public class Process extends javax.swing.JInternalFrame {
         String Code, Name;
 
         Code = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 0).toString();
-        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();        
+        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();
 
         textCode.setText(Code);
         txtProcessName.setText(Name);
@@ -621,6 +639,60 @@ public class Process extends javax.swing.JInternalFrame {
         subDepartment.toFront();
     }//GEN-LAST:event_formInternalFrameIconified
 
+    private void cmbProductLevelPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductLevelPopupMenuWillBecomeInvisible
+        getItemLevel();
+    }//GEN-LAST:event_cmbProductLevelPopupMenuWillBecomeInvisible
+
+    private void getItemLevel() {
+        int level = Integer.parseInt(cmbProductLevel.getSelectedItem().toString());
+        ProductLevelItem(level);
+    }
+
+    private void ProductLevelItem(int level) {
+        if (level == 1) {
+            try {
+                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                String query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME FROM ProductLevel1 ORDER BY PL1_ITEM_NAME";
+                ResultSet rset = stmt.executeQuery(query);
+
+                cmbProductLevelItem.removeAllItems();
+                cmbProductLevelItem.insertItemAt("--Select--", 0);
+                int position = 1;
+                if (rset.next()) {
+                    do {
+                        cmbProductLevelItem.insertItemAt(rset.getString("PL1_ITEM_NAME") + "--" + rset.getString("PL1_ITEM_CODE"), position); // 
+                        position++;
+                    } while (rset.next());
+                }
+                cmbProductLevelItem.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        } else if (level == 2) {
+            try {
+                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                String query = "SELECT PL2_ITEM_CODE, PL2_ITEM_NAME FROM ProductLevel2 ORDER BY PL2_ITEM_NAME";
+                ResultSet rset = stmt.executeQuery(query);
+
+                cmbProductLevelItem.removeAllItems();
+                cmbProductLevelItem.insertItemAt("--Select--", 0);
+                int position = 1;
+                if (rset.next()) {
+                    do {
+                        cmbProductLevelItem.insertItemAt(rset.getString("PL2_ITEM_NAME") + "--" + rset.getString("PL2_ITEM_CODE"), position); // 
+                        position++;
+                    } while (rset.next());
+                }
+                cmbProductLevelItem.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        }
+
+    }
+
     private void Refresh() {
         RefreshTableAndLoadAgain();
         textCode.setText("");
@@ -646,7 +718,8 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox cmbDepartment;
+    private javax.swing.JComboBox cmbProductLevel;
+    private javax.swing.JComboBox cmbProductLevelItem;
     private javax.swing.JComboBox cmbWorkflow;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JScrollPane jScrollPane1;
@@ -654,9 +727,10 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbl_category;
     private javax.swing.JLabel lbl_category1;
+    private javax.swing.JLabel lbl_category2;
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_description1;
-    private javax.swing.JLabel lbl_description2;
+    private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description4;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
@@ -670,7 +744,7 @@ public class Process extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void exit() {
-         if (subDepartment != null) {
+        if (subDepartment != null) {
             subDepartment = null;
         }
         this.dispose();

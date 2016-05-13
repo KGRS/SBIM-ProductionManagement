@@ -4,7 +4,7 @@
  */
 package Transactions;
 
-import static MainFiles.IndexPage.allocateStudentsForEventGroup;
+import static MainFiles.IndexPage.jobAllocation;
 import db.ConnectSql;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -24,18 +24,22 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
     private final DefaultTableModel model_TableStudentOfGroup;
-    private final DefaultTableModel model_TableStudentOfBatch;
+    private final DefaultTableModel model_TableEmployee;
+    private final DefaultTableModel model_TableFixedJobs;
     private final String spliter = "--";
     private final String menuName = "Job allocation";
 
     public JobAllocation() {
         initComponents();
-//        loadBatchCodeToCombo();
 
-        cmbDepartment.requestFocus();
+        comboDepartment.requestFocus();
         model_TableStudentOfGroup = (DefaultTableModel) tableRankedEmployee.getModel();
-        model_TableStudentOfBatch = (DefaultTableModel) tableEmployee.getModel();
+        model_TableEmployee = (DefaultTableModel) tableEmployee.getModel();
+        model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
+        this.setTitle(menuName);
+
+        loadDepartmentsToCombo();
     }
 
     /**
@@ -56,7 +60,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         btnExit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableEmployee = new javax.swing.JTable();
-        cmbDepartment = new javax.swing.JComboBox();
+        comboDepartment = new javax.swing.JComboBox();
         lbl_subAccount = new javax.swing.JLabel();
         ButtonAddSelected = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -66,13 +70,27 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         lbl_subAccount2 = new javax.swing.JLabel();
         TextNumberOfEmpRanked = new javax.swing.JTextField();
         TextNumberOfEmpAtSubDepartment = new javax.swing.JTextField();
-        cmbSubDepartment = new javax.swing.JComboBox();
+        comboSubDepartment = new javax.swing.JComboBox();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tableDesignationRank = new javax.swing.JTable();
+        tableFixedJobs = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        lbl_description5 = new javax.swing.JLabel();
+        lbl_description2 = new javax.swing.JLabel();
+        spinnerItemCount = new javax.swing.JSpinner();
+        formatedTextAllocatedTime = new javax.swing.JFormattedTextField();
+        lbl_description4 = new javax.swing.JLabel();
+        lbl_description = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        textAreaRemarks = new javax.swing.JTextArea();
+        spinnerEmpCount = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        lbl_description6 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setIconifiable(true);
-        setTitle("Employee tree");
-        setPreferredSize(new java.awt.Dimension(990, 688));
+        setPreferredSize(new java.awt.Dimension(1070, 688));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -112,7 +130,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 buttonViewActionPerformed(evt);
             }
         });
-        panel1.add(buttonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 20, 90, 20));
+        panel1.add(buttonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 90, 20));
 
         btnSave.setMnemonic('s');
         btnSave.setText("Save");
@@ -122,7 +140,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        panel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 610, 80, -1));
+        panel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 610, 80, -1));
 
         btnRefresh.setMnemonic('d');
         btnRefresh.setText("Refresh");
@@ -131,7 +149,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 btnRefreshActionPerformed(evt);
             }
         });
-        panel1.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 610, 80, -1));
+        panel1.add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 610, 80, -1));
 
         btnExit.setMnemonic('e');
         btnExit.setText("Exit");
@@ -145,7 +163,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 btnExitKeyPressed(evt);
             }
         });
-        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 610, 80, -1));
+        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 610, 80, -1));
 
         tableEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -172,56 +190,51 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         });
         tableEmployee.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tableEmployee);
-        if (tableEmployee.getColumnModel().getColumnCount() > 0) {
-            tableEmployee.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tableEmployee.getColumnModel().getColumn(2).setPreferredWidth(200);
-            tableEmployee.getColumnModel().getColumn(3).setPreferredWidth(100);
-        }
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 510, 230));
+        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 440, 210));
 
-        cmbDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        cmbDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        comboDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        comboDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                cmbDepartmentPopupMenuWillBecomeInvisible(evt);
+                comboDepartmentPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-        cmbDepartment.addKeyListener(new java.awt.event.KeyAdapter() {
+        comboDepartment.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbDepartmentKeyPressed(evt);
+                comboDepartmentKeyPressed(evt);
             }
         });
-        panel1.add(cmbDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 250, 20));
+        panel1.add(comboDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 230, 20));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Number of employees at selected sub department");
-        panel1.add(lbl_subAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 250, 20));
+        panel1.add(lbl_subAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 250, 20));
 
-        ButtonAddSelected.setText("Add selected");
+        ButtonAddSelected.setText("-->>");
         ButtonAddSelected.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonAddSelectedActionPerformed(evt);
             }
         });
-        panel1.add(ButtonAddSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 320, 130, -1));
+        panel1.add(ButtonAddSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, 90, -1));
 
         tableRankedEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Rank code", "Designation code", "Designation name", "Employee code", "First name", "Calling name"
+                "Employee code", "First name", "Name with initials", "Calling name"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -244,62 +257,58 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane2.setViewportView(tableRankedEmployee);
-        if (tableRankedEmployee.getColumnModel().getColumnCount() > 0) {
-            tableRankedEmployee.getColumnModel().getColumn(4).setPreferredWidth(130);
-            tableRankedEmployee.getColumnModel().getColumn(5).setPreferredWidth(130);
-        }
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 357, 930, 230));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 377, 440, 210));
 
-        ButtonRemoveSelected.setText("Remove selected");
+        ButtonRemoveSelected.setText("<<--");
         ButtonRemoveSelected.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonRemoveSelectedActionPerformed(evt);
             }
         });
-        panel1.add(ButtonRemoveSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 320, 120, -1));
+        panel1.add(ButtonRemoveSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 500, 90, -1));
 
         lbl_subAccount1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount1.setText("Sub department *");
-        panel1.add(lbl_subAccount1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 100, 20));
+        panel1.add(lbl_subAccount1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 100, 20));
 
         lbl_subAccount2.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_subAccount2.setText("Number of employees who given rank code");
-        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 610, 220, 20));
+        lbl_subAccount2.setText("Number of employees allocated to the job");
+        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 340, 220, 20));
 
         TextNumberOfEmpRanked.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         TextNumberOfEmpRanked.setEnabled(false);
-        panel1.add(TextNumberOfEmpRanked, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 610, 70, -1));
+        panel1.add(TextNumberOfEmpRanked, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 340, 70, -1));
 
         TextNumberOfEmpAtSubDepartment.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         TextNumberOfEmpAtSubDepartment.setEnabled(false);
-        panel1.add(TextNumberOfEmpAtSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 320, 70, -1));
+        panel1.add(TextNumberOfEmpAtSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 70, -1));
 
-        cmbSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        cmbSubDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        comboSubDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                cmbSubDepartmentPopupMenuWillBecomeInvisible(evt);
+                comboSubDepartmentPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-        panel1.add(cmbSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, 240, -1));
+        panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 230, -1));
 
-        tableDesignationRank.setModel(new javax.swing.table.DefaultTableModel(
+        tableFixedJobs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Rank code", "Designation code", "Designation name"
+                "Fixed job code", "Fixed job name", "Product level", "Product level item code"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -310,20 +319,78 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tableDesignationRank.getTableHeader().setReorderingAllowed(false);
-        jScrollPane3.setViewportView(tableDesignationRank);
+        tableFixedJobs.getTableHeader().setReorderingAllowed(false);
+        tableFixedJobs.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableFixedJobsMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tableFixedJobs);
 
-        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(552, 70, 400, 230));
+        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 440, 220));
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description5.setText("Allocated time (minutes) *");
+        jPanel1.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 140, 20));
+
+        lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description2.setText("Item count *");
+        jPanel1.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 130, 20));
+
+        spinnerItemCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        jPanel1.add(spinnerItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 80, -1));
+
+        formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        formatedTextAllocatedTime.setText("30");
+        jPanel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 80, -1));
+
+        lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description4.setText("Employee count *");
+        jPanel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 140, 20));
+
+        lbl_description.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description.setText("Remarks");
+        jPanel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 100, 20));
+
+        textAreaRemarks.setColumns(20);
+        textAreaRemarks.setRows(5);
+        jScrollPane4.setViewportView(textAreaRemarks);
+
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 320, 70));
+
+        spinnerEmpCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        jPanel1.add(spinnerEmpCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 80, -1));
+
+        jButton1.setText("Select");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 84, -1));
+
+        jButton2.setText("Deselect");
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 250, 84, -1));
+        jPanel1.add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 86, -1));
+
+        lbl_description6.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description6.setText(" Start time *");
+        jPanel1.add(lbl_description6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 70, 20));
+
+        jCheckBox1.setForeground(new java.awt.Color(102, 102, 102));
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("Get job saving time");
+        jPanel1.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 140, -1));
+
+        panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 540, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 973, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1054, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
         );
 
         pack();
@@ -331,9 +398,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
     private void RefreshTable() {
         try {
-            int row = model_TableStudentOfBatch.getRowCount();
+            int row = model_TableFixedJobs.getRowCount();
             for (int j = 0; j < row; j++) {
-                model_TableStudentOfBatch.removeRow(0);
+                model_TableFixedJobs.removeRow(0);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -341,30 +408,26 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }
 
-    private void loadStudentByBatch(String studentID) {
+    private void loadFixedJobsToTable() {
         try {
             ResultSet reset;
             Statement stmt;
             String query;
             int rowCount = 0;
             RefreshTable();
-            query = "SELECT STUDENT_ID, STUDENT_FIRST_NAME, STUDENT_NAME_INITIAL"
-                    + ", student_batch_BATCH_WITH_DEPARTMENT_CODE FROM students WHERE "
-                    + "student_batch_BATCH_WITH_DEPARTMENT_CODE = '" + studentID + "' "
-                    + "AND IS_ACTIVE = 'Yes'";
 
+            query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed ORDER BY JOB_FIXED_ID";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-                model_TableStudentOfBatch.addRow(new Object[model_TableStudentOfBatch.getColumnCount()]);
-                tableEmployee.setValueAt(reset.getString("STUDENT_ID"), rowCount, 0);
-                tableEmployee.setValueAt(reset.getString("STUDENT_FIRST_NAME"), rowCount, 1);
-                tableEmployee.setValueAt(reset.getString("STUDENT_NAME_INITIAL"), rowCount, 2);
-                tableEmployee.setValueAt(reset.getString("student_batch_BATCH_WITH_DEPARTMENT_CODE"), rowCount, 3);
+                model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
+                tableFixedJobs.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
+                tableFixedJobs.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
+                tableFixedJobs.setValueAt(reset.getString("PRODUCT_LEVEL"), rowCount, 2);
+                tableFixedJobs.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                 rowCount++;
             }
-            TextNumberOfEmpAtSubDepartment.setText(String.valueOf(rowCount));
             reset.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -372,23 +435,68 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }
 
-    private void cmbDepartmentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbDepartmentKeyPressed
+    private void loadDepartmentsToCombo() {
+        try {
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select DepartmentCode, DepartmentName From Departments order by DepartmentName";
+            ResultSet rset = stmt.executeQuery(query);
+
+            comboDepartment.removeAllItems();
+            comboDepartment.insertItemAt("--Select--", 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboDepartment.insertItemAt(rset.getString("DepartmentName") + "--" + rset.getString("DepartmentCode"), position); // 
+                    position++;
+                } while (rset.next());
+            }
+            comboDepartment.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+        }
+    }
+
+    private void loadSubDepartmentsToCombo() {
+        try {
+            String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments WHERE DepartmentCode = '" + departmentCode[1] + "' order by SUB_DEPARTMENT_NAME";
+            ResultSet rset = stmt.executeQuery(query);
+
+            comboSubDepartment.removeAllItems();
+            comboSubDepartment.insertItemAt("--Select--", 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + "--" + rset.getString("SUB_DEPARTMENT_CODE"), position); // 
+                    position++;
+                } while (rset.next());
+            }
+            comboSubDepartment.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+        }
+    }
+
+    private void comboDepartmentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboDepartmentKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String text = cmbDepartment.getSelectedItem().toString();
+            String text = comboDepartment.getSelectedItem().toString();
             if (!text.equals(select)) {
-                loadGroupsToCombo();
+                loadSubDepartmentsToCombo();
                 btnSave.requestFocus();
             }
         }
-    }//GEN-LAST:event_cmbDepartmentKeyPressed
+    }//GEN-LAST:event_comboDepartmentKeyPressed
 
-    private void cmbDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbDepartmentPopupMenuWillBecomeInvisible
-        String text = cmbDepartment.getSelectedItem().toString();
+    private void comboDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboDepartmentPopupMenuWillBecomeInvisible
+        String text = comboDepartment.getSelectedItem().toString();
         if (!text.equals(select)) {
-            loadGroupsToCombo();
+            loadSubDepartmentsToCombo();
             btnSave.requestFocus();
         }
-    }//GEN-LAST:event_cmbDepartmentPopupMenuWillBecomeInvisible
+    }//GEN-LAST:event_comboDepartmentPopupMenuWillBecomeInvisible
 
     private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -409,13 +517,12 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void buttonViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonViewActionPerformed
-        String Batch = cmbDepartment.getSelectedItem().toString();
+        String Batch = comboDepartment.getSelectedItem().toString();
         if (!Batch.equals(select)) {
-            String BatchCode[] = cmbDepartment.getSelectedItem().toString().split("--");
-            loadStudentByBatch(BatchCode[0]);
+            loadFixedJobsToTable();
         } else if (Batch.equals(select)) {
             JOptionPane.showMessageDialog(this, "Batch is not selected.", "Not selected", JOptionPane.OK_OPTION);
-            cmbDepartment.requestFocus();
+            comboDepartment.requestFocus();
         }
     }//GEN-LAST:event_buttonViewActionPerformed
 
@@ -431,7 +538,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             String studntFromBtch = tableEmployee.getValueAt(tableEmployee.getSelectedRow(), 0).toString();
             Object[] CheckStudentAlreadyAdded = CheckIfStudentAlreadyAdded(studntFromBtch);
             if ((Boolean) CheckStudentAlreadyAdded[0]) {
-                JOptionPane.showMessageDialog(this, "Student is already allocated.", "Already allocated.", JOptionPane.OK_OPTION);
+                JOptionPane.showMessageDialog(this, "Employee is already allocated.", "Already allocated.", JOptionPane.OK_OPTION);
             } else {
                 addToAllocateTable();
             }
@@ -465,7 +572,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         if (x == JOptionPane.YES_OPTION) {
             int i = tableRankedEmployee.getSelectedRow();
             try {
-                String groupID[] = cmbSubDepartment.getSelectedItem().toString().split("--");
+                String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
                 java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 String Checkquery = "select * From event_student_attendees where GROUP_ID = '" + groupID[1] + "'";
@@ -493,20 +600,68 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tableRankedEmployeeKeyPressed
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
-        allocateStudentsForEventGroup.toFront();
+        jobAllocation.toFront();
     }//GEN-LAST:event_formInternalFrameIconified
 
-    private void cmbSubDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbSubDepartmentPopupMenuWillBecomeInvisible
-        String group = cmbSubDepartment.getSelectedItem().toString();
-        if (!group.equals(select)) {
-            String groupID[] = cmbSubDepartment.getSelectedItem().toString().split("--");
-            loadStudentsOfGroup(groupID[1]);
+    private void comboSubDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
+        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+        if (!subDepartment.equals(select)) {
+            buttonView.requestFocus();
         }
-    }//GEN-LAST:event_cmbSubDepartmentPopupMenuWillBecomeInvisible
+    }//GEN-LAST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
 
     private void ButtonRemoveSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoveSelectedActionPerformed
         tableStudentsOfGroup();
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
+
+    private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
+        String Code = "", Name = "", productLevel = "",productLevelItemCode = "", remarks = "";
+        int itemCount = 0, allocateTime = 0, employeeCount = 0;
+
+        Code = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
+        Name = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 1).toString();
+        productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
+        productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
+
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+
+            query = "SELECT\n"
+                    + "     JobFixed.\"JOB_FIXED_ID\" AS JobFixed_JOB_FIXED_ID,\n"
+                    + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME,\n"
+                    + "     JobFixed.\"PRODUCT_LEVEL\" AS JobFixed_PRODUCT_LEVEL,\n"
+                    + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,\n"
+                    + "     JobFixed.\"ITEM_COUNT\" AS JobFixed_ITEM_COUNT,\n"
+                    + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
+                    + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
+                    + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"JobFixed\" JobFixed \n"
+                    + "WHERE\n"
+                    + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
+
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            if (reset.next()) {
+                itemCount = reset.getInt("JobFixed_ITEM_COUNT");
+                allocateTime = reset.getInt("JobFixed_ALLOCATED_TIME");
+                employeeCount = reset.getInt("JobFixed_EMPLOYEE_COUNT");
+                remarks = reset.getString("JobFixed_REMARKS");
+
+                spinnerItemCount.setValue(itemCount);
+                formatedTextAllocatedTime.setText(String.valueOf(allocateTime));
+                spinnerEmpCount.setValue(employeeCount);
+                textAreaRemarks.setText(remarks);
+            }
+            reset.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }//GEN-LAST:event_tableFixedJobsMouseClicked
 
     private void loadStudentsOfGroup(String groupID) {
         try {
@@ -549,7 +704,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 //
 //            }
             TextNumberOfEmpRanked.setText(String.valueOf(rowCount));
-            cmbDepartment.setEnabled(false);
+            comboDepartment.setEnabled(false);
             buttonView.setEnabled(false);
 
         } catch (SQLException ex) {
@@ -583,39 +738,16 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             String query = "select BATCH_WITH_DEPARTMENT_CODE, BATCH_YEAR From student_batch order by BATCH_WITH_DEPARTMENT_CODE DESC";
             ResultSet rset = stmt.executeQuery(query);
 
-            cmbDepartment.removeAllItems();
-            cmbDepartment.insertItemAt("--Select--", 0);
+            comboDepartment.removeAllItems();
+            comboDepartment.insertItemAt("--Select--", 0);
             int position = 1;
             if (rset.next()) {
                 do {
-                    cmbDepartment.insertItemAt(rset.getString("BATCH_WITH_DEPARTMENT_CODE") + "--" + rset.getString("BATCH_YEAR"), position);
+                    comboDepartment.insertItemAt(rset.getString("BATCH_WITH_DEPARTMENT_CODE") + "--" + rset.getString("BATCH_YEAR"), position);
                     position++;
                 } while (rset.next());
             }
-            cmbDepartment.setSelectedIndex(0);
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
-        }
-    }
-
-    private void loadGroupsToCombo() {
-        try {
-            String batchCode[] = cmbDepartment.getSelectedItem().toString().split("--");
-            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "SELECT GROUP_ID, GROUP_NAME FROM student_event_groups WHERE student_batch_BATCH_WITH_DEPARTMENT_CODE = '" + batchCode[0] + "' AND STATUS = 'Pending' ORDER BY GROUP_NAME";
-            ResultSet rset = stmt.executeQuery(query);
-
-            cmbSubDepartment.removeAllItems();
-            cmbSubDepartment.insertItemAt("--Select--", 0);
-            int position = 1;
-            if (rset.next()) {
-                do {
-                    cmbSubDepartment.insertItemAt(rset.getString("GROUP_NAME") + "--" + rset.getString("GROUP_ID"), position);
-                    position++;
-                } while (rset.next());
-            }
-            cmbSubDepartment.setSelectedIndex(0);
+            comboDepartment.setSelectedIndex(0);
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
@@ -624,8 +756,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
     private void CheckBeforeSave() {
         int RowCount = tableRankedEmployee.getRowCount();
-        String Batch = cmbDepartment.getSelectedItem().toString();
-        String group = cmbSubDepartment.getSelectedItem().toString();
+        String Batch = comboDepartment.getSelectedItem().toString();
+        String group = comboSubDepartment.getSelectedItem().toString();
 
         if (Batch.equals(select) || group.equals(select)) {
             JOptionPane.showMessageDialog(this, "Batch or group is not selected.", "Not selected", JOptionPane.OK_OPTION);
@@ -642,8 +774,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private void allocateStudents() {
         String studentID, event;
         int RowCount = tableRankedEmployee.getRowCount();
-        String groupID[] = cmbSubDepartment.getSelectedItem().toString().split("--");
-        String eventCode[] = cmbSubDepartment.getSelectedItem().toString().split("--");
+        String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
+        String eventCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
         event = "";
         String SENT_TO_STUDENT = "No";
 
@@ -710,18 +842,18 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private void Refresh() {
         int x = JOptionPane.showConfirmDialog(this, "Refresh Stock Eidt window?", "Refresh", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
-            cmbDepartment.setEnabled(true);
+            comboDepartment.setEnabled(true);
             buttonView.setEnabled(true);
-            cmbDepartment.setSelectedItem(select);
-            cmbSubDepartment.setSelectedItem(select);
+            comboDepartment.setSelectedItem(select);
+            comboSubDepartment.setSelectedItem(select);
 
             TextNumberOfEmpRanked.setText("");
             TextNumberOfEmpAtSubDepartment.setText("");
 
             try {
-                int rowi = model_TableStudentOfBatch.getRowCount();
+                int rowi = model_TableEmployee.getRowCount();
                 for (int i = 0; i < rowi; i++) {
-                    model_TableStudentOfBatch.removeRow(0);
+                    model_TableEmployee.removeRow(0);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -741,8 +873,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }
 
     private void exit() {
-        if (allocateStudentsForEventGroup != null) {
-            allocateStudentsForEventGroup = null;
+        if (jobAllocation != null) {
+            jobAllocation = null;
         }
         this.dispose();
     }
@@ -756,18 +888,33 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonView;
-    private javax.swing.JComboBox cmbDepartment;
-    private javax.swing.JComboBox cmbSubDepartment;
+    private javax.swing.JComboBox comboDepartment;
+    private javax.swing.JComboBox comboSubDepartment;
+    private javax.swing.JFormattedTextField formatedTextAllocatedTime;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lbl_accountType1;
+    private javax.swing.JLabel lbl_description;
+    private javax.swing.JLabel lbl_description2;
+    private javax.swing.JLabel lbl_description4;
+    private javax.swing.JLabel lbl_description5;
+    private javax.swing.JLabel lbl_description6;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JLabel lbl_subAccount1;
     private javax.swing.JLabel lbl_subAccount2;
     private javax.swing.JPanel panel1;
-    private javax.swing.JTable tableDesignationRank;
+    private javax.swing.JSpinner spinnerEmpCount;
+    private javax.swing.JSpinner spinnerItemCount;
     private javax.swing.JTable tableEmployee;
+    private javax.swing.JTable tableFixedJobs;
     private javax.swing.JTable tableRankedEmployee;
+    private javax.swing.JTextArea textAreaRemarks;
     // End of variables declaration//GEN-END:variables
 }
