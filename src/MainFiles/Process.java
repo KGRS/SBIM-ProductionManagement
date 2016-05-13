@@ -42,6 +42,7 @@ public class Process extends javax.swing.JInternalFrame {
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
+        loadSubDepartmentsToCombo();
         LoadDepartments();
     }
 
@@ -68,6 +69,28 @@ public class Process extends javax.swing.JInternalFrame {
         }
     }
 
+    private void loadSubDepartmentsToCombo() {
+        try {
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments order by SUB_DEPARTMENT_NAME";
+            ResultSet rset = stmt.executeQuery(query);
+
+            comboSubDepartment.removeAllItems();
+            comboSubDepartment.insertItemAt("--Select--", 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + "--" + rset.getString("SUB_DEPARTMENT_CODE"), position); // 
+                    position++;
+                } while (rset.next());
+            }
+            comboSubDepartment.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,9 +127,11 @@ public class Process extends javax.swing.JInternalFrame {
         lbl_description3 = new javax.swing.JLabel();
         cmbProductLevel = new javax.swing.JComboBox();
         cmbProductLevelItem = new javax.swing.JComboBox();
+        lbl_description5 = new javax.swing.JLabel();
+        comboSubDepartment = new javax.swing.JComboBox();
 
         setIconifiable(true);
-        setPreferredSize(new java.awt.Dimension(895, 494));
+        setPreferredSize(new java.awt.Dimension(968, 528));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -152,7 +177,7 @@ public class Process extends javax.swing.JInternalFrame {
                 textCodeKeyReleased(evt);
             }
         });
-        panel1.add(textCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 170, 20));
+        panel1.add(textCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 230, 20));
 
         txtProcessName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -167,7 +192,7 @@ public class Process extends javax.swing.JInternalFrame {
                 txtProcessNameKeyReleased(evt);
             }
         });
-        panel1.add(txtProcessName, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 210, 20));
+        panel1.add(txtProcessName, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 140, 270, 20));
 
         btnSave.setMnemonic('s');
         btnSave.setText("Save");
@@ -177,7 +202,7 @@ public class Process extends javax.swing.JInternalFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        panel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 420, 80, -1));
+        panel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 80, -1));
 
         btnDelete.setMnemonic('d');
         btnDelete.setText("Delete");
@@ -186,11 +211,11 @@ public class Process extends javax.swing.JInternalFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
-        panel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 420, 80, -1));
+        panel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 450, 80, -1));
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Remarks");
-        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 100, 20));
+        panel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 340, 100, 20));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Search process by");
@@ -208,7 +233,7 @@ public class Process extends javax.swing.JInternalFrame {
                 btnExitKeyPressed(evt);
             }
         });
-        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 420, 80, -1));
+        panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 450, 80, -1));
 
         rBtnCode.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rBtnCode);
@@ -268,7 +293,7 @@ public class Process extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tableViewDetails);
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 340));
+        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 370));
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -276,10 +301,10 @@ public class Process extends javax.swing.JInternalFrame {
             }
         });
         panel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 170, -1));
-        panel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 350, -1));
+        panel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 430, 410, 10));
 
         cmbWorkflow.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        panel1.add(cmbWorkflow, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 60, 210, -1));
+        panel1.add(cmbWorkflow, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 270, -1));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category1.setText("Process code *");
@@ -292,25 +317,25 @@ public class Process extends javax.swing.JInternalFrame {
         formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         formatedTextAllocatedTime.setText("30");
-        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 110, -1));
+        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 300, 170, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description4.setText("Allocated time (minute) *");
-        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 120, 20));
+        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 120, 20));
 
         textAreaRemarks.setColumns(20);
         textAreaRemarks.setRows(5);
         jScrollPane2.setViewportView(textAreaRemarks);
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, 210, 80));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 340, 270, 70));
 
         lbl_category2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category2.setText("Product level *");
         panel1.add(lbl_category2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 100, 20));
 
         lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description3.setText("Product level item *");
-        panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 120, 20));
+        lbl_description3.setText("Sub department *");
+        panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 120, 20));
 
         cmbProductLevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2" }));
         cmbProductLevel.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -322,21 +347,28 @@ public class Process extends javax.swing.JInternalFrame {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 80, -1));
+        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 180, 140, -1));
 
         cmbProductLevelItem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         cmbProductLevelItem.setToolTipText("");
-        panel1.add(cmbProductLevelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 210, -1));
+        panel1.add(cmbProductLevelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 220, 270, -1));
+
+        lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description5.setText("Product level item *");
+        panel1.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, 120, 20));
+
+        comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 260, 270, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 952, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
 
         pack();
@@ -721,6 +753,7 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox cmbProductLevel;
     private javax.swing.JComboBox cmbProductLevelItem;
     private javax.swing.JComboBox cmbWorkflow;
+    private javax.swing.JComboBox comboSubDepartment;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -732,6 +765,7 @@ public class Process extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_description1;
     private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description4;
+    private javax.swing.JLabel lbl_description5;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JRadioButton rBtnCode;

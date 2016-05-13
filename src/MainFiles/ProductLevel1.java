@@ -48,7 +48,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         LoadAllRawItems();
         LoadAllProductLevel1Items();
         loadPurUnitsToCombo();
-        loadSubDepartmentsToCombo();
     }
 
     /**
@@ -84,7 +83,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         lbl_accountType1 = new javax.swing.JLabel();
         lbl_accountType4 = new javax.swing.JLabel();
         lbl_description2 = new javax.swing.JLabel();
-        comboSubDepartment = new javax.swing.JComboBox();
         textPrintName = new javax.swing.JTextField();
         textProductLevel1Name = new javax.swing.JTextField();
         textProductLevel1Code = new javax.swing.JTextField();
@@ -98,10 +96,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         TextProLevel1ItemCount = new javax.swing.JTextField();
         lbl_description3 = new javax.swing.JLabel();
         cmbPurchaseUnit = new javax.swing.JComboBox();
-        lbl_description4 = new javax.swing.JLabel();
         comboVisibility = new javax.swing.JComboBox();
-        lbl_description5 = new javax.swing.JLabel();
-        comboProcess = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         buttonAddSelected = new javax.swing.JButton();
         buttonRemoveSelected = new javax.swing.JButton();
@@ -305,37 +300,19 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("Product level 1 code *");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, 120, 20));
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 60, 120, 20));
 
         lbl_accountType1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_accountType1.setText("Product level 1 name *");
-        jPanel3.add(lbl_accountType1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 60, 120, 20));
+        jPanel3.add(lbl_accountType1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 120, 20));
 
         lbl_accountType4.setForeground(new java.awt.Color(102, 102, 102));
         lbl_accountType4.setText("Print name *");
-        jPanel3.add(lbl_accountType4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 100, 20));
+        jPanel3.add(lbl_accountType4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 100, 20));
 
         lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description2.setText("Manufacture unit *");
-        jPanel3.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 120, 20));
-
-        comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        comboSubDepartment.setToolTipText("");
-        comboSubDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                comboSubDepartmentPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        comboSubDepartment.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                comboSubDepartmentKeyPressed(evt);
-            }
-        });
-        jPanel3.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 140, 300, -1));
+        jPanel3.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 120, 20));
 
         textPrintName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -345,7 +322,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 textPrintNameKeyReleased(evt);
             }
         });
-        jPanel3.add(textPrintName, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, 300, -1));
+        jPanel3.add(textPrintName, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 140, 300, -1));
 
         textProductLevel1Name.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -355,7 +332,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 textProductLevel1NameKeyReleased(evt);
             }
         });
-        jPanel3.add(textProductLevel1Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 300, -1));
+        jPanel3.add(textProductLevel1Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, 300, -1));
 
         textProductLevel1Code.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -365,7 +342,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 textProductLevel1CodeKeyReleased(evt);
             }
         });
-        jPanel3.add(textProductLevel1Code, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 160, -1));
+        jPanel3.add(textProductLevel1Code, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 160, -1));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount.setText("Search product level 1 by");
@@ -407,7 +384,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Product level 1 code", "Product level 1 name", "Sub department"
+                "Product level 1 code", "Product level 1 name", "Manufacture unit"
             }
         ) {
             Class[] types = new Class [] {
@@ -449,7 +426,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
         lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description3.setText("Visibility *");
-        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 220, 70, 20));
+        jPanel3.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 70, 20));
 
         cmbPurchaseUnit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         cmbPurchaseUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -457,11 +434,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 cmbPurchaseUnitKeyPressed(evt);
             }
         });
-        jPanel3.add(cmbPurchaseUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 100, -1));
-
-        lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description4.setText("Process *");
-        jPanel3.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 90, 20));
+        jPanel3.add(cmbPurchaseUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 170, -1));
 
         comboVisibility.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Yes", "No" }));
         comboVisibility.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -469,19 +442,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 comboVisibilityKeyPressed(evt);
             }
         });
-        jPanel3.add(comboVisibility, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 220, 100, -1));
-
-        lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description5.setText("Sub department *");
-        jPanel3.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 100, 20));
-
-        comboProcess.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
-        comboProcess.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                comboProcessKeyPressed(evt);
-            }
-        });
-        jPanel3.add(comboProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 300, -1));
+        jPanel3.add(comboVisibility, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, 170, -1));
 
         panel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1090, 270));
 
@@ -608,51 +569,28 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         }
     }
 
-    private void loadSubDepartmentsToCombo() {
-        try {
-            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments order by SUB_DEPARTMENT_NAME";
-            ResultSet rset = stmt.executeQuery(query);
-
-            comboSubDepartment.removeAllItems();
-            comboSubDepartment.insertItemAt("--Select--", 0);
-            int position = 1;
-            if (rset.next()) {
-                do {
-                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + "--" + rset.getString("SUB_DEPARTMENT_CODE"), position); // 
-                    position++;
-                } while (rset.next());
-            }
-            comboSubDepartment.setSelectedIndex(0);
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
-        }
-    }
-
-    private void loadProcessToCombo() {
-        try {
-            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
-            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select PROCESS_CODE, PROCESS_NAME From Process WHERE SUB_DEPARTMENT_CODE = '"+subDepartmentCode[1]+"' order by PROCESS_NAME";
-            ResultSet rset = stmt.executeQuery(query);
-
-            comboProcess.removeAllItems();
-            comboProcess.insertItemAt("--Select--", 0);
-            int position = 1;
-            if (rset.next()) {
-                do {
-                    comboProcess.insertItemAt(rset.getString("PROCESS_NAME") + "--" + rset.getString("PROCESS_CODE"), position); // 
-                    position++;
-                } while (rset.next());
-            }
-            comboProcess.setSelectedIndex(0);
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
-        }
-    }
-
+//    private void loadProcessToCombo() {
+//        try {
+//            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
+//            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            String query = "select PROCESS_CODE, PROCESS_NAME From Process WHERE SUB_DEPARTMENT_CODE = '"+subDepartmentCode[1]+"' order by PROCESS_NAME";
+//            ResultSet rset = stmt.executeQuery(query);
+//
+//            comboProcess.removeAllItems();
+//            comboProcess.insertItemAt("--Select--", 0);
+//            int position = 1;
+//            if (rset.next()) {
+//                do {
+//                    comboProcess.insertItemAt(rset.getString("PROCESS_NAME") + "--" + rset.getString("PROCESS_CODE"), position); // 
+//                    position++;
+//                } while (rset.next());
+//            }
+//            comboProcess.setSelectedIndex(0);
+//
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+//        }
+//    }
     private void LoadAllRawItems() {
         try {
             ResultSet reset;
@@ -683,7 +621,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             Statement stmt;
             String query;
             int rowCount = 0;
-            query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 ORDER BY PL1_ITEM_NAME";
+            query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, UnitCode FROM ProductLevel1 ORDER BY PL1_ITEM_NAME";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
@@ -691,7 +629,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
-                tableProductLevel1.setValueAt(reset.getString("SUB_DEPARTMENT_CODE"), rowCount, 2);
+                tableProductLevel1.setValueAt(reset.getString("UnitCode"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -755,9 +693,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             LoadAllRawItems();
             LoadAllProductLevel1Items();
             loadPurUnitsToCombo();
-            loadSubDepartmentsToCombo();
             comboVisibility.setSelectedIndex(0);
-            comboProcess.setSelectedIndex(0);
             textIngredientItemCount.setText("0");
             setForPicker.setValue(1);
         }
@@ -817,9 +753,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             RefreshProductLevel1Table();
 
             if (!ItemCode.equals("")) {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, UnitCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             } else {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, UnitCode FROM ProductLevel1 WHERE PL1_ITEM_CODE LIKE '" + ItemCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -828,7 +764,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
-                tableProductLevel1.setValueAt(reset.getString("SUB_DEPARTMENT_CODE"), rowCount, 2);
+                tableProductLevel1.setValueAt(reset.getString("UnitCode"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -848,9 +784,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             RefreshProductLevel1Table();
 
             if (!ItemName.equals("")) {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, UnitCode FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
             } else {
-                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, SUB_DEPARTMENT_CODE FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
+                query = "SELECT PL1_ITEM_CODE, PL1_ITEM_NAME, UnitCode FROM ProductLevel1 WHERE PL1_ITEM_NAME LIKE '%" + ItemName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -859,7 +795,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 model_ProductLevel1.addRow(new Object[model_ProductLevel1.getColumnCount()]);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_CODE"), rowCount, 0);
                 tableProductLevel1.setValueAt(reset.getString("PL1_ITEM_NAME"), rowCount, 1);
-                tableProductLevel1.setValueAt(reset.getString("SUB_DEPARTMENT_CODE"), rowCount, 2);
+                tableProductLevel1.setValueAt(reset.getString("UnitCode"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -1026,12 +962,11 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_buttonCalculateActionPerformed
 
     private void tableProductLevel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductLevel1MouseClicked
-        loadProcessToCombo();
-        String Code, Name, UnitCode = "", UnitName = "", subDepartmentCode, subDepartmentName = "", printName = "", visibility = "", processCode = "", processName = "";
+        String Code, Name, UnitCode, UnitName = "", printName = "", visibility = "";
 
         Code = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 0).toString();
         Name = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 1).toString();
-        subDepartmentCode = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 2).toString();
+        UnitCode = tableProductLevel1.getValueAt(tableProductLevel1.getSelectedRow(), 2).toString();
 
         int rowCount = 0;
 
@@ -1044,7 +979,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                     + "     ProductLevel1.\"PL1_ITEM_NAME\" AS ProductLevel1_PL1_ITEM_NAME,\n"
                     + "     ProductLevel1.\"PL1_ITEM_PRINT_NAME\" AS ProductLevel1_PL1_ITEM_PRINT_NAME,\n"
                     + "     ProductLevel1.\"UnitCode\" AS ProductLevel1_UnitCode,\n"
-                    + "     ProductLevel1.\"SUB_DEPARTMENT_CODE\" AS ProductLevel1_SUB_DEPARTMENT_CODE,\n"
                     + "     ProductLevel1.\"VISIBILITY\" AS ProductLevel1_VISIBILITY,\n"
                     + "     ProductLevel1RawItems.\"PL1_ITEM_CODE\" AS ProductLevel1RawItems_PL1_ITEM_CODE,\n"
                     + "     ProductLevel1RawItems.\"PL1_ITEM_QUANTITY\" AS ProductLevel1RawItems_PL1_ITEM_QUANTITY,\n"
@@ -1054,20 +988,14 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                     + "     SIUnits.\"PurchaseMeasurement\" AS SIUnits_PurchaseMeasurement,\n"
                     + "     SIUnits.\"IssueMeasurement\" AS SIUnits_IssueMeasurement,\n"
                     + "     SIUnits.\"BaseUnitCode\" AS SIUnits_BaseUnitCode,\n"
-                    + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME,\n"
-                    + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
                     + "     Items.\"ItemName\" AS Items_ItemName,\n"
-                    + "     Items.\"UnitPurchase\" AS Items_UnitPurchase,\n"
-                    + "     Process.\"PROCESS_NAME\" AS Process_PROCESS_NAME,\n"
-                    + "     ProductLevel1.\"PROCESS_CODE\" AS ProductLevel1_PROCESS_CODE\n"
+                    + "     Items.\"UnitPurchase\" AS Items_UnitPurchase\n"
                     + "FROM\n"
                     + "     \"dbo\".\"ProductLevel1RawItems\" ProductLevel1RawItems INNER JOIN \"dbo\".\"ProductLevel1\" ProductLevel1 ON ProductLevel1RawItems.\"PL1_ITEM_CODE\" = ProductLevel1.\"PL1_ITEM_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"SIUnits\" SIUnits ON ProductLevel1.\"UnitCode\" = SIUnits.\"UnitCode\"\n"
-                    + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON ProductLevel1.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
-                    + "     INNER JOIN \"dbo\".\"Process\" Process ON ProductLevel1.\"PROCESS_CODE\" = Process.\"PROCESS_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"Items\" Items ON ProductLevel1RawItems.\"ItemCode\" = Items.\"ItemCode\"\n"
                     + "WHERE\n"
-                    + "     ProductLevel1.\"PL1_ITEM_CODE\" = '" + Code + "'";
+                    + "     ProductLevel1.\"PL1_ITEM_CODE\" = '"+Code+"'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmtForIngredientItems = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
@@ -1076,13 +1004,9 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
 
             if (reset.next()) {
                 printName = reset.getString("ProductLevel1_PL1_ITEM_PRINT_NAME");
-                subDepartmentName = reset.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                 UnitCode = reset.getString("ProductLevel1_UnitCode");
                 UnitName = reset.getString("SIUnits_UnitName");
-                processCode = reset.getString("ProductLevel1_PROCESS_CODE");
-                processName = reset.getString("Process_PROCESS_NAME");
                 visibility = reset.getString("ProductLevel1_VISIBILITY");
-
                 model_IngredientItemTable.setRowCount(0);
             }
 
@@ -1104,9 +1028,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         textProductLevel1Name.setText(Name);
         textPrintName.setText(printName);
         cmbPurchaseUnit.setSelectedItem(UnitName + "--" + UnitCode);
-        comboSubDepartment.setSelectedItem(subDepartmentName + "--" + subDepartmentCode);
         comboVisibility.setSelectedItem(visibility);
-        comboProcess.setSelectedItem(processName + "--" + processCode);
         setForPicker.setValue(1);
     }//GEN-LAST:event_tableProductLevel1MouseClicked
 
@@ -1137,24 +1059,14 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String printName = textPrintName.getText();
             if (!printName.isEmpty()) {
-                comboSubDepartment.requestFocus();
+                cmbPurchaseUnit.requestFocus();
             }
         }
     }//GEN-LAST:event_textPrintNameKeyPressed
 
-    private void comboSubDepartmentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboSubDepartmentKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String subDepartment = comboSubDepartment.getSelectedItem().toString();
-            if (!subDepartment.equals(select)) {
-                loadProcessToCombo();
-                comboProcess.requestFocus();
-            }
-        }
-    }//GEN-LAST:event_comboSubDepartmentKeyPressed
-
     private void cmbPurchaseUnitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPurchaseUnitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String purchaseUnit = comboSubDepartment.getSelectedItem().toString();
+            String purchaseUnit = cmbPurchaseUnit.getSelectedItem().toString();
             if (!purchaseUnit.equals(select)) {
                 comboVisibility.requestFocus();
             }
@@ -1179,33 +1091,14 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         ValidateFields.CheckForOtherFields(textPrintName);
     }//GEN-LAST:event_textPrintNameKeyReleased
 
-    private void comboSubDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
-        String subDepartment = comboSubDepartment.getSelectedItem().toString();
-        if (!subDepartment.equals(select)) {
-            loadProcessToCombo();
-            comboProcess.requestFocus();
-        }
-    }//GEN-LAST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
-
-    private void comboProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboProcessKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String Process = comboProcess.getSelectedItem().toString();
-            if (!Process.equals(select)) {
-                cmbPurchaseUnit.requestFocus();
-            }
-        }
-    }//GEN-LAST:event_comboProcessKeyPressed
-
     private void SaveProLve1Item() {
         String Code, Name, printName, visibility;
         int ingredientRawItemsRowCount = tableIngredientRawItems.getRowCount();
-        if (!cmbPurchaseUnit.getSelectedItem().equals(select) && !comboSubDepartment.getSelectedItem().equals(select) && !comboProcess.getSelectedItem().equals(select)) {
+        if (!cmbPurchaseUnit.getSelectedItem().equals(select)) {
             Code = textProductLevel1Code.getText();
             Name = textProductLevel1Name.getText();
             printName = textPrintName.getText();
             String UnitCode[] = cmbPurchaseUnit.getSelectedItem().toString().split("--");
-            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
-            String processCode[] = comboProcess.getSelectedItem().toString().split("--");
             visibility = comboVisibility.getSelectedItem().toString();
             if (!Code.isEmpty() && !Name.isEmpty() && !printName.isEmpty()) {
                 if (ingredientRawItemsRowCount > 0) {
@@ -1222,9 +1115,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                                         + "      [PL1_ITEM_NAME] = '" + Name + "'\n"
                                         + "      ,[PL1_ITEM_PRINT_NAME] = '" + printName + "'\n"
                                         + "      ,[UnitCode] = '" + UnitCode[1] + "'\n"
-                                        + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCode[1] + "'\n"
                                         + "      ,[VISIBILITY] = '" + visibility + "'\n"
-                                        + "      ,[PROCESS_CODE] = '" + processCode[1] + "'\n"
                                         + " WHERE [PL1_ITEM_CODE] = '" + Code + "'";
                                 stmt.execute(UpdateQuery);
                                 deleteExsistsRawItemsBeforeSave();
@@ -1238,17 +1129,13 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                                     + "           ,[PL1_ITEM_NAME]\n"
                                     + "           ,[PL1_ITEM_PRINT_NAME]\n"
                                     + "           ,[UnitCode]\n"
-                                    + "           ,[SUB_DEPARTMENT_CODE]\n"
-                                    + "           ,[VISIBILITY]\n"
-                                    + "           ,[PROCESS_CODE])\n"
+                                    + "           ,[VISIBILITY])\n"
                                     + "     VALUES\n"
                                     + "           ('" + Code + "'\n"
                                     + "           ,'" + Name + "'\n"
                                     + "           ,'" + printName + "'\n"
                                     + "           ,'" + UnitCode[1] + "'\n"
-                                    + "           ,'" + subDepartmentCode[1] + "'\n"
-                                    + "           ,'" + visibility + "'\n"
-                                    + "           ,'" + processCode[1] + "')";
+                                    + "           ,'" + visibility + "')";
                             stmt.execute(InsertQuery);
                             deleteExsistsRawItemsBeforeSave();
                             JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
@@ -1270,7 +1157,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
                 textProductLevel1Code.requestFocus();
             }
-        } else if (cmbPurchaseUnit.getSelectedItem().equals(select) || comboSubDepartment.getSelectedItem().equals(select) || comboProcess.getSelectedItem().equals(select)) {
+        } else if (cmbPurchaseUnit.getSelectedItem().equals(select)) {
             JOptionPane.showMessageDialog(this, "Manufacture unit or sub department or process is not selected.", "Not selected", JOptionPane.OK_OPTION);
             cmbPurchaseUnit.requestFocus();
         }
@@ -1398,7 +1285,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
         try {
             Quantity = roundThreeDecimals(Double.parseDouble(formattedTextQuantity.getText()));
             setFor = (Integer) setForPicker.getValue();
-            calculatedQuantity = roundThreeDecimals(Quantity/setFor);
+            calculatedQuantity = roundThreeDecimals(Quantity / setFor);
             formattedTextQuantity.setText(String.valueOf(calculatedQuantity));
             AddToSecondTable();
         } catch (Exception ex) {
@@ -1426,8 +1313,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JButton buttonRemoveSelected;
     private javax.swing.JButton buttonViewCost;
     private javax.swing.JComboBox cmbPurchaseUnit;
-    private javax.swing.JComboBox comboProcess;
-    private javax.swing.JComboBox comboSubDepartment;
     private javax.swing.JComboBox comboVisibility;
     private javax.swing.JFormattedTextField formattedTextQuantity;
     private javax.swing.JLabel jLabel1;
@@ -1446,8 +1331,6 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_accountType6;
     private javax.swing.JLabel lbl_description2;
     private javax.swing.JLabel lbl_description3;
-    private javax.swing.JLabel lbl_description4;
-    private javax.swing.JLabel lbl_description5;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JRadioButton rBtnCode;
