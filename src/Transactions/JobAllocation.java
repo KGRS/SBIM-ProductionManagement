@@ -4,8 +4,10 @@
  */
 package Transactions;
 
+import MainFiles.IndexPage;
 import static MainFiles.IndexPage.jobAllocation;
 import db.ConnectSql;
+import functions.DocNumGenerator;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -23,23 +25,30 @@ import javax.swing.table.DefaultTableModel;
 public class JobAllocation extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
-    private final DefaultTableModel model_TableStudentOfGroup;
+    private final DefaultTableModel model_TableAllocatedEmployees;
     private final DefaultTableModel model_TableEmployee;
     private final DefaultTableModel model_TableFixedJobs;
     private final String spliter = "--";
     private final String menuName = "Job allocation";
+    private final String logUser = IndexPage.LabelUser.getText();
+    private DocNumGenerator AutoID;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
+            , productLevelItemName = "", remarks = "", jobAllocatedDate = ""
+            , jobAllocatedtime = "", allocatedtime = "", emptyFields = ""
+            , employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "";
 
     public JobAllocation() {
         initComponents();
 
         comboDepartment.requestFocus();
-        model_TableStudentOfGroup = (DefaultTableModel) tableRankedEmployee.getModel();
+        model_TableAllocatedEmployees = (DefaultTableModel) tableAllocatedEmployee.getModel();
         model_TableEmployee = (DefaultTableModel) tableEmployee.getModel();
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
         loadDepartmentsToCombo();
+        rBtnProductLevel1.setSelected(true);
     }
 
     /**
@@ -52,6 +61,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         panel1 = new javax.swing.JPanel();
         lbl_accountType1 = new javax.swing.JLabel();
         buttonView = new javax.swing.JButton();
@@ -64,12 +74,12 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         lbl_subAccount = new javax.swing.JLabel();
         ButtonAddSelected = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tableRankedEmployee = new javax.swing.JTable();
+        tableAllocatedEmployee = new javax.swing.JTable();
         ButtonRemoveSelected = new javax.swing.JButton();
         lbl_subAccount1 = new javax.swing.JLabel();
         lbl_subAccount2 = new javax.swing.JLabel();
-        TextNumberOfEmpRanked = new javax.swing.JTextField();
-        TextNumberOfEmpAtSubDepartment = new javax.swing.JTextField();
+        textNumberOfEmpAllocatedToJob = new javax.swing.JTextField();
+        TextNumberOfEmpAtDepartment = new javax.swing.JTextField();
         comboSubDepartment = new javax.swing.JComboBox();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableFixedJobs = new javax.swing.JTable();
@@ -85,9 +95,12 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         spinnerEmpCount = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        textStartTime = new javax.swing.JFormattedTextField();
         lbl_description6 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        checkBoxGetJobSavingTime = new javax.swing.JCheckBox();
+        rBtnProductLevel1 = new javax.swing.JRadioButton();
+        rBtnProductLevel2 = new javax.swing.JRadioButton();
+        textFieldJobCode = new javax.swing.JTextField();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1070, 688));
@@ -130,7 +143,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 buttonViewActionPerformed(evt);
             }
         });
-        panel1.add(buttonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 90, 20));
+        panel1.add(buttonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 90, 20));
 
         btnSave.setMnemonic('s');
         btnSave.setText("Save");
@@ -208,11 +221,11 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 comboDepartmentKeyPressed(evt);
             }
         });
-        panel1.add(comboDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 230, 20));
+        panel1.add(comboDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 330, 20));
 
         lbl_subAccount.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_subAccount.setText("Number of employees at selected sub department");
-        panel1.add(lbl_subAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 250, 20));
+        lbl_subAccount.setText("Number of employees at selected department");
+        panel1.add(lbl_subAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 230, 20));
 
         ButtonAddSelected.setText("-->>");
         ButtonAddSelected.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +235,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         });
         panel1.add(ButtonAddSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, 90, -1));
 
-        tableRankedEmployee.setModel(new javax.swing.table.DefaultTableModel(
+        tableAllocatedEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -245,18 +258,18 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tableRankedEmployee.getTableHeader().setReorderingAllowed(false);
-        tableRankedEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableAllocatedEmployee.getTableHeader().setReorderingAllowed(false);
+        tableAllocatedEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableRankedEmployeeMouseClicked(evt);
+                tableAllocatedEmployeeMouseClicked(evt);
             }
         });
-        tableRankedEmployee.addKeyListener(new java.awt.event.KeyAdapter() {
+        tableAllocatedEmployee.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tableRankedEmployeeKeyPressed(evt);
+                tableAllocatedEmployeeKeyPressed(evt);
             }
         });
-        jScrollPane2.setViewportView(tableRankedEmployee);
+        jScrollPane2.setViewportView(tableAllocatedEmployee);
 
         panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 377, 440, 210));
 
@@ -276,13 +289,13 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         lbl_subAccount2.setText("Number of employees allocated to the job");
         panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 340, 220, 20));
 
-        TextNumberOfEmpRanked.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        TextNumberOfEmpRanked.setEnabled(false);
-        panel1.add(TextNumberOfEmpRanked, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 340, 70, -1));
+        textNumberOfEmpAllocatedToJob.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        textNumberOfEmpAllocatedToJob.setEnabled(false);
+        panel1.add(textNumberOfEmpAllocatedToJob, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 340, 70, -1));
 
-        TextNumberOfEmpAtSubDepartment.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        TextNumberOfEmpAtSubDepartment.setEnabled(false);
-        panel1.add(TextNumberOfEmpAtSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 70, -1));
+        TextNumberOfEmpAtDepartment.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        TextNumberOfEmpAtDepartment.setEnabled(false);
+        panel1.add(TextNumberOfEmpAtDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 70, -1));
 
         comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         comboSubDepartment.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -294,14 +307,14 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-        panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 230, -1));
+        panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 330, -1));
 
         tableFixedJobs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Fixed job code", "Fixed job name", "Product level", "Product level item code"
+                "Fixed job code", "Fixed job name", "Item count", "Product level item code"
             }
         ) {
             Class[] types = new Class [] {
@@ -326,8 +339,11 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane3.setViewportView(tableFixedJobs);
+        if (tableFixedJobs.getColumnModel().getColumnCount() > 0) {
+            tableFixedJobs.getColumnModel().getColumn(2).setPreferredWidth(30);
+        }
 
-        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 440, 220));
+        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 440, 180));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -369,18 +385,38 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         jButton2.setText("Deselect");
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 250, 84, -1));
-        jPanel1.add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 86, -1));
+        jPanel1.add(textStartTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 86, -1));
 
         lbl_description6.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description6.setText(" Start time *");
         jPanel1.add(lbl_description6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 70, 20));
 
-        jCheckBox1.setForeground(new java.awt.Color(102, 102, 102));
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Get job saving time");
-        jPanel1.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 140, -1));
+        checkBoxGetJobSavingTime.setForeground(new java.awt.Color(102, 102, 102));
+        checkBoxGetJobSavingTime.setSelected(true);
+        checkBoxGetJobSavingTime.setText("Get job saving time");
+        checkBoxGetJobSavingTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxGetJobSavingTimeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 140, -1));
 
         panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 540, 300));
+
+        rBtnProductLevel1.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(rBtnProductLevel1);
+        rBtnProductLevel1.setForeground(new java.awt.Color(102, 102, 102));
+        rBtnProductLevel1.setText("Product level 1");
+        panel1.add(rBtnProductLevel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 100, -1));
+
+        rBtnProductLevel2.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(rBtnProductLevel2);
+        rBtnProductLevel2.setForeground(new java.awt.Color(102, 102, 102));
+        rBtnProductLevel2.setText("Product level 2");
+        panel1.add(rBtnProductLevel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 120, -1));
+
+        textFieldJobCode.setEditable(false);
+        panel1.add(textFieldJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 610, 110, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -408,31 +444,105 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }
 
-    private void loadFixedJobsToTable() {
+    private void RefreshEmployeeTable() {
         try {
-            ResultSet reset;
-            Statement stmt;
-            String query;
-            int rowCount = 0;
-            RefreshTable();
-
-            query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed ORDER BY JOB_FIXED_ID";
-            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            reset = stmt.executeQuery(query);
-
-            while (reset.next()) {
-                model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
-                tableFixedJobs.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
-                tableFixedJobs.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
-                tableFixedJobs.setValueAt(reset.getString("PRODUCT_LEVEL"), rowCount, 2);
-                tableFixedJobs.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
-                rowCount++;
+            int row = model_TableEmployee.getRowCount();
+            for (int j = 0; j < row; j++) {
+                model_TableEmployee.removeRow(0);
             }
-            reset.close();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
+    }
+
+    private void loadFixedJobsToTable(String subDepartmentCode) {
+        if (rBtnProductLevel1.isSelected()) {
+            try {
+                ResultSet reset;
+                Statement stmt;
+                String query;
+                int rowCount = 0;
+                RefreshTable();
+
+                query = "SELECT DISTINCT\n"
+                        + "     ProductLevel1.\"PL1_ITEM_NAME\" AS ProductLevel1_PL1_ITEM_NAME,\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" AS JobFixed_JOB_FIXED_ID,\n"
+                        + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL\" AS JobFixed_PRODUCT_LEVEL,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,\n"
+                        + "     JobFixed.\"ITEM_COUNT\" AS JobFixed_ITEM_COUNT,\n"
+                        + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
+                        + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
+                        + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS,\n"
+                        + "     ProductLevel1.\"UnitCode\" AS ProductLevel1_UnitCode,\n"
+                        + "     ProductLevel1.\"VISIBILITY\" AS ProductLevel1_VISIBILITY,\n"
+                        + "     Process.\"SUB_DEPARTMENT_CODE\" AS Process_SUB_DEPARTMENT_CODE\n"
+                        + "FROM\n"
+                        + "     \"dbo\".\"ProductLevel1\" ProductLevel1 INNER JOIN \"dbo\".\"Process\" Process ON ProductLevel1.\"PL1_ITEM_CODE\" = Process.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "     INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel1.\"PL1_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "WHERE\n"
+                        + "     Process.\"SUB_DEPARTMENT_CODE\" = '" + subDepartmentCode + "' AND ProductLevel1.\"VISIBILITY\"= 'Yes'";
+                stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                reset = stmt.executeQuery(query);
+
+                while (reset.next()) {
+                    model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 2);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
+                    rowCount++;
+                }
+                reset.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        } else if (rBtnProductLevel2.isSelected()) {
+            try {
+                ResultSet reset;
+                Statement stmt;
+                String query;
+                int rowCount = 0;
+                RefreshTable();
+
+                query = "SELECT DISTINCT\n"
+                        + "     JobFixed.\"JOB_FIXED_ID\" AS JobFixed_JOB_FIXED_ID,\n"
+                        + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL\" AS JobFixed_PRODUCT_LEVEL,\n"
+                        + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,\n"
+                        + "     JobFixed.\"ITEM_COUNT\" AS JobFixed_ITEM_COUNT,\n"
+                        + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
+                        + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
+                        + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS,\n"
+                        + "     Process.\"SUB_DEPARTMENT_CODE\" AS Process_SUB_DEPARTMENT_CODE,\n"
+                        + "     ProductLevel2.\"PL2_ITEM_NAME\" AS ProductLevel2_PL2_ITEM_NAME,\n"
+                        + "     ProductLevel2.\"UnitCode\" AS ProductLevel2_UnitCode,\n"
+                        + "     ProductLevel2.\"VISIBILITY\" AS ProductLevel2_VISIBILITY\n"
+                        + "FROM\n"
+                        + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel2.\"PL2_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "     INNER JOIN \"dbo\".\"Process\" Process ON JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" = Process.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
+                        + "WHERE\n"
+                        + "     Process.\"SUB_DEPARTMENT_CODE\" = '" + subDepartmentCode + "' AND ProductLevel2.\"VISIBILITY\" = 'Yes'";
+                stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                reset = stmt.executeQuery(query);
+
+                while (reset.next()) {
+                    model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 2);
+                    tableFixedJobs.setValueAt(reset.getString("JobFixed_PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
+                    rowCount++;
+                }
+                reset.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        }
+
     }
 
     private void loadDepartmentsToCombo() {
@@ -517,14 +627,59 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void buttonViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonViewActionPerformed
-        String Batch = comboDepartment.getSelectedItem().toString();
-        if (!Batch.equals(select)) {
-            loadFixedJobsToTable();
-        } else if (Batch.equals(select)) {
-            JOptionPane.showMessageDialog(this, "Batch is not selected.", "Not selected", JOptionPane.OK_OPTION);
-            comboDepartment.requestFocus();
+        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+        if (!subDepartment.equals(select)) {
+            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split(spliter);
+            String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
+            loadFixedJobsToTable(subDepartmentCode[1]);
+            loadAllEmployeesToTable(departmentCode[1]);
+        } else if (subDepartment.equals(select)) {
+            JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
+            comboSubDepartment.requestFocus();
         }
     }//GEN-LAST:event_buttonViewActionPerformed
+
+    private void loadAllEmployeesToTable(String departmentCode) {
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+            int rowCount = 0;
+            RefreshEmployeeTable();
+
+            query = "SELECT [EMPLOYEE_CODE]\n"
+                    + "      ,[EPF_NO]\n"
+                    + "      ,[FIRST_NAME]\n"
+                    + "      ,[LAST_NAME]\n"
+                    + "      ,[SUR_NAME]\n"
+                    + "      ,[INITIALS]\n"
+                    + "      ,[CALL_NAME]\n"
+                    + "      ,[DepartmentCode]\n"
+                    + "      ,[SUB_DEPARTMENT_CODE]\n"
+                    + "      ,[EMPLOYEE_TYPE_CODE]\n"
+                    + "      ,[CONTACT_LAND]\n"
+                    + "      ,[CONTACT_MOBILE]\n"
+                    + "      ,[EMAIL]\n"
+                    + "      ,[ACTIVE]\n"
+                    + "  FROM [Employees] WHERE DepartmentCode = '" + departmentCode + "' ORDER BY FIRST_NAME";
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            while (reset.next()) {
+                model_TableEmployee.addRow(new Object[model_TableEmployee.getColumnCount()]);
+                tableEmployee.setValueAt(reset.getString("EMPLOYEE_CODE"), rowCount, 0);
+                tableEmployee.setValueAt(reset.getString("FIRST_NAME"), rowCount, 1);
+                tableEmployee.setValueAt(reset.getString("INITIALS"), rowCount, 2);
+                tableEmployee.setValueAt(reset.getString("CALL_NAME"), rowCount, 3);
+                rowCount++;
+            }
+            TextNumberOfEmpAtDepartment.setText(String.valueOf(rowCount));
+            reset.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
 
     private void panel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel1MouseClicked
         if (SwingUtilities.isRightMouseButton(evt) || evt.isControlDown()) {
@@ -546,58 +701,63 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ButtonAddSelectedActionPerformed
 
     private void addToAllocateTable() {
-        String Code, FirstName, NameWithIni, batchCode;
         int SelectedRow = tableEmployee.getSelectedRow();
         try {
-            Code = tableEmployee.getValueAt(SelectedRow, 0).toString();
+            employeeID = tableEmployee.getValueAt(SelectedRow, 0).toString();
             FirstName = tableEmployee.getValueAt(SelectedRow, 1).toString();
             NameWithIni = tableEmployee.getValueAt(SelectedRow, 2).toString();
-            batchCode = tableEmployee.getValueAt(SelectedRow, 3).toString();
+            callName = tableEmployee.getValueAt(SelectedRow, 3).toString();
 
-            model_TableStudentOfGroup.addRow(new Object[]{Code, FirstName, NameWithIni, batchCode});
+            model_TableAllocatedEmployees.addRow(new Object[]{employeeID, FirstName, NameWithIni, callName});
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
 
-    private void tableRankedEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRankedEmployeeMouseClicked
+    private void tableAllocatedEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllocatedEmployeeMouseClicked
         if (evt.getClickCount() == 2) {
-            tableStudentsOfGroup();
-        }
-    }//GEN-LAST:event_tableRankedEmployeeMouseClicked
-
-    private void tableStudentsOfGroup() {
-        int x = JOptionPane.showConfirmDialog(this, "Are you sure To remove selected student?", "Remove student?", JOptionPane.YES_NO_OPTION);
-        if (x == JOptionPane.YES_OPTION) {
-            int i = tableRankedEmployee.getSelectedRow();
-            try {
-                String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
-                java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String Checkquery = "select * From event_student_attendees where GROUP_ID = '" + groupID[1] + "'";
-                ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
-
-                if (IfExistRset.next()) {
-                    String studentID = tableRankedEmployee.getValueAt(i, 0).toString();
-                    String deleteQuery = "delete From event_student_attendees where GROUP_ID = '" + groupID[1] + "' AND STUDENT_ID = '" + studentID + "'";
-                    stmtDeleteExist.execute(deleteQuery);
-                }
-                model_TableStudentOfGroup.removeRow(i);
-                int EditedRowCount = tableRankedEmployee.getRowCount();
-                TextNumberOfEmpAtSubDepartment.setText(String.valueOf(EditedRowCount));
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            int i = tableAllocatedEmployee.getSelectedRowCount();
+            if (i == 1) {
+                tableAllocatedEmployeesOfJob();
+            } else if (i == 1) {
+                JOptionPane.showMessageDialog(this, "Please select a single row.", "Select one row", JOptionPane.OK_OPTION);
             }
+        }
+    }//GEN-LAST:event_tableAllocatedEmployeeMouseClicked
+
+    private void tableAllocatedEmployeesOfJob() {
+        int x = JOptionPane.showConfirmDialog(this, "Are you sure To remove selected employee?", "Remove employee?", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION) {
+            int i = tableAllocatedEmployee.getSelectedRow();
+            model_TableAllocatedEmployees.removeRow(i);
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()));
+//            try {
+//                String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
+//                java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//                java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//                String Checkquery = "select * From event_student_attendees where GROUP_ID = '" + groupID[1] + "'";
+//                ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
+//
+//                if (IfExistRset.next()) {
+//                    String studentID = tableAllocatedEmployee.getValueAt(i, 0).toString();
+//                    String deleteQuery = "delete From event_student_attendees where GROUP_ID = '" + groupID[1] + "' AND STUDENT_ID = '" + studentID + "'";
+//                    stmtDeleteExist.execute(deleteQuery);
+//                }
+//                
+//            } catch (Exception ex) {
+//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Please contact for support.");
+//            }
         }
     }
 
-    private void tableRankedEmployeeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableRankedEmployeeKeyPressed
+    private void tableAllocatedEmployeeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableAllocatedEmployeeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            tableStudentsOfGroup();
+            tableAllocatedEmployeesOfJob();
         }
-    }//GEN-LAST:event_tableRankedEmployeeKeyPressed
+    }//GEN-LAST:event_tableAllocatedEmployeeKeyPressed
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
         jobAllocation.toFront();
@@ -611,14 +771,13 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
 
     private void ButtonRemoveSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoveSelectedActionPerformed
-        tableStudentsOfGroup();
+        tableAllocatedEmployeesOfJob();
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
-        String Code = "", Name = "", productLevel = "",productLevelItemCode = "", remarks = "";
-        int itemCount = 0, allocateTime = 0, employeeCount = 0;
+        int itemCount, allocateTime, employeeCount;
 
-        Code = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
+        fixedJobID = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
         Name = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 1).toString();
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
@@ -640,7 +799,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed \n"
                     + "WHERE\n"
-                    + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
+                    + "     JobFixed.\"JOB_FIXED_ID\" = '" + fixedJobID + "'";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -663,67 +822,25 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tableFixedJobsMouseClicked
 
-    private void loadStudentsOfGroup(String groupID) {
-        try {
-            int rowi = model_TableStudentOfGroup.getRowCount();
-            for (int i = 0; i < rowi; i++) {
-                model_TableStudentOfGroup.removeRow(0);
-            }
-            ResultSet RSETStudentsOfGroup;
-            int rowCount = 0;
-            java.sql.Statement stmtStudentsOfGroup = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String StudentsOfGroupQuery = "SELECT\n"
-                    + "     events.`EVENT_NAME` AS events_EVENT_NAME,\n"
-                    + "     event_student_attendees.`GROUP_ID` AS event_student_attendees_GROUP_ID,\n"
-                    + "     event_student_attendees.`STUDENT_ID` AS event_student_attendees_STUDENT_ID,\n"
-                    + "     event_student_attendees.`EVENT_CODE` AS event_student_attendees_EVENT_CODE,\n"
-                    + "     event_student_attendees.`IS_CONFERMATION_SENT_TO_STUDENT` AS event_student_attendees_IS_CONFERMATION_SENT_TO_STUDENT,\n"
-                    + "     event_student_attendees.`student_event_groups_GROUP_ID` AS event_student_attendees_student_event_groups_GROUP_ID,\n"
-                    + "     students.`STUDENT_FIRST_NAME` AS students_STUDENT_FIRST_NAME,\n"
-                    + "     students.`STUDENT_NAME_INITIAL` AS students_STUDENT_NAME_INITIAL,\n"
-                    + "     students.`student_batch_BATCH_WITH_DEPARTMENT_CODE` AS students_student_batch_BATCH_WITH_DEPARTMENT_CODE\n"
-                    + "FROM\n"
-                    + "     `events` events INNER JOIN `event_student_attendees` event_student_attendees ON events.`EVENT_CODE` = event_student_attendees.`EVENT_CODE`\n"
-                    + "     INNER JOIN `students` students ON event_student_attendees.`STUDENT_ID` = students.`STUDENT_ID`\n"
-                    + "WHERE\n"
-                    + "     event_student_attendees.`GROUP_ID` = '" + groupID + "'";
-            RSETStudentsOfGroup = stmtStudentsOfGroup.executeQuery(StudentsOfGroupQuery);
-            while (RSETStudentsOfGroup.next()) {
-                model_TableStudentOfGroup.addRow(new Object[model_TableStudentOfGroup.getColumnCount()]);
-                tableRankedEmployee.setValueAt(RSETStudentsOfGroup.getString("event_student_attendees_STUDENT_ID"), rowCount, 0);
-                tableRankedEmployee.setValueAt(RSETStudentsOfGroup.getString("students_STUDENT_FIRST_NAME"), rowCount, 1);
-                tableRankedEmployee.setValueAt(RSETStudentsOfGroup.getString("students_STUDENT_NAME_INITIAL"), rowCount, 2);
-                tableRankedEmployee.setValueAt(RSETStudentsOfGroup.getString("students_student_batch_BATCH_WITH_DEPARTMENT_CODE"), rowCount, 3);
-                rowCount++;
-
-                String eventCode = RSETStudentsOfGroup.getString("event_student_attendees_EVENT_CODE");
-                String eventName = RSETStudentsOfGroup.getString("events_EVENT_NAME");
-            }
-
-//            if (RSETStudentsOfGroup.next()) {
-//
-//            }
-            TextNumberOfEmpRanked.setText(String.valueOf(rowCount));
-            comboDepartment.setEnabled(false);
-            buttonView.setEnabled(false);
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
+    private void checkBoxGetJobSavingTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxGetJobSavingTimeActionPerformed
+        if (checkBoxGetJobSavingTime.isSelected()) {
+            textStartTime.setEditable(false);
+            textStartTime.setText("Saving time");
+        } else if (!checkBoxGetJobSavingTime.isSelected()) {
+            textStartTime.setEditable(true);
+            textStartTime.setText("");
+            textStartTime.requestFocus();
         }
-    }
+    }//GEN-LAST:event_checkBoxGetJobSavingTimeActionPerformed
 
     protected Object[] CheckIfStudentAlreadyAdded(String studntFromBtch) {
-        int rowCount = model_TableStudentOfGroup.getRowCount();
+        int rowCount = model_TableAllocatedEmployees.getRowCount();
         Object[] data = new Object[2];
         data[0] = false;
         data[1] = -1;
 
         for (int i = 0; i < rowCount; i++) {
-            String studentAllocateToEvent = model_TableStudentOfGroup.getValueAt(i, 0).toString();
+            String studentAllocateToEvent = model_TableAllocatedEmployees.getValueAt(i, 0).toString();
             if (studntFromBtch.equals(studentAllocateToEvent)) {
                 data[0] = true;
                 data[1] = i;
@@ -732,90 +849,133 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         return data;
     }
 
-    private void loadBatchCodeToCombo() {
-        try {
-            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select BATCH_WITH_DEPARTMENT_CODE, BATCH_YEAR From student_batch order by BATCH_WITH_DEPARTMENT_CODE DESC";
-            ResultSet rset = stmt.executeQuery(query);
+    private void CheckBeforeSave() {
+        int RowCount = tableAllocatedEmployee.getRowCount();
+        int selectedRowCountAtFixJob = tableFixedJobs.getSelectedRowCount();
+        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+        String department = comboDepartment.getSelectedItem().toString();
 
-            comboDepartment.removeAllItems();
-            comboDepartment.insertItemAt("--Select--", 0);
-            int position = 1;
-            if (rset.next()) {
-                do {
-                    comboDepartment.insertItemAt(rset.getString("BATCH_WITH_DEPARTMENT_CODE") + "--" + rset.getString("BATCH_YEAR"), position);
-                    position++;
-                } while (rset.next());
+        if (department.equals(select) || subDepartment.equals(select)) {
+            JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
+        } else if (RowCount <= 0) {
+            JOptionPane.showMessageDialog(this, "Employees are not available at table.", "No employees", JOptionPane.OK_OPTION);
+        } else if (selectedRowCountAtFixJob != 1) {
+            JOptionPane.showMessageDialog(this, "Job selection is not correct.", "Incorrect selection", JOptionPane.OK_OPTION);
+        } else if (!department.equals(select) && RowCount > 0 && !subDepartment.equals(select) && selectedRowCountAtFixJob == 1) {
+            int x = JOptionPane.showConfirmDialog(this, "Are you sure to allocate these employees?", "Save?", JOptionPane.YES_NO_OPTION);
+            if (x == JOptionPane.YES_OPTION) {
+                loadDateTime();
             }
-            comboDepartment.setSelectedIndex(0);
+        }
+    }
+
+    private void loadDateTime() {
+        String query = "SELECT GETDATE() AS CurrentDateTime";
+        String Time, Date;
+        try {
+            Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultset = statement.executeQuery(query);
+
+            if (resultset.next()) {
+                Date = IndexPage.LabelDate.getText();
+//                Date = resultset.getString("CurrentDateTime").split(" ")[0];
+                Time = resultset.getString("CurrentDateTime").split(" ")[1];
+                Time = Time.split("\\.")[0];
+                saveAsAllocation(Time, Date);
+            }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please contact for support.");
         }
     }
 
-    private void CheckBeforeSave() {
-        int RowCount = tableRankedEmployee.getRowCount();
-        String Batch = comboDepartment.getSelectedItem().toString();
-        String group = comboSubDepartment.getSelectedItem().toString();
+    private void saveAsAllocation(String Time, String Date) {
+        int RowCount = tableAllocatedEmployee.getRowCount();
+        int selectedRowAtFixJob = tableFixedJobs.getSelectedRow();
+        statusOfJob = "New";
+        productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
+        productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
+        remarks = textAreaRemarks.getText();
 
-        if (Batch.equals(select) || group.equals(select)) {
-            JOptionPane.showMessageDialog(this, "Batch or group is not selected.", "Not selected", JOptionPane.OK_OPTION);
-        } else if (RowCount <= 0) {
-            JOptionPane.showMessageDialog(this, "Students are not available at table.", "No students", JOptionPane.OK_OPTION);
-        } else if (!Batch.equals(select) && RowCount > 0 && !group.equals(select)) {
-            int x = JOptionPane.showConfirmDialog(this, "Are you sure to allocate these stduents?", "Save?", JOptionPane.YES_NO_OPTION);
-            if (x == JOptionPane.YES_OPTION) {
-                allocateStudents();
-            }
+        if (checkBoxGetJobSavingTime.isSelected()) {
+            jobAllocatedtime = Time;
+        } else if (!checkBoxGetJobSavingTime.isSelected()) {
+            jobAllocatedtime = textStartTime.getText();
         }
-    }
-
-    private void allocateStudents() {
-        String studentID, event;
-        int RowCount = tableRankedEmployee.getRowCount();
-        String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
-        String eventCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
-        event = "";
-        String SENT_TO_STUDENT = "No";
+        allocatedtime = formatedTextAllocatedTime.getText();
 
         try {
+            AutoID = new DocNumGenerator();
+            AutoID.methodNumGen("JOB");
+            jobID = AutoID.getDocChar() + AutoID.getDocNumber();
+            textFieldJobCode.setText(jobID);
+            jobID = textFieldJobCode.getText();
+
             java.sql.Statement stmtMain = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String Checkquery = "select * From event_student_attendees where GROUP_ID = '" + groupID[1] + "'";
-            ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
+//            java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtEmp = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            String Checkquery = "select JOB_ID From JobRunning where JOB_ID = '" + jobID + "'";
+//            ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
+//
+//            if (IfExistRset.next()) {
+//                String deleteQuery = "delete From JobRunning where JOB_ID = '" + jobID + "'";
+//                stmtDeleteExist.execute(deleteQuery);
+//            }
+
+            fixedJobID = tableFixedJobs.getValueAt(selectedRowAtFixJob, 0).toString();
+
+            String MainInsertQuery = "INSERT INTO [JobRunning]\n"
+                    + "           ([JOB_ID]\n"
+                    + "           ,[FIXED_JOB_ID]\n"
+                    + "           ,[JOB_ALLOCATED_DATE]\n"
+                    + "           ,[JOB_ALLOCATED_TIME]\n"
+                    + "           ,[ALLOCATED_TIME]\n"
+                    + "           ,[ASSIGNED_BY]\n"
+                    + "           ,[SUPERVISE_BY]\n"
+                    + "           ,[PRODUCT_LEVEL]\n"
+                    + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
+                    + "           ,[IS_NEW_ONGOING]\n"
+                    + "           ,[REMARKS]\n"
+                    + "           ,[USER_ID]\n"
+                    + "           ,[LOG_INSERT_DATE]\n"
+                    + "           ,[LOG_INSERT_TIME])\n"
+                    + "     VALUES\n"
+                    + "           ('" + jobID + "'\n"
+                    + "           ,'" + fixedJobID + "'\n"
+                    + "           ,'" + Date + "'\n"
+                    + "           ,'" + jobAllocatedtime + "'\n"
+                    + "           ,'" + allocatedtime + "'\n"
+                    + "           ,'" + logUser + "'\n"
+                    + "           ,'" + emptyFields + "'\n"
+                    + "           ,'" + productLevel + "'\n"
+                    + "           ,'" + productLevelItemCode + "'\n"
+                    + "           ,'" + statusOfJob + "'\n"
+                    + "           ,'" + remarks + "'\n"
+                    + "           ,'" + logUser + "'\n"
+                    + "           ,'" + Date + "'\n"
+                    + "           ,'" + Time + "')";
+            stmtMain.execute(MainInsertQuery);
 
             for (int i = 0; i < RowCount; i++) {
-                studentID = tableRankedEmployee.getValueAt(i, 0).toString();
-
-                if (IfExistRset.next()) {
-                    String deleteQuery = "delete From event_student_attendees where GROUP_ID = '" + groupID[1] + "' AND STUDENT_ID = '" + studentID + "'";
-                    stmtDeleteExist.execute(deleteQuery);
-                }
-
-                String MainInsertQuery = "INSERT INTO `event_student_attendees`\n"
-                        + "(`GROUP_ID`,\n"
-                        + "`STUDENT_ID`,\n"
-                        + "`EVENT_CODE`,\n"
-                        + "`IS_CONFERMATION_SENT_TO_STUDENT`,\n"
-                        + "`student_event_groups_GROUP_ID`)\n"
-                        + "VALUES\n"
-                        + "(\n"
-                        + "'" + groupID[1] + "',\n"
-                        + "'" + studentID + "',\n"
-                        + "'" + eventCode[1] + "',\n"
-                        + "'" + SENT_TO_STUDENT + "',\n"
-                        + "'" + groupID[1] + "'\n"
-                        + ")";
-                stmtMain.execute(MainInsertQuery);
+                employeeID = tableAllocatedEmployee.getValueAt(i, 0).toString();
+                String empInsertQuery = "INSERT INTO [EmployeesAtRunningJob]\n"
+                        + "           ([JOB_ID]\n"
+                        + "           ,[EMPLOYEE_CODE]\n"
+                        + "           ,[TO_EMPLOYEE_REMARKS])\n"
+                        + "     VALUES\n"
+                        + "           ('" + jobID + "'\n"
+                        + "           ,'" + employeeID + "'\n"
+                        + "           ,'" + emptyFields + "')";
+                stmtEmp.execute(empInsertQuery);
             }
 
-            JOptionPane.showMessageDialog(this, "Selected students are allocated to '" + event + "' successfully.");
+            JOptionPane.showMessageDialog(this, "Selected employees are allocated to '" + jobID + "' successfully.");
             btnSave.setEnabled(false);
             stmtMain.close();
-            stmtDeleteExist.close();
-            stmtIfExist.close();
+//            stmtDeleteExist.close();
+//            stmtIfExist.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -840,15 +1000,16 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }
 
     private void Refresh() {
-        int x = JOptionPane.showConfirmDialog(this, "Refresh Stock Eidt window?", "Refresh", JOptionPane.YES_NO_OPTION);
+        int x = JOptionPane.showConfirmDialog(this, "Refresh '" + menuName + "' window?", "Refresh", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             comboDepartment.setEnabled(true);
             buttonView.setEnabled(true);
             comboDepartment.setSelectedItem(select);
             comboSubDepartment.setSelectedItem(select);
 
-            TextNumberOfEmpRanked.setText("");
-            TextNumberOfEmpAtSubDepartment.setText("");
+            textNumberOfEmpAllocatedToJob.setText("");
+            TextNumberOfEmpAtDepartment.setText("");
+            textFieldJobCode.setText("");
 
             try {
                 int rowi = model_TableEmployee.getRowCount();
@@ -861,9 +1022,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             }
 
             try {
-                int rowi = model_TableStudentOfGroup.getRowCount();
+                int rowi = model_TableAllocatedEmployees.getRowCount();
                 for (int i = 0; i < rowi; i++) {
-                    model_TableStudentOfGroup.removeRow(0);
+                    model_TableAllocatedEmployees.removeRow(0);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -881,20 +1042,19 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAddSelected;
     private javax.swing.JButton ButtonRemoveSelected;
-    private javax.swing.JTextField TextNumberOfEmpAtSubDepartment;
-    private javax.swing.JTextField TextNumberOfEmpRanked;
+    private javax.swing.JTextField TextNumberOfEmpAtDepartment;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton buttonView;
+    private javax.swing.JCheckBox checkBoxGetJobSavingTime;
     private javax.swing.JComboBox comboDepartment;
     private javax.swing.JComboBox comboSubDepartment;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -910,11 +1070,16 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_subAccount1;
     private javax.swing.JLabel lbl_subAccount2;
     private javax.swing.JPanel panel1;
+    private javax.swing.JRadioButton rBtnProductLevel1;
+    private javax.swing.JRadioButton rBtnProductLevel2;
     private javax.swing.JSpinner spinnerEmpCount;
     private javax.swing.JSpinner spinnerItemCount;
+    private javax.swing.JTable tableAllocatedEmployee;
     private javax.swing.JTable tableEmployee;
     private javax.swing.JTable tableFixedJobs;
-    private javax.swing.JTable tableRankedEmployee;
     private javax.swing.JTextArea textAreaRemarks;
+    private javax.swing.JTextField textFieldJobCode;
+    private javax.swing.JTextField textNumberOfEmpAllocatedToJob;
+    private javax.swing.JFormattedTextField textStartTime;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,9 +5,9 @@
 package MainFiles;
 
 import Transactions.UserLogins;
-import Transactions.DesignationTree;
 import reports.Attachements;
 import Transactions.JobAllocation;
+import Transactions.JobStatus;
 import Transactions.UserPrivilege;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import javax.print.attribute.standard.JobState;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -64,6 +65,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static JobFixed jobFixed = null;
 
     public static JobAllocation jobAllocation = null;
+    public static JobStatus jobStatus = null;
     public static UserPrivilege userPrivilege = null;
     public static UserLogins userLogins = null;
 
@@ -452,8 +454,8 @@ public class IndexPage extends javax.swing.JFrame {
         });
         TabMenuTransactions.add(MenuCreateStudentEventGroup);
 
-        menuEmployeeTree.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
-        menuEmployeeTree.setText("Employee tree");
+        menuEmployeeTree.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
+        menuEmployeeTree.setText("Job status");
         menuEmployeeTree.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuEmployeeTreeActionPerformed(evt);
@@ -1293,15 +1295,15 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     }//GEN-LAST:event_MenuCreateStudentEventGroupActionPerformed
 
     private void menuEmployeeTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmployeeTreeActionPerformed
-//        if (allocateStudentsForEventGroup != null) {
-//            if (!allocateStudentsForEventGroup.isVisible()) {
-//                allocateStudentsForEventGroup.setVisible(true);
-//            }
-//        } else {
-//            allocateStudentsForEventGroup = new JobAllocation();
-//            dskPane_RightPanel.add(allocateStudentsForEventGroup);
-//            allocateStudentsForEventGroup.setVisible(true);
-//        }
+        if (jobStatus != null) {
+            if (!jobStatus.isVisible()) {
+                jobStatus.setVisible(true);
+            }
+        } else {
+            jobStatus = new JobStatus();
+            dskPane_RightPanel.add(jobStatus);
+            jobStatus.setVisible(true);
+        }
     }//GEN-LAST:event_menuEmployeeTreeActionPerformed
 
     private void MenuItemBlankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemBlankActionPerformed
@@ -1418,7 +1420,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JLabel LabelDate2;
     private javax.swing.JLabel LabelDate3;
     public static javax.swing.JLabel LabelTime;
-    private javax.swing.JLabel LabelUser;
+    public static javax.swing.JLabel LabelUser;
     private javax.swing.JMenuItem MenuAbout;
     private javax.swing.JMenuItem MenuAdminSettings;
     private javax.swing.JMenuItem MenuConnectionSettings;

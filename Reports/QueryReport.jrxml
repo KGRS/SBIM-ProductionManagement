@@ -5,54 +5,53 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     SIUnits."UnitName" AS SIUnits_UnitName,
-     SIUnits."PurchaseMeasurement" AS SIUnits_PurchaseMeasurement,
-     SIUnits."IssueMeasurement" AS SIUnits_IssueMeasurement,
-     SIUnits."BaseUnitCode" AS SIUnits_BaseUnitCode,
-     Items."ItemName" AS Items_ItemName,
-     Items."UnitPurchase" AS Items_UnitPurchase,
-     ProductLevel2."PL2_ITEM_CODE" AS ProductLevel2_PL2_ITEM_CODE,
-     ProductLevel2."PL2_ITEM_NAME" AS ProductLevel2_PL2_ITEM_NAME,
-     ProductLevel2."PL2_ITEM_PRINT_NAME" AS ProductLevel2_PL2_ITEM_PRINT_NAME,
-     ProductLevel2."UnitCode" AS ProductLevel2_UnitCode,
-     ProductLevel2."VISIBILITY" AS ProductLevel2_VISIBILITY,
-     ProductLevel2RawItems."PL2_ITEM_CODE" AS ProductLevel2RawItems_PL2_ITEM_CODE,
-     ProductLevel2RawItems."PL2_ITEM_QUANTITY" AS ProductLevel2RawItems_PL2_ITEM_QUANTITY,
-     ProductLevel2RawItems."PL1_ITEM_CODE" AS ProductLevel2RawItems_PL1_ITEM_CODE,
-     ProductLevel2RawItems."PL1_ITEM_QUANTITY" AS ProductLevel2RawItems_PL1_ITEM_QUANTITY,
-     ProductLevel2RawItems."ItemCode" AS ProductLevel2RawItems_ItemCode,
-     ProductLevel2RawItems."QUANTITY" AS ProductLevel2RawItems_QUANTITY,
-     ProductLevel1."PL1_ITEM_CODE" AS ProductLevel1_PL1_ITEM_CODE,
-     ProductLevel1."PL1_ITEM_NAME" AS ProductLevel1_PL1_ITEM_NAME,
-     ProductLevel1."UnitCode" AS ProductLevel1_UnitCode
+     JobFixed."JOB_FIXED_NAME" AS JobFixed_JOB_FIXED_NAME,
+     JobFixed."PRODUCT_LEVEL" AS JobFixed_PRODUCT_LEVEL,
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,
+     JobFixed."ITEM_COUNT" AS JobFixed_ITEM_COUNT,
+     JobFixed."ALLOCATED_TIME" AS JobFixed_ALLOCATED_TIME,
+     JobFixed."EMPLOYEE_COUNT" AS JobFixed_EMPLOYEE_COUNT,
+     JobFixed."REMARKS" AS JobFixed_REMARKS,
+     JobFinished."JOB_ID" AS JobFinished_JOB_ID,
+     JobFinished."FIXED_JOB_ID" AS JobFinished_FIXED_JOB_ID,
+     JobFinished."JOB_ALLOCATED_DATE" AS JobFinished_JOB_ALLOCATED_DATE,
+     JobFinished."JOB_ALLOCATED_TIME" AS JobFinished_JOB_ALLOCATED_TIME,
+     JobFinished."ALLOCATED_TIME" AS JobFinished_ALLOCATED_TIME,
+     JobFinished."ASSIGNED_BY" AS JobFinished_ASSIGNED_BY,
+     JobFinished."SUPERVISE_BY" AS JobFinished_SUPERVISE_BY,
+     JobFinished."PRODUCT_LEVEL" AS JobFinished_PRODUCT_LEVEL,
+     JobFinished."PRODUCT_LEVEL_ITEM_CODE" AS JobFinished_PRODUCT_LEVEL_ITEM_CODE,
+     JobFinished."IS_COMPLETE_CANCLE" AS JobFinished_IS_COMPLETE_CANCLE,
+     JobFinished."REMARKS" AS JobFinished_REMARKS,
+     JobFinished."USER_ID" AS JobFinished_USER_ID,
+     JobFinished."LOG_INSERT_DATE" AS JobFinished_LOG_INSERT_DATE,
+     JobFinished."LOG_INSERT_TIME" AS JobFinished_LOG_INSERT_TIME
 FROM
-     "dbo"."ProductLevel2RawItems" ProductLevel2RawItems INNER JOIN "dbo"."ProductLevel2" ProductLevel2 ON ProductLevel2RawItems."PL2_ITEM_CODE" = ProductLevel2."PL2_ITEM_CODE"
-     INNER JOIN "dbo"."Items" Items ON ProductLevel2RawItems."ItemCode" = Items."ItemCode"
-     INNER JOIN "dbo"."ProductLevel1" ProductLevel1 ON ProductLevel2RawItems."PL1_ITEM_CODE" = ProductLevel1."PL1_ITEM_CODE"
-     INNER JOIN "dbo"."SIUnits" SIUnits ON ProductLevel2."UnitCode" = SIUnits."UnitCode"
+     "dbo"."JobFixed" JobFixed INNER JOIN "dbo"."JobFinished" JobFinished ON JobFixed."JOB_FIXED_ID" = JobFinished."FIXED_JOB_ID"
 WHERE
-     ProductLevel2."PL2_ITEM_CODE" = 'PL2C1']]>
+     JobFinished."IS_COMPLETE_CANCLE" = '']]>
 	</queryString>
-	<field name="SIUnits_UnitName" class="java.lang.String"/>
-	<field name="SIUnits_PurchaseMeasurement" class="java.lang.Double"/>
-	<field name="SIUnits_IssueMeasurement" class="java.lang.Double"/>
-	<field name="SIUnits_BaseUnitCode" class="java.lang.String"/>
-	<field name="Items_ItemName" class="java.lang.String"/>
-	<field name="Items_UnitPurchase" class="java.lang.String"/>
-	<field name="ProductLevel2_PL2_ITEM_CODE" class="java.lang.String"/>
-	<field name="ProductLevel2_PL2_ITEM_NAME" class="java.lang.String"/>
-	<field name="ProductLevel2_PL2_ITEM_PRINT_NAME" class="java.lang.String"/>
-	<field name="ProductLevel2_UnitCode" class="java.lang.String"/>
-	<field name="ProductLevel2_VISIBILITY" class="java.lang.String"/>
-	<field name="ProductLevel2RawItems_PL2_ITEM_CODE" class="java.lang.String"/>
-	<field name="ProductLevel2RawItems_PL2_ITEM_QUANTITY" class="java.lang.Double"/>
-	<field name="ProductLevel2RawItems_PL1_ITEM_CODE" class="java.lang.String"/>
-	<field name="ProductLevel2RawItems_PL1_ITEM_QUANTITY" class="java.lang.Double"/>
-	<field name="ProductLevel2RawItems_ItemCode" class="java.lang.String"/>
-	<field name="ProductLevel2RawItems_QUANTITY" class="java.lang.Double"/>
-	<field name="ProductLevel1_PL1_ITEM_CODE" class="java.lang.String"/>
-	<field name="ProductLevel1_PL1_ITEM_NAME" class="java.lang.String"/>
-	<field name="ProductLevel1_UnitCode" class="java.lang.String"/>
+	<field name="JobFixed_JOB_FIXED_NAME" class="java.lang.String"/>
+	<field name="JobFixed_PRODUCT_LEVEL" class="java.lang.Integer"/>
+	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="JobFixed_ITEM_COUNT" class="java.lang.Integer"/>
+	<field name="JobFixed_ALLOCATED_TIME" class="java.lang.Double"/>
+	<field name="JobFixed_EMPLOYEE_COUNT" class="java.lang.Integer"/>
+	<field name="JobFixed_REMARKS" class="java.lang.String"/>
+	<field name="JobFinished_JOB_ID" class="java.lang.String"/>
+	<field name="JobFinished_FIXED_JOB_ID" class="java.lang.String"/>
+	<field name="JobFinished_JOB_ALLOCATED_DATE" class="java.lang.String"/>
+	<field name="JobFinished_JOB_ALLOCATED_TIME" class="java.lang.String"/>
+	<field name="JobFinished_ALLOCATED_TIME" class="java.lang.Double"/>
+	<field name="JobFinished_ASSIGNED_BY" class="java.lang.String"/>
+	<field name="JobFinished_SUPERVISE_BY" class="java.lang.String"/>
+	<field name="JobFinished_PRODUCT_LEVEL" class="java.lang.Integer"/>
+	<field name="JobFinished_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="JobFinished_IS_COMPLETE_CANCLE" class="java.lang.String"/>
+	<field name="JobFinished_REMARKS" class="java.lang.String"/>
+	<field name="JobFinished_USER_ID" class="java.lang.String"/>
+	<field name="JobFinished_LOG_INSERT_DATE" class="java.lang.String"/>
+	<field name="JobFinished_LOG_INSERT_TIME" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
