@@ -5,53 +5,37 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     JobFixed."JOB_FIXED_NAME" AS JobFixed_JOB_FIXED_NAME,
-     JobFixed."PRODUCT_LEVEL" AS JobFixed_PRODUCT_LEVEL,
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,
-     JobFixed."ITEM_COUNT" AS JobFixed_ITEM_COUNT,
-     JobFixed."ALLOCATED_TIME" AS JobFixed_ALLOCATED_TIME,
-     JobFixed."EMPLOYEE_COUNT" AS JobFixed_EMPLOYEE_COUNT,
-     JobFixed."REMARKS" AS JobFixed_REMARKS,
-     JobFinished."JOB_ID" AS JobFinished_JOB_ID,
-     JobFinished."FIXED_JOB_ID" AS JobFinished_FIXED_JOB_ID,
-     JobFinished."JOB_ALLOCATED_DATE" AS JobFinished_JOB_ALLOCATED_DATE,
-     JobFinished."JOB_ALLOCATED_TIME" AS JobFinished_JOB_ALLOCATED_TIME,
-     JobFinished."ALLOCATED_TIME" AS JobFinished_ALLOCATED_TIME,
-     JobFinished."ASSIGNED_BY" AS JobFinished_ASSIGNED_BY,
-     JobFinished."SUPERVISE_BY" AS JobFinished_SUPERVISE_BY,
-     JobFinished."PRODUCT_LEVEL" AS JobFinished_PRODUCT_LEVEL,
-     JobFinished."PRODUCT_LEVEL_ITEM_CODE" AS JobFinished_PRODUCT_LEVEL_ITEM_CODE,
-     JobFinished."IS_COMPLETE_CANCLE" AS JobFinished_IS_COMPLETE_CANCLE,
-     JobFinished."REMARKS" AS JobFinished_REMARKS,
-     JobFinished."USER_ID" AS JobFinished_USER_ID,
-     JobFinished."LOG_INSERT_DATE" AS JobFinished_LOG_INSERT_DATE,
-     JobFinished."LOG_INSERT_TIME" AS JobFinished_LOG_INSERT_TIME
+     JobRunning."JOB_ID" AS JobRunning_JOB_ID,
+     JobRunning."FIXED_JOB_ID" AS JobRunning_FIXED_JOB_ID,
+     JobRunning."ASSIGNED_BY" AS JobRunning_ASSIGNED_BY,
+     JobRunning."SUPERVISE_BY" AS JobRunning_SUPERVISE_BY,
+     JobRunning."PRODUCT_LEVEL" AS JobRunning_PRODUCT_LEVEL,
+     JobRunning."PRODUCT_LEVEL_ITEM_CODE" AS JobRunning_PRODUCT_LEVEL_ITEM_CODE,
+     JobRunning."REMARKS" AS JobRunning_REMARKS,
+     JobRunning."USER_ID" AS JobRunning_USER_ID,
+     JobRunning."LOG_INSERT_DATE" AS JobRunning_LOG_INSERT_DATE,
+     JobRunning."LOG_INSERT_TIME" AS JobRunning_LOG_INSERT_TIME,
+     EmployeesAtRunningJob."JOB_ID" AS EmployeesAtRunningJob_JOB_ID,
+     EmployeesAtRunningJob."EMPLOYEE_CODE" AS EmployeesAtRunningJob_EMPLOYEE_CODE,
+     EmployeesAtRunningJob."TO_EMPLOYEE_REMARKS" AS EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS
 FROM
-     "dbo"."JobFixed" JobFixed INNER JOIN "dbo"."JobFinished" JobFinished ON JobFixed."JOB_FIXED_ID" = JobFinished."FIXED_JOB_ID"
+     "dbo"."EmployeesAtRunningJob" EmployeesAtRunningJob INNER JOIN "dbo"."JobRunning" JobRunning ON EmployeesAtRunningJob."JOB_ID" = JobRunning."JOB_ID"
 WHERE
-     JobFinished."IS_COMPLETE_CANCLE" = '']]>
+     JobRunning."JOB_ID" = '']]>
 	</queryString>
-	<field name="JobFixed_JOB_FIXED_NAME" class="java.lang.String"/>
-	<field name="JobFixed_PRODUCT_LEVEL" class="java.lang.Integer"/>
-	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
-	<field name="JobFixed_ITEM_COUNT" class="java.lang.Integer"/>
-	<field name="JobFixed_ALLOCATED_TIME" class="java.lang.Double"/>
-	<field name="JobFixed_EMPLOYEE_COUNT" class="java.lang.Integer"/>
-	<field name="JobFixed_REMARKS" class="java.lang.String"/>
-	<field name="JobFinished_JOB_ID" class="java.lang.String"/>
-	<field name="JobFinished_FIXED_JOB_ID" class="java.lang.String"/>
-	<field name="JobFinished_JOB_ALLOCATED_DATE" class="java.lang.String"/>
-	<field name="JobFinished_JOB_ALLOCATED_TIME" class="java.lang.String"/>
-	<field name="JobFinished_ALLOCATED_TIME" class="java.lang.Double"/>
-	<field name="JobFinished_ASSIGNED_BY" class="java.lang.String"/>
-	<field name="JobFinished_SUPERVISE_BY" class="java.lang.String"/>
-	<field name="JobFinished_PRODUCT_LEVEL" class="java.lang.Integer"/>
-	<field name="JobFinished_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
-	<field name="JobFinished_IS_COMPLETE_CANCLE" class="java.lang.String"/>
-	<field name="JobFinished_REMARKS" class="java.lang.String"/>
-	<field name="JobFinished_USER_ID" class="java.lang.String"/>
-	<field name="JobFinished_LOG_INSERT_DATE" class="java.lang.String"/>
-	<field name="JobFinished_LOG_INSERT_TIME" class="java.lang.String"/>
+	<field name="JobRunning_JOB_ID" class="java.lang.String"/>
+	<field name="JobRunning_FIXED_JOB_ID" class="java.lang.String"/>
+	<field name="JobRunning_ASSIGNED_BY" class="java.lang.String"/>
+	<field name="JobRunning_SUPERVISE_BY" class="java.lang.String"/>
+	<field name="JobRunning_PRODUCT_LEVEL" class="java.lang.Integer"/>
+	<field name="JobRunning_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="JobRunning_REMARKS" class="java.lang.String"/>
+	<field name="JobRunning_USER_ID" class="java.lang.String"/>
+	<field name="JobRunning_LOG_INSERT_DATE" class="java.lang.String"/>
+	<field name="JobRunning_LOG_INSERT_TIME" class="java.lang.String"/>
+	<field name="EmployeesAtRunningJob_JOB_ID" class="java.lang.String"/>
+	<field name="EmployeesAtRunningJob_EMPLOYEE_CODE" class="java.lang.String"/>
+	<field name="EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

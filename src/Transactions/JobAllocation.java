@@ -35,7 +35,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
             , productLevelItemName = "", remarks = "", jobAllocatedDate = ""
             , jobAllocatedtime = "", allocatedtime = "", emptyFields = ""
-            , employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "";
+            , employeeID = "", FirstName = "", NameWithIni = "", callName = ""
+            , fixedJobID = "", statusOfJob = "";
+    int itemCount;
 
     public JobAllocation() {
         initComponents();
@@ -775,7 +777,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
-        int itemCount, allocateTime, employeeCount;
+        int allocateTime, employeeCount;
 
         fixedJobID = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
         Name = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 1).toString();
@@ -897,6 +899,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
         remarks = textAreaRemarks.getText();
+        itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
 
         if (checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = Time;
@@ -913,17 +916,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             jobID = textFieldJobCode.getText();
 
             java.sql.Statement stmtMain = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtEmp = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            String Checkquery = "select JOB_ID From JobRunning where JOB_ID = '" + jobID + "'";
-//            ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
-//
-//            if (IfExistRset.next()) {
-//                String deleteQuery = "delete From JobRunning where JOB_ID = '" + jobID + "'";
-//                stmtDeleteExist.execute(deleteQuery);
-//            }
-
             fixedJobID = tableFixedJobs.getValueAt(selectedRowAtFixJob, 0).toString();
 
             String MainInsertQuery = "INSERT INTO [JobRunning]\n"
@@ -936,6 +929,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,[SUPERVISE_BY]\n"
                     + "           ,[PRODUCT_LEVEL]\n"
                     + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
+                    + "           ,[ITEM_COUNT]\n"
                     + "           ,[IS_NEW_ONGOING]\n"
                     + "           ,[REMARKS]\n"
                     + "           ,[USER_ID]\n"
@@ -951,6 +945,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + emptyFields + "'\n"
                     + "           ,'" + productLevel + "'\n"
                     + "           ,'" + productLevelItemCode + "'\n"
+                    + "           ,'" + itemCount + "'\n"
                     + "           ,'" + statusOfJob + "'\n"
                     + "           ,'" + remarks + "'\n"
                     + "           ,'" + logUser + "'\n"
@@ -974,8 +969,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Selected employees are allocated to '" + jobID + "' successfully.");
             btnSave.setEnabled(false);
             stmtMain.close();
-//            stmtDeleteExist.close();
-//            stmtIfExist.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
