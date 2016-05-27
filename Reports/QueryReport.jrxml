@@ -5,37 +5,19 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     JobRunning."JOB_ID" AS JobRunning_JOB_ID,
-     JobRunning."FIXED_JOB_ID" AS JobRunning_FIXED_JOB_ID,
-     JobRunning."ASSIGNED_BY" AS JobRunning_ASSIGNED_BY,
-     JobRunning."SUPERVISE_BY" AS JobRunning_SUPERVISE_BY,
-     JobRunning."PRODUCT_LEVEL" AS JobRunning_PRODUCT_LEVEL,
-     JobRunning."PRODUCT_LEVEL_ITEM_CODE" AS JobRunning_PRODUCT_LEVEL_ITEM_CODE,
-     JobRunning."REMARKS" AS JobRunning_REMARKS,
-     JobRunning."USER_ID" AS JobRunning_USER_ID,
-     JobRunning."LOG_INSERT_DATE" AS JobRunning_LOG_INSERT_DATE,
-     JobRunning."LOG_INSERT_TIME" AS JobRunning_LOG_INSERT_TIME,
      EmployeesAtRunningJob."JOB_ID" AS EmployeesAtRunningJob_JOB_ID,
      EmployeesAtRunningJob."EMPLOYEE_CODE" AS EmployeesAtRunningJob_EMPLOYEE_CODE,
-     EmployeesAtRunningJob."TO_EMPLOYEE_REMARKS" AS EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS
+     EmployeesAtRunningJob."TO_EMPLOYEE_REMARKS" AS EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS,
+     JobRunning."JOB_ID" AS JobRunning_JOB_ID
 FROM
      "dbo"."EmployeesAtRunningJob" EmployeesAtRunningJob INNER JOIN "dbo"."JobRunning" JobRunning ON EmployeesAtRunningJob."JOB_ID" = JobRunning."JOB_ID"
 WHERE
      JobRunning."JOB_ID" = '']]>
 	</queryString>
-	<field name="JobRunning_JOB_ID" class="java.lang.String"/>
-	<field name="JobRunning_FIXED_JOB_ID" class="java.lang.String"/>
-	<field name="JobRunning_ASSIGNED_BY" class="java.lang.String"/>
-	<field name="JobRunning_SUPERVISE_BY" class="java.lang.String"/>
-	<field name="JobRunning_PRODUCT_LEVEL" class="java.lang.Integer"/>
-	<field name="JobRunning_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
-	<field name="JobRunning_REMARKS" class="java.lang.String"/>
-	<field name="JobRunning_USER_ID" class="java.lang.String"/>
-	<field name="JobRunning_LOG_INSERT_DATE" class="java.lang.String"/>
-	<field name="JobRunning_LOG_INSERT_TIME" class="java.lang.String"/>
 	<field name="EmployeesAtRunningJob_JOB_ID" class="java.lang.String"/>
 	<field name="EmployeesAtRunningJob_EMPLOYEE_CODE" class="java.lang.String"/>
 	<field name="EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS" class="java.lang.String"/>
+	<field name="JobRunning_JOB_ID" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

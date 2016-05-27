@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -38,6 +39,10 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             , employeeID = "", FirstName = "", NameWithIni = "", callName = ""
             , fixedJobID = "", statusOfJob = "";
     int itemCount;
+    String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
+    int ALLOCATED_TIME;
+    long millisecondsjobAllocatedTime, millisecondsAllocatedTime, millisecondsAllocatedFinishingTime, millisecondsCurrentTime;
+    SimpleDateFormat commonTimeFormate = new SimpleDateFormat("hh:mm:ss");
 
     public JobAllocation() {
         initComponents();
@@ -896,6 +901,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         int RowCount = tableAllocatedEmployee.getRowCount();
         int selectedRowAtFixJob = tableFixedJobs.getSelectedRow();
         statusOfJob = "New";
+        isLate = "No";
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
         remarks = textAreaRemarks.getText();
@@ -934,7 +940,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,[REMARKS]\n"
                     + "           ,[USER_ID]\n"
                     + "           ,[LOG_INSERT_DATE]\n"
-                    + "           ,[LOG_INSERT_TIME])\n"
+                    + "           ,[LOG_INSERT_TIME]\n"
+                    + "           ,[SHOULD_FINISHED_AT]\n"
+                    + "           ,[IS_LATE])\n"
                     + "     VALUES\n"
                     + "           ('" + jobID + "'\n"
                     + "           ,'" + fixedJobID + "'\n"
@@ -950,7 +958,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + remarks + "'\n"
                     + "           ,'" + logUser + "'\n"
                     + "           ,'" + Date + "'\n"
-                    + "           ,'" + Time + "')";
+                    + "           ,'" + Time + "'\n"
+                    + "           ,'" + Date + "'\n"
+                    + "           ,'" + isLate + "')";
             stmtMain.execute(MainInsertQuery);
 
             for (int i = 0; i < RowCount; i++) {

@@ -18,7 +18,9 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -46,7 +48,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
 //    private final DefaultTableModel model_TableFixedJobs;
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
-    private final String Date = IndexPage.LabelDate.getText();
+    private final String logDate = IndexPage.LabelDate.getText();
     String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "";
     int itemCount, jobFinishedTime;
 
@@ -60,8 +62,10 @@ public class JobStatus extends javax.swing.JInternalFrame {
         this.setTitle(menuName);
         txtSearch.setVisible(false);
 
-        CalendarStartDate.setText(Date);
-        CalendarEndDate.setText(Date);
+        CalendarStartDate.setText(logDate);
+        CalendarEndDate.setText(logDate);
+        textFinishedTime.setEditable(true);
+        checkBoxGetJobSavingTime.setSelected(false);
         cmbAtTableAt8();
     }
 
@@ -96,6 +100,10 @@ public class JobStatus extends javax.swing.JInternalFrame {
         comboBoxFilter = new javax.swing.JComboBox();
         lableNoOfJobs = new javax.swing.JLabel();
         comboBoxOrder = new javax.swing.JComboBox();
+        textFinishedTime = new javax.swing.JTextField();
+        buttonAddFinishedTime = new javax.swing.JButton();
+        checkBoxGetJobSavingTime = new javax.swing.JCheckBox();
+        lbl_category1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setIconifiable(true);
@@ -130,8 +138,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
         panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lbl_category.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category.setText("Order selected jobs by");
-        panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 130, 20));
+        lbl_category.setText(" (Insert finished time in 24 hours clock)");
+        panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, 380, 20));
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Start date");
@@ -237,7 +245,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 ButtonViewActionPerformed(evt);
             }
         });
-        panel1.add(ButtonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 20, 90, -1));
+        panel1.add(ButtonView, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, 130, -1));
 
         buttonSave.setText("Save");
         buttonSave.addActionListener(new java.awt.event.ActionListener() {
@@ -269,6 +277,42 @@ public class JobStatus extends javax.swing.JInternalFrame {
 
         comboBoxOrder.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Job ID", "Fixed job ID", "Description", "Date" }));
         panel1.add(comboBoxOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 150, -1));
+
+        textFinishedTime.setText("hh:mm:ss");
+        textFinishedTime.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textFinishedTimeFocusGained(evt);
+            }
+        });
+        textFinishedTime.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textFinishedTimeKeyPressed(evt);
+            }
+        });
+        panel1.add(textFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, 110, -1));
+
+        buttonAddFinishedTime.setText("Add finished time");
+        buttonAddFinishedTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddFinishedTimeActionPerformed(evt);
+            }
+        });
+        panel1.add(buttonAddFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 100, 130, -1));
+
+        checkBoxGetJobSavingTime.setBackground(new java.awt.Color(255, 255, 255));
+        checkBoxGetJobSavingTime.setForeground(new java.awt.Color(102, 102, 102));
+        checkBoxGetJobSavingTime.setSelected(true);
+        checkBoxGetJobSavingTime.setText("Get current time");
+        checkBoxGetJobSavingTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxGetJobSavingTimeActionPerformed(evt);
+            }
+        });
+        panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 100, 110, -1));
+
+        lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_category1.setText("Order selected jobs by");
+        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 130, 20));
 
         javax.swing.GroupLayout pnl_BaseLayout = new javax.swing.GroupLayout(pnl_Base);
         pnl_Base.setLayout(pnl_BaseLayout);
@@ -316,11 +360,14 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private void Refresh() {
         RefreshJobsTable();
         txtSearch.setText("");
-        CalendarStartDate.setText(Date);
-        CalendarEndDate.setText(Date);
+        CalendarStartDate.setText(logDate);
+        CalendarEndDate.setText(logDate);
         txtSearch.requestFocus();
         textNumberTransactions.setText("");
         comboBoxFilter.setSelectedIndex(0);
+        textFinishedTime.setEditable(true);
+        textFinishedTime.setText("hh:mm:ss");
+        checkBoxGetJobSavingTime.setSelected(false);
     }
 
     private void RefreshJobsTable() {
@@ -513,8 +560,10 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet reset;
             Statement stmt;
             int rowCount = 0;
+            long startTimeInMilliSeconds;
             RefreshJobsTable();
             statusOfJob = "Completed";
+            Calendar calender = Calendar.getInstance();
 
             if (comboOrder.equals("Job ID")) {
                 orderOfShowingJobs = "JobFinished.\"JOB_ID\"";
@@ -539,6 +588,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobFinished.\"JOB_ALLOCATED_DATE\" AS JobFinished_JOB_ALLOCATED_DATE,\n"
                     + "     JobFinished.\"JOB_ALLOCATED_TIME\" AS JobFinished_JOB_ALLOCATED_TIME,\n"
                     + "     JobFinished.\"ALLOCATED_TIME\" AS JobFinished_ALLOCATED_TIME,\n"
+                    + "     JobFinished.\"JOB_FINISHED_TIME\" AS JobFinished_JOB_FINISHED_TIME,\n"
                     + "     JobFinished.\"ASSIGNED_BY\" AS JobFinished_ASSIGNED_BY,\n"
                     + "     JobFinished.\"SUPERVISE_BY\" AS JobFinished_SUPERVISE_BY,\n"
                     + "     JobFinished.\"PRODUCT_LEVEL\" AS JobFinished_PRODUCT_LEVEL,\n"
@@ -565,7 +615,20 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobFinished_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(0, rowCount, 6);
+
+//                Date stTime = tableJobs.getValueAt(rowCount, 4).toString();
+//                long retryDate = stTime.currentTimeMillis();
+//
+//                startTimeInMilliSeconds = calender.setTimeInMillis(date.getTime());
+//                int sec = 600;
+//                Timestamp later = new Timestamp(retry_date.getTime() + sec * 1000);
+                
+//                SimpleDateFormat PoyaStart = new SimpleDateFormat("hh:mm");
+//                Calendar calPoyaSart = Calendar.getInstance();
+//                calPoyaSart.setTime(PoyaStart.parse(rset.getString("St_time_Poyaday").split(" ")[1]));
+//                millisecondsPoyaStart = calPoyaSart.getTimeInMillis();
+                
+                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_TIME"), rowCount, 6);
                 tableJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 7);
                 tableJobs.setValueAt(statusOfJob, rowCount, 8);
                 rowCount++;
@@ -730,17 +793,79 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
     }//GEN-LAST:event_buttonSaveActionPerformed
 
+    private void buttonAddFinishedTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddFinishedTimeActionPerformed
+        int selectedRowOfTable = tableJobs.getSelectedRow();
+        int selectedRowCountOfTable = tableJobs.getSelectedRowCount();
+        String finishedTime = textFinishedTime.getText();
+        if(selectedRowCountOfTable == 1 && !finishedTime.equals("")){
+            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 6);
+        }else if(selectedRowCountOfTable != 1 && finishedTime.equals("")){
+            JOptionPane.showMessageDialog(this, "Row should be selected and finished time cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
+        }
+        
+    }//GEN-LAST:event_buttonAddFinishedTimeActionPerformed
+
+    private void checkBoxGetJobSavingTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxGetJobSavingTimeActionPerformed
+        if (checkBoxGetJobSavingTime.isSelected()) {
+            textFinishedTime.setEditable(false);
+            String query = "SELECT GETDATE() AS CurrentDateTime";
+            String Time;
+            try {
+                Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet resultset = statement.executeQuery(query);
+
+                if (resultset.next()) {
+                    Time = resultset.getString("CurrentDateTime").split(" ")[1];
+                    Time = Time.split("\\.")[0];
+                    textFinishedTime.setText(Time);
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "please contact for support.");
+            }
+        } else if (!checkBoxGetJobSavingTime.isSelected()) {
+            textFinishedTime.setEditable(true);
+            textFinishedTime.setText("hh:mm:ss");
+            textFinishedTime.requestFocus();
+            textFinishedTime.selectAll();
+        }
+    }//GEN-LAST:event_checkBoxGetJobSavingTimeActionPerformed
+
+    private void textFinishedTimeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFinishedTimeKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (textFinishedTime.getText().length() == 1) {
+                textFinishedTime.setText("0" + textFinishedTime.getText() + ":00" + ":00");
+            } else if (textFinishedTime.getText().length() == 2) {
+                int time = Integer.parseInt(textFinishedTime.getText());
+                if (time > 23) {
+                    JOptionPane.showMessageDialog(this, "Please insert a valid time.");
+                } else {
+                    textFinishedTime.setText(textFinishedTime.getText() + ":00" + ":00");
+                }
+            } else if (textFinishedTime.getText().length() == 3) {
+                String[] ttime = textFinishedTime.getText().split("\\.");
+                textFinishedTime.setText("0" + ttime[0] + ":" + ttime[1] + "0");
+            }
+            buttonAddFinishedTime.requestFocus();
+        }
+    }//GEN-LAST:event_textFinishedTimeKeyPressed
+
+    private void textFinishedTimeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFinishedTimeFocusGained
+        textFinishedTime.selectAll();
+    }//GEN-LAST:event_textFinishedTimeFocusGained
+
     private void loadDateTime() {
         String query = "SELECT GETDATE() AS CurrentDateTime";
-        String Time;
+        String logTime;
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
 
             if (resultset.next()) {
-                Time = resultset.getString("CurrentDateTime").split(" ")[1];
-                Time = Time.split("\\.")[0];
-                Save(Time, Date);
+                logTime = resultset.getString("CurrentDateTime").split(" ")[1];
+                logTime = logTime.split("\\.")[0];
+                Save(logTime, logDate);
             }
 
         } catch (SQLException ex) {
@@ -749,7 +874,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
     }
 
-    private void Save(String Time, String Date) {
+    private void Save(String logTime, String logDate) {
         int RowCount = tableJobs.getRowCount();
 
         try {
@@ -836,8 +961,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + logUser + "'\n"
                                 + "           ,'" + JobRunning_LOG_INSERT_DATE + "'\n"
                                 + "           ,'" + JobRunning_LOG_INSERT_TIME + "'\n"
-                                + "           ,'" + Date + "'\n"
-                                + "           ,'" + Time + "')";
+                                + "           ,'" + logDate + "'\n"
+                                + "           ,'" + logTime + "')";
                         stmtMain.execute(MainInsertQuery);
                     }
 
@@ -923,8 +1048,10 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private org.sourceforge.jcalendarbutton.JCalendarButton CalendarStartDate;
     private javax.swing.JButton btnExit;
     private javax.swing.ButtonGroup btnGrup_yesNo;
+    private javax.swing.JButton buttonAddFinishedTime;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonSave;
+    private javax.swing.JCheckBox checkBoxGetJobSavingTime;
     private javax.swing.JComboBox comboBoxFilter;
     private javax.swing.JComboBox comboBoxOrder;
     private javax.swing.JScrollPane jScrollPane2;
@@ -932,11 +1059,13 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JLabel lableNoOfJobs;
     private javax.swing.JLabel lbl_accountType;
     private javax.swing.JLabel lbl_category;
+    private javax.swing.JLabel lbl_category1;
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel pnl_Base;
     private javax.swing.JTable tableJobs;
+    private javax.swing.JTextField textFinishedTime;
     private javax.swing.JTextField textNumberTransactions;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
