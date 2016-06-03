@@ -18,6 +18,7 @@ import de.javasoft.plaf.synthetica.SyntheticaOrangeMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
 import functions.Informations;
 import functions.ReadConfig;
+import functions.TimerMethods;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -105,10 +106,10 @@ public class IndexPage extends javax.swing.JFrame {
 
         String LogedUser = IndexPage.user;
         LabelUser.setText(LogedUser);
-        
+
         String LogedUserDepartmentCode = IndexPage.departmentCode;
         labelDepartmentCode.setText(LogedUserDepartmentCode);
-        
+
         String LogedUserSubDepartmentCode = IndexPage.subDepartmentCode;
         labelSubDepartmentCode.setText(LogedUserSubDepartmentCode);
 
@@ -120,6 +121,9 @@ public class IndexPage extends javax.swing.JFrame {
         LabelBackGroundPicture.setIcon(DefaultBackGround);
         dskPane_RightPanel.setBackground(new Color(255, 255, 255));
         LabelUser.requestFocus();
+
+        java.util.Timer timerCheckLateJobs = new java.util.Timer();
+        timerCheckLateJobs.schedule(new TimerMethods(), 2000, 2000); //show time in milli seconds
     }
 
     /**
@@ -1246,10 +1250,8 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
 
     private void MenuItemDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemDefaultActionPerformed
         try {
-
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            ImageIcon imgThisImg = new ImageIcon(projectPath + "/pictures/DefaultBackgrounds/Basic/Student.jpg");
-
+            ImageIcon imgThisImg = new ImageIcon(projectPath + "/pictures/DefaultBackgrounds/Basic/Default.jpg");
             LabelBackGroundPicture.setIcon(imgThisImg);
             dskPane_RightPanel.setBackground(new Color(255, 255, 255));
         } catch (ClassNotFoundException ex) {

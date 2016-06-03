@@ -33,11 +33,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private final String menuName = "Job allocation";
     private final String logUser = IndexPage.LabelUser.getText();
     private DocNumGenerator AutoID;
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
-            , productLevelItemName = "", remarks = "", jobAllocatedDate = ""
-            , jobAllocatedtime = "", allocatedtime = "", emptyFields = ""
-            , employeeID = "", FirstName = "", NameWithIni = "", callName = ""
-            , fixedJobID = "", statusOfJob = "";
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "";
     int itemCount;
     String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
     int ALLOCATED_TIME;
@@ -56,6 +52,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         loadDepartmentsToCombo();
         rBtnProductLevel1.setSelected(true);
+//        checkBoxGetJobSavingTime.setSelected(true);
+        textStartTime.setEditable(false);
     }
 
     /**
@@ -110,7 +108,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         textFieldJobCode = new javax.swing.JTextField();
 
         setIconifiable(true);
-        setPreferredSize(new java.awt.Dimension(1070, 688));
+        setPreferredSize(new java.awt.Dimension(1070, 675));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -352,51 +350,38 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 440, 180));
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description5.setText("Allocated time (minutes) *");
-        jPanel1.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 140, 20));
 
         lbl_description2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description2.setText("Item count *");
-        jPanel1.add(lbl_description2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 130, 20));
 
         spinnerItemCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-        jPanel1.add(spinnerItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 80, -1));
 
         formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         formatedTextAllocatedTime.setText("30");
-        jPanel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 80, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description4.setText("Employee count *");
-        jPanel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 140, 20));
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Remarks");
-        jPanel1.add(lbl_description, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 100, 20));
 
         textAreaRemarks.setColumns(20);
         textAreaRemarks.setRows(5);
         jScrollPane4.setViewportView(textAreaRemarks);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 320, 70));
-
         spinnerEmpCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-        jPanel1.add(spinnerEmpCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 80, -1));
 
         jButton1.setText("Select");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 84, -1));
 
         jButton2.setText("Deselect");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 250, 84, -1));
-        jPanel1.add(textStartTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 86, -1));
+
+        textStartTime.setText("Saving time");
 
         lbl_description6.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description6.setText(" Start time *");
-        jPanel1.add(lbl_description6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 70, 20));
 
         checkBoxGetJobSavingTime.setForeground(new java.awt.Color(102, 102, 102));
         checkBoxGetJobSavingTime.setSelected(true);
@@ -406,7 +391,78 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                 checkBoxGetJobSavingTimeActionPerformed(evt);
             }
         });
-        jPanel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 140, -1));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(spinnerItemCount, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(formatedTextAllocatedTime, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(80, 80, 80)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(checkBoxGetJobSavingTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(24, 24, 24))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(textStartTime, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(spinnerEmpCount, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(26, 26, 26))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_description2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spinnerItemCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textStartTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_description6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_description5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(formatedTextAllocatedTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxGetJobSavingTime))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_description4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spinnerEmpCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_description, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)))
+        );
 
         panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 540, 300));
 
@@ -414,7 +470,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         buttonGroup1.add(rBtnProductLevel1);
         rBtnProductLevel1.setForeground(new java.awt.Color(102, 102, 102));
         rBtnProductLevel1.setText("Product level 1");
-        panel1.add(rBtnProductLevel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 100, -1));
+        panel1.add(rBtnProductLevel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 120, -1));
 
         rBtnProductLevel2.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rBtnProductLevel2);
@@ -433,7 +489,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
         );
 
         pack();
@@ -728,7 +784,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             int i = tableAllocatedEmployee.getSelectedRowCount();
             if (i == 1) {
                 tableAllocatedEmployeesOfJob();
-            } else if (i == 1) {
+            } else if (i != 1) {
                 JOptionPane.showMessageDialog(this, "Please select a single row.", "Select one row", JOptionPane.OK_OPTION);
             }
         }
@@ -778,7 +834,12 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
 
     private void ButtonRemoveSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoveSelectedActionPerformed
-        tableAllocatedEmployeesOfJob();
+        int i = tableAllocatedEmployee.getSelectedRowCount();
+        if (i == 1) {
+            tableAllocatedEmployeesOfJob();
+        } else if (i != 1) {
+            JOptionPane.showMessageDialog(this, "Please select a single row.", "Select one row", JOptionPane.OK_OPTION);
+        }
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
@@ -900,7 +961,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private void saveAsAllocation(String Time, String Date) {
         int RowCount = tableAllocatedEmployee.getRowCount();
         int selectedRowAtFixJob = tableFixedJobs.getSelectedRow();
-        statusOfJob = "New";
         isLate = "No";
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
@@ -909,8 +969,10 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         if (checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = Time;
+            statusOfJob = "Ongoing";
         } else if (!checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = textStartTime.getText();
+            statusOfJob = "New";
         }
         allocatedtime = formatedTextAllocatedTime.getText();
 
@@ -1013,6 +1075,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             textNumberOfEmpAllocatedToJob.setText("");
             TextNumberOfEmpAtDepartment.setText("");
             textFieldJobCode.setText("");
+            textStartTime.setEditable(false);
+            textStartTime.setText("Saving time");
+            checkBoxGetJobSavingTime.setSelected(true);
 
             try {
                 int rowi = model_TableEmployee.getRowCount();
