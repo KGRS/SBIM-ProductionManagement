@@ -25,17 +25,17 @@ public class TimerMethods extends TimerTask{
 
     String logDate, logTime, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, JOB_ID;
     int ALLOCATED_TIME;
-    long millisecondsjobAllocatedTime, millisecondsAllocatedTime, millisecondsShouldFinishIn, millisecondsCurrentTime;
+    long millisecondsjobAllocatedTime, millisecondsAllocatedTime, millisecondsShouldFinishIn, millisecondsShouldFinishInToCompare, millisecondsCurrentTime, millisecondsCurrentTimeToCompare;
     SimpleDateFormat commonTimeFormate = new SimpleDateFormat("hh:mm:ss");
 
     private String checkLateOngoingJobs(String logTime) {
         String timeShouldFinish = "";
-        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE FROM JobRunning";
+        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE FROM JobRunning WHERE IS_LATE = 'No'";
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
 
-            if (resultset.next()) {
+            while (resultset.next()) {
                 JOB_ID = resultset.getString("JOB_ID");
                 ALLOCATED_TIME = resultset.getInt("ALLOCATED_TIME");
                 JOB_ALLOCATED_TIME = resultset.getString("JOB_ALLOCATED_TIME");
@@ -50,23 +50,32 @@ public class TimerMethods extends TimerTask{
                 millisecondsCurrentTime = calcurrentTime.getTimeInMillis();
 
                 millisecondsAllocatedTime = ALLOCATED_TIME * 60 * 1000;
-                millisecondsShouldFinishIn = millisecondsjobAllocatedTime + millisecondsAllocatedTime;
-
-//                Date date = new Date(logEvent.timeSTamp);
-//                DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-//                String dateFormatted = formatter.format(date);
-                if (millisecondsCurrentTime < millisecondsShouldFinishIn) {
-                    java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    String UpdateQuery = "update JobRunning set IS_LATE = 'Yes' WHERE JOB_ID = '"+JOB_ID+"'";
-                    stmt.execute(UpdateQuery);
-                }
-
+                millisecondsShouldFinishIn = millisecondsjobAllocatedTime + millisecondsAllocatedTime;                
                 long second = (millisecondsShouldFinishIn / 1000) % 60;
                 long minute = (millisecondsShouldFinishIn / (1000 * 60)) % 60;
                 long hour = (millisecondsShouldFinishIn / (1000 * 60 * 60)) % 24;
 
                 timeShouldFinish = String.format("%02d:%02d:%02d", hour, minute, second);
                 System.out.println(timeShouldFinish);
+
+//                Date date = new Date(logEvent.timeSTamp);
+//                DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+//                String dateFormatted = formatter.format(date);
+                if(millisecondsCurrentTime < 0){
+                    millisecondsCurrentTimeToCompare = millisecondsCurrentTime * (-1);                    
+                }else if(millisecondsCurrentTime >= 0){
+                    millisecondsCurrentTimeToCompare = millisecondsCurrentTime;                    
+                }                
+                if(millisecondsShouldFinishIn < 0){
+                    millisecondsShouldFinishInToCompare = millisecondsShouldFinishIn * (-1);
+                }else if(millisecondsShouldFinishIn >= 0){
+                    millisecondsShouldFinishInToCompare = millisecondsShouldFinishIn;
+                }                
+                if (millisecondsCurrentTimeToCompare > millisecondsShouldFinishInToCompare) {
+                    java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    String UpdateQuery = "update JobRunning set IS_LATE = 'Yes' WHERE JOB_ID = '"+JOB_ID+"'";
+                    stmt.execute(UpdateQuery);
+                }                
             }
 
         } catch (SQLException ex) {

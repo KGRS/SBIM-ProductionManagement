@@ -962,7 +962,11 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         int RowCount = tableAllocatedEmployee.getRowCount();
         int selectedRowAtFixJob = tableFixedJobs.getSelectedRow();
         isLate = "No";
-        productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
+        if (rBtnProductLevel1.isSelected()) {
+            productLevel = "1";
+        } else if (rBtnProductLevel2.isSelected()) {
+            productLevel = "2";
+        }
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
         remarks = textAreaRemarks.getText();
         itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
@@ -1078,26 +1082,10 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             textStartTime.setEditable(false);
             textStartTime.setText("Saving time");
             checkBoxGetJobSavingTime.setSelected(true);
-
-            try {
-                int rowi = model_TableEmployee.getRowCount();
-                for (int i = 0; i < rowi; i++) {
-                    model_TableEmployee.removeRow(0);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            }
-
-            try {
-                int rowi = model_TableAllocatedEmployees.getRowCount();
-                for (int i = 0; i < rowi; i++) {
-                    model_TableAllocatedEmployees.removeRow(0);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(this, "Please contact for support.");
-            }
+            btnSave.setEnabled(false);
+            model_TableFixedJobs.setRowCount(0);
+            model_TableEmployee.setRowCount(0);
+            model_TableAllocatedEmployees.setRowCount(0);
         }
     }
 
