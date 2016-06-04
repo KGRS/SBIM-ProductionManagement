@@ -33,7 +33,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private final String menuName = "Job allocation";
     private final String logUser = IndexPage.LabelUser.getText();
     private DocNumGenerator AutoID;
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "";
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", emptyField="";
     int itemCount;
     String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
     int ALLOCATED_TIME;
@@ -1025,7 +1025,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + logUser + "'\n"
                     + "           ,'" + Date + "'\n"
                     + "           ,'" + Time + "'\n"
-                    + "           ,'" + Date + "'\n"
+                    + "           ,'" + emptyField + "'\n"
                     + "           ,'" + isLate + "')";
             stmtMain.execute(MainInsertQuery);
 
