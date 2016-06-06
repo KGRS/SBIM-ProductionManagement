@@ -49,8 +49,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "";
-    int itemCount, jobFinishedTime;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime;
+    int itemCount, jobFinishedTime, selectedRowOfTableJobs, selectedRowCountOfTableJobs;
 
     /**
      * Creates new form MainCategory
@@ -231,6 +231,11 @@ public class JobStatus extends javax.swing.JInternalFrame {
             }
         });
         tableJobs.getTableHeader().setReorderingAllowed(false);
+        tableJobs.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableJobsMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableJobs);
         if (tableJobs.getColumnModel().getColumnCount() > 0) {
             tableJobs.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -452,7 +457,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobRunning.\"REMARKS\" AS JobRunning_REMARKS,\n"
                     + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
                     + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
-                    + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME\n"
+                    + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                    + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT\n"
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
                     + "WHERE\n"
@@ -470,7 +476,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobRunning_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(0, rowCount, 6);
+                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_AT"), rowCount, 6);
                 tableJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 7);
                 tableJobs.setValueAt(statusOfJob, rowCount, 8);
                 rowCount++;
@@ -523,7 +529,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobRunning.\"REMARKS\" AS JobRunning_REMARKS,\n"
                     + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
                     + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
-                    + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME\n"
+                    + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                    + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT\n"
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
                     + "WHERE\n"
@@ -854,6 +861,15 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void textFinishedTimeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFinishedTimeFocusGained
         textFinishedTime.selectAll();
     }//GEN-LAST:event_textFinishedTimeFocusGained
+
+    private void tableJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableJobsMouseClicked
+        selectedRowCountOfTableJobs = tableJobs.getSelectedRowCount();
+        if(selectedRowCountOfTableJobs == 1){
+            selectedRowOfTableJobs = tableJobs.getSelectedRow();
+            jobFinishTime = tableJobs.getValueAt(selectedRowOfTableJobs, 6).toString();
+            textFinishedTime.setText(jobFinishTime);
+        }
+    }//GEN-LAST:event_tableJobsMouseClicked
 
     private void loadDateTime() {
         String query = "SELECT GETDATE() AS CurrentDateTime";

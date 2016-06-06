@@ -112,7 +112,7 @@ public class TimerMethods extends TimerTask {
 
     private void updateJobRunningStatus(String logTime) {
         String timeShouldFinish;
-        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE FROM JobRunning WHERE IS_NEW_ONGOING = 'New' AND SHOULD_FINISHED_AT = '"+emptyField+"'";
+        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE FROM JobRunning WHERE SHOULD_FINISHED_AT = '"+emptyField+"'";
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
