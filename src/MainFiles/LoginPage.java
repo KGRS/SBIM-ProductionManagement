@@ -358,10 +358,14 @@ public class LoginPage extends javax.swing.JFrame {
                 String dbPassword = rsetGetLoginDetails.getString("UnAndPw_USER_PASSWORD");
                 String departmentCode = rsetGetLoginDetails.getString("SubDepartments_DepartmentCode");
                 String subDepartmentCode = rsetGetLoginDetails.getString("Employees_SUB_DEPARTMENT_CODE");
+                String departmentName = rsetGetLoginDetails.getString("Departments_DepartmentName");
+                String subDepartmentName = rsetGetLoginDetails.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                 if (dbPassword.equals(password)) {
                     IndexPage.user = textUserName.getText().trim();
                     IndexPage.departmentCode = departmentCode;
                     IndexPage.subDepartmentCode = subDepartmentCode;
+                    IndexPage.departmentName = departmentName;
+                    IndexPage.subDepartmentName = subDepartmentName;
                     IndexPage mainpage = new IndexPage();
                     mainpage.setExtendedState(Frame.MAXIMIZED_BOTH);
                     mainpage.setVisible(true);

@@ -54,9 +54,12 @@ public class IndexPage extends javax.swing.JFrame {
     public static String user = "";
     public static String departmentCode = "";
     public static String subDepartmentCode = "";
+    public static String departmentName = "";
+    public static String subDepartmentName = "";
     public static String time = "";
     public static URL url = null;
     public static Date SYSTEM_DATE;
+    private final String spliter = "--";
 
     public static Workflow department = null;
     public static Process subDepartment = null;
@@ -111,10 +114,12 @@ public class IndexPage extends javax.swing.JFrame {
         LabelUser.setText(LogedUser);
 
         String LogedUserDepartmentCode = IndexPage.departmentCode;
-        labelDepartmentCode.setText(LogedUserDepartmentCode);
+        String LogedUserDepartmentName = IndexPage.departmentName;
+        labelDepartmentCode.setText(LogedUserDepartmentName + spliter + LogedUserDepartmentCode);
 
         String LogedUserSubDepartmentCode = IndexPage.subDepartmentCode;
-        labelSubDepartmentCode.setText(LogedUserSubDepartmentCode);
+        String LogedUserSubDepartmentName = IndexPage.subDepartmentName;
+        labelSubDepartmentCode.setText(LogedUserSubDepartmentName + spliter + LogedUserSubDepartmentCode);
 
         Informations.setTimeAnd_date();
 
