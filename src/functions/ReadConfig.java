@@ -22,6 +22,7 @@ public class ReadConfig {
     public static String EnableSellPricePresentage;
     public static String BarCodeImageType;
     public static String Date;
+    public static String checkAvailableQuantity;
 
     static {
         try {
@@ -54,6 +55,7 @@ public class ReadConfig {
             }
 
             Date = prop.getProperty("DateType");
+            checkAvailableQuantity =prop.getProperty("CheckAvailableQuantity");
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Can't read cofig files");

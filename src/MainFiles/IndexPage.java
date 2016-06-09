@@ -8,6 +8,8 @@ import Transactions.UserLogins;
 import reports.Attachements;
 import Transactions.JobAllocation;
 import Transactions.JobStatus;
+import Transactions.MaterialRequisitionNote;
+import Transactions.MaterialRequisitionNoteForProItems;
 import Transactions.UserPrivilege;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
@@ -33,7 +35,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import javax.print.attribute.standard.JobState;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -67,6 +68,8 @@ public class IndexPage extends javax.swing.JFrame {
 
     public static JobAllocation jobAllocation = null;
     public static JobStatus jobStatus = null;
+    public static MaterialRequisitionNote materialRequisitionNote = null;
+    public static MaterialRequisitionNoteForProItems materialRequisitionNoteForProItems = null;
     public static UserPrivilege userPrivilege = null;
     public static UserLogins userLogins = null;
 
@@ -169,6 +172,10 @@ public class IndexPage extends javax.swing.JFrame {
         TabMenuTransactions = new javax.swing.JMenu();
         MenuCreateStudentEventGroup = new javax.swing.JMenuItem();
         menuEmployeeTree = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        arrowMenuMRN = new javax.swing.JMenu();
+        menuMeterialRequisitionNote = new javax.swing.JMenuItem();
+        menuMeterialRequisitionNoteForProItems = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         MenuUserLogin = new javax.swing.JMenuItem();
         menuUserPrivilege = new javax.swing.JMenuItem();
@@ -466,6 +473,27 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         TabMenuTransactions.add(menuEmployeeTree);
+        TabMenuTransactions.add(jSeparator5);
+
+        arrowMenuMRN.setText("MRN from Departments");
+
+        menuMeterialRequisitionNote.setText("Material Requisition Note");
+        menuMeterialRequisitionNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMeterialRequisitionNoteActionPerformed(evt);
+            }
+        });
+        arrowMenuMRN.add(menuMeterialRequisitionNote);
+
+        menuMeterialRequisitionNoteForProItems.setText("Material Requisition Note for Production Items");
+        menuMeterialRequisitionNoteForProItems.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMeterialRequisitionNoteForProItemsActionPerformed(evt);
+            }
+        });
+        arrowMenuMRN.add(menuMeterialRequisitionNoteForProItems);
+
+        TabMenuTransactions.add(arrowMenuMRN);
         TabMenuTransactions.add(jSeparator6);
 
         MenuUserLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
@@ -1373,6 +1401,30 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuFixedJobsActionPerformed
 
+    private void menuMeterialRequisitionNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMeterialRequisitionNoteActionPerformed
+        if (materialRequisitionNote != null) {
+            if (!materialRequisitionNote.isVisible()) {
+                materialRequisitionNote.setVisible(true);
+            }
+        } else {
+            materialRequisitionNote = new MaterialRequisitionNote();
+            dskPane_RightPanel.add(materialRequisitionNote);
+            materialRequisitionNote.setVisible(true);
+        }
+    }//GEN-LAST:event_menuMeterialRequisitionNoteActionPerformed
+
+    private void menuMeterialRequisitionNoteForProItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMeterialRequisitionNoteForProItemsActionPerformed
+        if (materialRequisitionNoteForProItems != null) {
+            if (!materialRequisitionNoteForProItems.isVisible()) {
+                materialRequisitionNoteForProItems.setVisible(true);
+            }
+        } else {
+            materialRequisitionNoteForProItems = new MaterialRequisitionNoteForProItems();
+            dskPane_RightPanel.add(materialRequisitionNoteForProItems);
+            materialRequisitionNoteForProItems.setVisible(true);
+        }
+    }//GEN-LAST:event_menuMeterialRequisitionNoteForProItemsActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1462,6 +1514,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JMenu TabMenuTools;
     public static javax.swing.JMenu TabMenuTransactions;
     public static javax.swing.JTextField TextCompanyName;
+    private javax.swing.JMenu arrowMenuMRN;
     public static javax.swing.JDesktopPane dskPane_RightPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
@@ -1472,6 +1525,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator9;
@@ -1479,6 +1533,8 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuFixedJobs;
+    private javax.swing.JMenuItem menuMeterialRequisitionNote;
+    private javax.swing.JMenuItem menuMeterialRequisitionNoteForProItems;
     private javax.swing.JMenuItem menuOtherCost;
     public static javax.swing.JMenuItem menuProcess;
     private javax.swing.JMenuItem menuProcessExceptions;
