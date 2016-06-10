@@ -28,13 +28,12 @@ public class ColoursOfTable extends DefaultTableCellRenderer {
                 = super.getTableCellRendererComponent(table, value,
                         isSelected, hasFocus,
                         row, column);
-
         try {
             String jobStatus, checkingJobStatus = "Yes";
             String jobID = (String) JobStatus.tableJobs.getValueAt(row, 0).toString();
             ResultSet reset;
             Statement stmt;
-            String query = "Select IS_LATE from JobRunning where IS_LATE='Yes' AND JOB_ID='" + jobID + "'";
+            String query = "Select IS_LATE from JobRunning where IS_LATE='Yes' AND JOB_ID='" + jobID + "' AND IS_NEW_ONGOING = 'Ongoing'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
             if (reset.next()) {
@@ -52,20 +51,4 @@ public class ColoursOfTable extends DefaultTableCellRenderer {
         }
         return c;
     }
-
-//    private boolean Check(String isLate) {
-//        boolean check = false;
-//        try {
-//            Connection conn = ConnectSql.conn;
-//            java.sql.Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            ResultSet rset = stmt.executeQuery("Select IS_LATE from JobRunning where IS_LATE='Yes'");
-//            if (rset.next()) {
-//                check = true;
-//            }
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(ColoursOfTable.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return check;
-//    }
 }

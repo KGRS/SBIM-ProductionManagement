@@ -19,7 +19,6 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,16 +42,17 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final DefaultTableModel model_TableJobs;
     private final String projectPath = System.getProperty("user.dir");
-
-//    private final DefaultTableModel model_TableAllocatedEmployees;
-//    private final DefaultTableModel model_TableEmployee;
-//    private final DefaultTableModel model_TableFixedJobs;
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime;
-    int itemCount, jobFinishedTime, selectedRowOfTableJobs, selectedRowCountOfTableJobs;
-
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
+            , productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = ""
+            , allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = ""
+            , callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = ""
+            , endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = ""
+            , JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE
+            , SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime;
+    int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs;
     /**
      * Creates new form MainCategory
      */
@@ -374,6 +374,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         textFinishedTime.setEditable(true);
         textFinishedTime.setText("hh:mm:ss");
         checkBoxGetJobSavingTime.setSelected(false);
+        buttonSave.setEnabled(true);
     }
 
     private void RefreshJobsTable() {
@@ -898,7 +899,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         try {
             java.sql.Statement stmtMain = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtEmp = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
             java.sql.Statement stmtSelectJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtSelectEmployeesAtJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtDeleteRunningJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -915,7 +915,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();
                     jobAllocatedtime = tableJobs.getValueAt(i, 4).toString();
                     allocatedtime = tableJobs.getValueAt(i, 5).toString();
-                    jobFinishedTime = Integer.parseInt(tableJobs.getValueAt(i, 6).toString());
+                    jobFinishedTime = tableJobs.getValueAt(i, 6).toString();
                     itemCount = Integer.parseInt(tableJobs.getValueAt(i, 7).toString());
 
                     String querySelectJob = "SELECT\n"
@@ -928,7 +928,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             + "     JobRunning.\"REMARKS\" AS JobRunning_REMARKS,\n"
                             + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
                             + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
-                            + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME\n"
+                            + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                            + "     JobRunning.\"SHOULD_FINISHED_DATE\" AS JobRunning_SHOULD_FINISHED_DATE,\n"
+                            + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT,\n"
+                            + "     JobRunning.\"IS_LATE\" AS JobRunning_IS_LATE,\n"
+                            + "     JobRunning.\"MRNID\" AS JobRunning_MRNID\n"
                             + "FROM\n"
                             + "     \"dbo\".\"JobRunning\" JobRunning\n"
                             + "WHERE\n"
@@ -942,6 +946,10 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         JobRunning_LOG_INSERT_TIME = resetSelectJob.getString("JobRunning_LOG_INSERT_TIME");
                         JobRunning_ASSIGNED_BY = resetSelectJob.getString("JobRunning_ASSIGNED_BY");
                         JobRunning_SUPERVISE_BY = resetSelectJob.getString("JobRunning_SUPERVISE_BY");
+                        SHOULD_FINISHED_DATE = resetSelectJob.getString("JobRunning_SHOULD_FINISHED_DATE");
+                        SHOULD_FINISHED_AT = resetSelectJob.getString("JobRunning_SHOULD_FINISHED_AT");
+                        IS_LATE = resetSelectJob.getString("JobRunning_IS_LATE");
+                        MRNID = resetSelectJob.getString("JobRunning_MRNID");
 
                         String MainInsertQuery = "INSERT INTO [JobFinished]\n"
                                 + "           ([JOB_ID]\n"
@@ -961,7 +969,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,[LOG_INSERT_DATE_FROM_JOB_RUN]\n"
                                 + "           ,[LOG_INSERT_TIME_FROM_JOB_RUN]\n"
                                 + "           ,[LOG_INSERT_DATE]\n"
-                                + "           ,[LOG_INSERT_TIME])\n"
+                                + "           ,[LOG_INSERT_TIME]\n"
+                                + "           ,[SHOULD_FINISHED_DATE]\n"
+                                + "           ,[SHOULD_FINISHED_AT]\n"
+                                + "           ,[IS_LATE]\n"
+                                + "           ,[MRNID])\n"
                                 + "     VALUES\n"
                                 + "           ('" + jobID + "'\n"
                                 + "           ,'" + fixedJobID + "'\n"
@@ -980,7 +992,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + JobRunning_LOG_INSERT_DATE + "'\n"
                                 + "           ,'" + JobRunning_LOG_INSERT_TIME + "'\n"
                                 + "           ,'" + logDate + "'\n"
-                                + "           ,'" + logTime + "')";
+                                + "           ,'" + logTime + "'\n"
+                                + "           ,'" + SHOULD_FINISHED_DATE + "'\n"
+                                + "           ,'" + SHOULD_FINISHED_AT + "'\n"
+                                + "           ,'" + IS_LATE + "'\n"
+                                + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
                     }
 
@@ -998,7 +1014,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     while (resetSelectEmployeesAtJob.next()) {
                         employeeID = resetSelectEmployeesAtJob.getString("EmployeesAtRunningJob_EMPLOYEE_CODE");
                         emptyFields = resetSelectEmployeesAtJob.getString("EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS");
-
                         String empInsertQuery = "INSERT INTO [EmployeesAtFinishedJob]\n"
                                 + "           ([JOB_ID]\n"
                                 + "           ,[EMPLOYEE_CODE]\n"
@@ -1016,7 +1031,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     String queryDeleteEmployeesAtJobs = "DELETE FROM [EmployeesAtRunningJob]\n"
                             + "      WHERE JOB_ID = '" + jobID + "'";
                     stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
-
                 }
             }
 
@@ -1024,14 +1038,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             buttonSave.setEnabled(false);
             stmtMain.close();
             stmtEmp.close();
-
             stmtDeleteEmpInRunningJobs.close();
             stmtDeleteRunningJob.close();
             stmtSelectEmployeesAtJob.close();
             stmtSelectJob.close();
 
-//            resetSelectEmployeesAtJob.close();
-//            resetSelectJob.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");

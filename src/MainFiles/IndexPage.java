@@ -160,6 +160,7 @@ public class IndexPage extends javax.swing.JFrame {
         LabelDate3 = new javax.swing.JLabel();
         labelDepartmentCode = new javax.swing.JLabel();
         labelSubDepartmentCode = new javax.swing.JLabel();
+        buttonJobStatus = new javax.swing.JButton();
         dskPane_RightPanel = new javax.swing.JDesktopPane();
         LabelBackGroundPicture = new javax.swing.JLabel();
         mnBar_menuBar = new javax.swing.JMenuBar();
@@ -307,6 +308,13 @@ public class IndexPage extends javax.swing.JFrame {
         labelSubDepartmentCode.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         labelSubDepartmentCode.setMaximumSize(new java.awt.Dimension(34, 25));
 
+        buttonJobStatus.setText("Job status");
+        buttonJobStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonJobStatusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnl_LeftPanelLayout = new javax.swing.GroupLayout(pnl_LeftPanel);
         pnl_LeftPanel.setLayout(pnl_LeftPanelLayout);
         pnl_LeftPanelLayout.setHorizontalGroup(
@@ -324,7 +332,8 @@ public class IndexPage extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(LabelDate3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(labelDepartmentCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelSubDepartmentCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelSubDepartmentCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonJobStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnl_LeftPanelLayout.setVerticalGroup(
@@ -334,7 +343,9 @@ public class IndexPage extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonClickHere)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonJobStatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
                 .addComponent(LabelDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LabelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1430,6 +1441,18 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuMeterialRequisitionNoteForProItemsActionPerformed
 
+    private void buttonJobStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJobStatusActionPerformed
+        if (jobStatus != null) {
+            if (!jobStatus.isVisible()) {
+                jobStatus.setVisible(true);
+            }
+        } else {
+            jobStatus = new JobStatus();
+            dskPane_RightPanel.add(jobStatus);
+            jobStatus.setVisible(true);
+        }
+    }//GEN-LAST:event_buttonJobStatusActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1520,6 +1543,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JMenu TabMenuTransactions;
     public static javax.swing.JTextField TextCompanyName;
     private javax.swing.JMenu arrowMenuMRN;
+    public static javax.swing.JButton buttonJobStatus;
     public static javax.swing.JDesktopPane dskPane_RightPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
