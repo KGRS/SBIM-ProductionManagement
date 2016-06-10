@@ -10,6 +10,7 @@ import static MainFiles.IndexPage.materialRequisitionNote;
 import OtherDialogs.WriteNotesCommon;
 import db.ConnectSql;
 import functions.DocNumGenerator;
+import functions.ReadConfig;
 import functions.ValidateFields;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -47,6 +48,7 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private DocNumGenerator AutoID;
     private final String projectPath = System.getProperty("user.dir");
+    private final String CheckAvailableQuantity = ReadConfig.checkAvailableQuantity;
 
     /**
      * Creates new form ItemDisposal
@@ -554,11 +556,11 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
             ResultSet rset = stmt.executeQuery(query);
 
             cmbTakeFromDepartment.removeAllItems();
-            cmbTakeFromDepartment.insertItemAt("--Select--", 0);
+            cmbTakeFromDepartment.insertItemAt(select, 0);
             int position = 1;
             if (rset.next()) {
                 do {
-                    cmbTakeFromDepartment.insertItemAt(rset.getString("DepartmentName") + "--" + rset.getString("DepartmentCode"), position); // 
+                    cmbTakeFromDepartment.insertItemAt(rset.getString("DepartmentName") + spliter + rset.getString("DepartmentCode"), position); // 
                     position++;
                 } while (rset.next());
             }
@@ -1310,6 +1312,7 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
 
     private void FirstCheckBeforeAddToTransferTableWithAvailableQuantity() {
         buttonSave.setEnabled(false);
+        float enteredQuantity = Float.parseFloat(TextQuantity.getText());
         int SelectedRowCount = TableAvailableItem.getSelectedRowCount();
         if (SelectedRowCount == 1) {
             String AddToGRNItem = TableAvailableItem.getValueAt(TableAvailableItem.getSelectedRow(), 0).toString();
@@ -1317,7 +1320,11 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
             if ((Boolean) CheckItemAlreadyAdded[0]) {
                 JOptionPane.showMessageDialog(this, "Item is already added.", "Already added.", JOptionPane.OK_OPTION);
             } else {
-                CheckBeforeAddToTransferTable();
+                if (CheckAvailableQuantity.equals("No")) {
+                    AddToTransferTable(enteredQuantity);
+                } else if (CheckAvailableQuantity.equals("Yes")) {
+                    CheckBeforeAddToTransferTable();
+                }
             }
         } else if (SelectedRowCount != 1) {
             JOptionPane.showMessageDialog(this, "Please select a single row in table.", "Select row.", JOptionPane.OK_OPTION);
@@ -1342,12 +1349,13 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
 
     private void CheckBeforeAddToTransferTable() {
         int getSelectedRowAtGRN = TableAvailableItem.getSelectedRow();
+        float enteredQuantity = Float.parseFloat(TextQuantity.getText());
         try {
             float AvailableQuantity = Float.parseFloat(TableAvailableItem.getValueAt(getSelectedRowAtGRN, 4).toString());
             float Quantity = Float.parseFloat(TextQuantity.getText());
 
             if (AvailableQuantity > 0 && AvailableQuantity >= Quantity) {
-                AddToTransferTable();
+                AddToTransferTable(enteredQuantity);
             } else if (AvailableQuantity <= 0) {
                 JOptionPane.showMessageDialog(this, "Quantity is not enough to request.", "Not enough.", JOptionPane.OK_OPTION);
             } else if (AvailableQuantity < Quantity) {
@@ -1363,7 +1371,7 @@ public class MaterialRequisitionNote extends javax.swing.JInternalFrame {
         }
     }
 
-    private void AddToTransferTable() {
+    private void AddToTransferTable(double enteredQuantity) {
         String ItemCode, ItemName, PurchaseUnitCode, Supplier;
         double PurchasePrice, Quantity, Amount;
         int getSelectedRowAtGRN = TableAvailableItem.getSelectedRow();

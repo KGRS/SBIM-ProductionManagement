@@ -847,7 +847,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
                 //////////////////////////////////////////////////////////////
             }
             stmtItems.close();
-            String UpdateQuery = "update JobRunning set MRNID = 'Yes' where JOB_ID = '" + jobID + "'";
+            String UpdateQuery = "update JobRunning set MRNID = '"+ID+"' where JOB_ID = '" + jobID + "'";
             stmtJobRunning.execute(UpdateQuery);
 
             JOptionPane.showMessageDialog(this, "'" + menuName + "' is successfully saved.");
@@ -1503,7 +1503,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
                     AvailableQuantity = RSETAvaItems.getFloat("Quantity");
                     float Quantity = Float.parseFloat(TextQuantity.getText());
                     if (AvailableQuantity > 0 && AvailableQuantity >= Quantity) {
-                        UpdateToReturnTable();
+                        UpdateToSecondTable();
                     } else if (AvailableQuantity <= 0) {
                         JOptionPane.showMessageDialog(this, "Quantity is not enough to request.", "Not enough.", JOptionPane.OK_OPTION);
                     } else if (AvailableQuantity < Quantity) {
@@ -1523,7 +1523,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         }
     }
 
-    private void UpdateToReturnTable() {
+    private void UpdateToSecondTable() {
         int SelectedRow = tableMRNItem.getSelectedRow();
         double PurchasePrice = Double.parseDouble(TextPurchasePrice.getText());
         double Quantity = Double.parseDouble(TextQuantity.getText());

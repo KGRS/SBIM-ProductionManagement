@@ -13,6 +13,7 @@ package Transactions;
 import MainFiles.IndexPage;
 import static MainFiles.IndexPage.jobStatus;
 import db.ConnectSql;
+import functions.ColoursOfTable;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -480,6 +481,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 7);
                 tableJobs.setValueAt(statusOfJob, rowCount, 8);
                 rowCount++;
+                tableJobs.setDefaultRenderer(Object.class, new ColoursOfTable());
             }
             reset.close();
             textNumberTransactions.setText(String.valueOf(rowCount));
@@ -1080,7 +1082,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel pnl_Base;
-    private javax.swing.JTable tableJobs;
+    public static javax.swing.JTable tableJobs;
     private javax.swing.JTextField textFinishedTime;
     private javax.swing.JTextField textNumberTransactions;
     private javax.swing.JTextField txtSearch;
