@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.utils.ToolTipUtils;
@@ -54,10 +53,6 @@ public class TimerMethods extends TimerTask {
 
                 millisecondsAllocatedTime = ALLOCATED_TIME * 60 * 1000;
                 millisecondsShouldFinishIn = millisecondsjobAllocatedTime + millisecondsAllocatedTime;
-
-//                long second = (millisecondsShouldFinishIn / 1000) % 60;
-//                long minute = (millisecondsShouldFinishIn / (1000 * 60)) % 60;
-//                long hour = (millisecondsShouldFinishIn / (1000 * 60 * 60)) % 24;
 //
 //                timeShouldFinish = String.format("%02d:%02d:%02d", hour, minute, second);
 //                System.out.println(timeShouldFinish);

@@ -4,6 +4,7 @@
  */
 package MainFiles;
 
+import Transactions.ItemTransferDepartmentWise;
 import Transactions.UserLogins;
 import reports.Attachements;
 import Transactions.JobAllocation;
@@ -73,6 +74,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static JobStatus jobStatus = null;
     public static MaterialRequisitionNote materialRequisitionNote = null;
     public static MaterialRequisitionNoteForProItems materialRequisitionNoteForProItems = null;
+    public static ItemTransferDepartmentWise ITDW = null;
     public static UserPrivilege userPrivilege = null;
     public static UserLogins userLogins = null;
 
@@ -182,9 +184,8 @@ public class IndexPage extends javax.swing.JFrame {
         arrowMenuMRN = new javax.swing.JMenu();
         menuMeterialRequisitionNote = new javax.swing.JMenuItem();
         menuMeterialRequisitionNoteForProItems = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        MenuUserLogin = new javax.swing.JMenuItem();
-        menuUserPrivilege = new javax.swing.JMenuItem();
+        arrowMenuTransfer = new javax.swing.JMenu();
+        menuTransferDepartment = new javax.swing.JMenuItem();
         TabMenuReports = new javax.swing.JMenu();
         MenuStockReports = new javax.swing.JMenuItem();
         MenuReports = new javax.swing.JMenuItem();
@@ -510,25 +511,18 @@ public class IndexPage extends javax.swing.JFrame {
         arrowMenuMRN.add(menuMeterialRequisitionNoteForProItems);
 
         TabMenuTransactions.add(arrowMenuMRN);
-        TabMenuTransactions.add(jSeparator6);
 
-        MenuUserLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
-        MenuUserLogin.setText("User login");
-        MenuUserLogin.addActionListener(new java.awt.event.ActionListener() {
+        arrowMenuTransfer.setText("Item Transfer");
+
+        menuTransferDepartment.setText("Item Transfer (Department wise)");
+        menuTransferDepartment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuUserLoginActionPerformed(evt);
+                menuTransferDepartmentActionPerformed(evt);
             }
         });
-        TabMenuTransactions.add(MenuUserLogin);
+        arrowMenuTransfer.add(menuTransferDepartment);
 
-        menuUserPrivilege.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
-        menuUserPrivilege.setText("User privilege");
-        menuUserPrivilege.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuUserPrivilegeActionPerformed(evt);
-            }
-        });
-        TabMenuTransactions.add(menuUserPrivilege);
+        TabMenuTransactions.add(arrowMenuTransfer);
 
         mnBar_menuBar.add(TabMenuTransactions);
 
@@ -1268,18 +1262,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
 
     }//GEN-LAST:event_ButtonClickHereActionPerformed
 
-    private void MenuUserLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuUserLoginActionPerformed
-        if (userLogins != null) {
-            if (!userLogins.isVisible()) {
-                userLogins.setVisible(true);
-            }
-        } else {
-            userLogins = new UserLogins();
-            dskPane_RightPanel.add(userLogins);
-            userLogins.setVisible(true);
-        }
-    }//GEN-LAST:event_MenuUserLoginActionPerformed
-
     private void MenuWorkflowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuWorkflowActionPerformed
         if (department != null) {
             if (!department.isVisible()) {
@@ -1327,31 +1309,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
 
     }//GEN-LAST:event_menuOtherCostActionPerformed
 
-    private void MenuCreateStudentEventGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuCreateStudentEventGroupActionPerformed
-        if (jobAllocation != null) {
-            if (!jobAllocation.isVisible()) {
-                jobAllocation.setVisible(true);
-            }
-        } else {
-            jobAllocation = new JobAllocation();
-            dskPane_RightPanel.add(jobAllocation);
-            jobAllocation.setVisible(true);
-        }
-
-    }//GEN-LAST:event_MenuCreateStudentEventGroupActionPerformed
-
-    private void menuEmployeeTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmployeeTreeActionPerformed
-        if (jobStatus != null) {
-            if (!jobStatus.isVisible()) {
-                jobStatus.setVisible(true);
-            }
-        } else {
-            jobStatus = new JobStatus();
-            dskPane_RightPanel.add(jobStatus);
-            jobStatus.setVisible(true);
-        }
-    }//GEN-LAST:event_menuEmployeeTreeActionPerformed
-
     private void MenuItemBlankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemBlankActionPerformed
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -1368,18 +1325,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_MenuItemBlankActionPerformed
-
-    private void menuUserPrivilegeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUserPrivilegeActionPerformed
-        if (userPrivilege != null) {
-            if (!userPrivilege.isVisible()) {
-                userPrivilege.setVisible(true);
-            }
-        } else {
-            userPrivilege = new UserPrivilege();
-            dskPane_RightPanel.add(userPrivilege);
-            userPrivilege.setVisible(true);
-        }
-    }//GEN-LAST:event_menuUserPrivilegeActionPerformed
 
     private void menuProductLevel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProductLevel1ActionPerformed
         if (productLevel1 != null) {
@@ -1417,17 +1362,17 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuFixedJobsActionPerformed
 
-    private void menuMeterialRequisitionNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMeterialRequisitionNoteActionPerformed
-        if (materialRequisitionNote != null) {
-            if (!materialRequisitionNote.isVisible()) {
-                materialRequisitionNote.setVisible(true);
+    private void buttonJobStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJobStatusActionPerformed
+        if (jobStatus != null) {
+            if (!jobStatus.isVisible()) {
+                jobStatus.setVisible(true);
             }
         } else {
-            materialRequisitionNote = new MaterialRequisitionNote();
-            dskPane_RightPanel.add(materialRequisitionNote);
-            materialRequisitionNote.setVisible(true);
+            jobStatus = new JobStatus();
+            dskPane_RightPanel.add(jobStatus);
+            jobStatus.setVisible(true);
         }
-    }//GEN-LAST:event_menuMeterialRequisitionNoteActionPerformed
+    }//GEN-LAST:event_buttonJobStatusActionPerformed
 
     private void menuMeterialRequisitionNoteForProItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMeterialRequisitionNoteForProItemsActionPerformed
         if (materialRequisitionNoteForProItems != null) {
@@ -1441,7 +1386,19 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuMeterialRequisitionNoteForProItemsActionPerformed
 
-    private void buttonJobStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJobStatusActionPerformed
+    private void menuMeterialRequisitionNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMeterialRequisitionNoteActionPerformed
+        if (materialRequisitionNote != null) {
+            if (!materialRequisitionNote.isVisible()) {
+                materialRequisitionNote.setVisible(true);
+            }
+        } else {
+            materialRequisitionNote = new MaterialRequisitionNote();
+            dskPane_RightPanel.add(materialRequisitionNote);
+            materialRequisitionNote.setVisible(true);
+        }
+    }//GEN-LAST:event_menuMeterialRequisitionNoteActionPerformed
+
+    private void menuEmployeeTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmployeeTreeActionPerformed
         if (jobStatus != null) {
             if (!jobStatus.isVisible()) {
                 jobStatus.setVisible(true);
@@ -1451,7 +1408,31 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
             dskPane_RightPanel.add(jobStatus);
             jobStatus.setVisible(true);
         }
-    }//GEN-LAST:event_buttonJobStatusActionPerformed
+    }//GEN-LAST:event_menuEmployeeTreeActionPerformed
+
+    private void MenuCreateStudentEventGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuCreateStudentEventGroupActionPerformed
+        if (jobAllocation != null) {
+            if (!jobAllocation.isVisible()) {
+                jobAllocation.setVisible(true);
+            }
+        } else {
+            jobAllocation = new JobAllocation();
+            dskPane_RightPanel.add(jobAllocation);
+            jobAllocation.setVisible(true);
+        }
+    }//GEN-LAST:event_MenuCreateStudentEventGroupActionPerformed
+
+    private void menuTransferDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTransferDepartmentActionPerformed
+        if (ITDW != null) {
+            if (!ITDW.isVisible()) {
+                ITDW.setVisible(true);
+            }
+        } else {
+            ITDW = new ItemTransferDepartmentWise();
+            dskPane_RightPanel.add(ITDW);
+            ITDW.setVisible(true);
+        }
+    }//GEN-LAST:event_menuTransferDepartmentActionPerformed
 
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
@@ -1514,7 +1495,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JMenu MenuPersonalization;
     public static javax.swing.JMenuItem MenuReports;
     private javax.swing.JMenuItem MenuStockReports;
-    private javax.swing.JMenuItem MenuUserLogin;
     private javax.swing.JMenuItem MenuWorkflow;
     private javax.swing.JPanel PanelCompanyLogo;
     private javax.swing.JMenuItem SubMenuAssassinsCreed;
@@ -1540,9 +1520,10 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JMenu TabMenuReports;
     private static javax.swing.JMenu TabMenuSettings;
     public static javax.swing.JMenu TabMenuTools;
-    public static javax.swing.JMenu TabMenuTransactions;
+    private javax.swing.JMenu TabMenuTransactions;
     public static javax.swing.JTextField TextCompanyName;
     private javax.swing.JMenu arrowMenuMRN;
+    private javax.swing.JMenu arrowMenuTransfer;
     public static javax.swing.JButton buttonJobStatus;
     public static javax.swing.JDesktopPane dskPane_RightPanel;
     private javax.swing.JLabel jLabel1;
@@ -1555,7 +1536,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     public static javax.swing.JLabel labelDepartmentCode;
@@ -1569,7 +1549,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem menuProcessExceptions;
     private javax.swing.JMenuItem menuProductLevel1;
     public static javax.swing.JMenuItem menuProductLevel2;
-    private javax.swing.JMenuItem menuUserPrivilege;
+    private javax.swing.JMenuItem menuTransferDepartment;
     private javax.swing.JMenuBar mnBar_menuBar;
     private javax.swing.JPanel pnl_BasePanel;
     private javax.swing.JPanel pnl_LeftPanel;

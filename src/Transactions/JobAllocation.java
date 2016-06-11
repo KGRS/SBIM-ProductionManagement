@@ -52,7 +52,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         loadDepartmentsToCombo();
         rBtnProductLevel1.setSelected(true);
-//        checkBoxGetJobSavingTime.setSelected(true);
         textStartTime.setEditable(false);
     }
 
@@ -615,11 +614,11 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             ResultSet rset = stmt.executeQuery(query);
 
             comboDepartment.removeAllItems();
-            comboDepartment.insertItemAt("--Select--", 0);
+            comboDepartment.insertItemAt(select, 0);
             int position = 1;
             if (rset.next()) {
                 do {
-                    comboDepartment.insertItemAt(rset.getString("DepartmentName") + "--" + rset.getString("DepartmentCode"), position); // 
+                    comboDepartment.insertItemAt(rset.getString("DepartmentName") + spliter + rset.getString("DepartmentCode"), position); // 
                     position++;
                 } while (rset.next());
             }
@@ -638,11 +637,11 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             ResultSet rset = stmt.executeQuery(query);
 
             comboSubDepartment.removeAllItems();
-            comboSubDepartment.insertItemAt("--Select--", 0);
+            comboSubDepartment.insertItemAt(select, 0);
             int position = 1;
             if (rset.next()) {
                 do {
-                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + "--" + rset.getString("SUB_DEPARTMENT_CODE"), position); // 
+                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + spliter + rset.getString("SUB_DEPARTMENT_CODE"), position);
                     position++;
                 } while (rset.next());
             }
@@ -796,23 +795,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             int i = tableAllocatedEmployee.getSelectedRow();
             model_TableAllocatedEmployees.removeRow(i);
             textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()));
-//            try {
-//                String groupID[] = comboSubDepartment.getSelectedItem().toString().split("--");
-//                java.sql.Statement stmtIfExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//                java.sql.Statement stmtDeleteExist = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//                String Checkquery = "select * From event_student_attendees where GROUP_ID = '" + groupID[1] + "'";
-//                ResultSet IfExistRset = stmtIfExist.executeQuery(Checkquery);
-//
-//                if (IfExistRset.next()) {
-//                    String studentID = tableAllocatedEmployee.getValueAt(i, 0).toString();
-//                    String deleteQuery = "delete From event_student_attendees where GROUP_ID = '" + groupID[1] + "' AND STUDENT_ID = '" + studentID + "'";
-//                    stmtDeleteExist.execute(deleteQuery);
-//                }
-//                
-//            } catch (Exception ex) {
-//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//                JOptionPane.showMessageDialog(this, "Please contact for support.");
-//            }
         }
     }
 
@@ -844,12 +826,10 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
         int allocateTime, employeeCount;
-
         fixedJobID = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
         Name = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 1).toString();
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
-
         try {
             ResultSet reset;
             Statement stmt;
@@ -871,7 +851,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
-
             if (reset.next()) {
                 itemCount = reset.getInt("JobFixed_ITEM_COUNT");
                 allocateTime = reset.getInt("JobFixed_ALLOCATED_TIME");
@@ -1002,6 +981,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,[PRODUCT_LEVEL]\n"
                     + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
                     + "           ,[ITEM_COUNT]\n"
+                    + "           ,[ITEM_COUNT_COMPLETED]\n"
                     + "           ,[IS_NEW_ONGOING]\n"
                     + "           ,[REMARKS]\n"
                     + "           ,[USER_ID]\n"
@@ -1019,6 +999,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + emptyFields + "'\n"
                     + "           ,'" + productLevel + "'\n"
                     + "           ,'" + productLevelItemCode + "'\n"
+                    + "           ,'" + itemCount + "'\n"
                     + "           ,'" + itemCount + "'\n"
                     + "           ,'" + statusOfJob + "'\n"
                     + "           ,'" + remarks + "'\n"
