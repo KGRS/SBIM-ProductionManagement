@@ -34,7 +34,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private final String logUser = IndexPage.LabelUser.getText();
     private DocNumGenerator AutoID;
     String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", emptyField="";
-    int itemCount;
+    int itemCount, itemCompleted = 0;
     String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
     int ALLOCATED_TIME;
     long millisecondsjobAllocatedTime, millisecondsAllocatedTime, millisecondsAllocatedFinishingTime, millisecondsCurrentTime;
@@ -318,7 +318,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Fixed job code", "Fixed job name", "Item count", "Product level item code"
+                "Fixed job/ Process code", "Fixed job/ Process name", "Item count", "Product level item code"
             }
         ) {
             Class[] types = new Class [] {
@@ -1000,7 +1000,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + productLevel + "'\n"
                     + "           ,'" + productLevelItemCode + "'\n"
                     + "           ,'" + itemCount + "'\n"
-                    + "           ,'" + itemCount + "'\n"
+                    + "           ,'" + itemCompleted + "'\n"
                     + "           ,'" + statusOfJob + "'\n"
                     + "           ,'" + remarks + "'\n"
                     + "           ,'" + logUser + "'\n"

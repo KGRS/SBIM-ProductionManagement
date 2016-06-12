@@ -236,7 +236,7 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Exception code", "Exception name", "Process"
+                "Exception code", "Exception name", "Fixed job/ Process"
             }
         ) {
             Class[] types = new Class [] {
@@ -276,7 +276,7 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
         panel1.add(cmbProductLevel1Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 210, -1));
 
         lbl_description3.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description3.setText("Process");
+        lbl_description3.setText("Fixed job/ Process");
         panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 110, 20));
 
         lbl_description1.setForeground(new java.awt.Color(102, 102, 102));

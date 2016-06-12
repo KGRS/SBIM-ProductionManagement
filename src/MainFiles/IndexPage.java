@@ -168,15 +168,13 @@ public class IndexPage extends javax.swing.JFrame {
         mnBar_menuBar = new javax.swing.JMenuBar();
         TabMenuMainFiles = new javax.swing.JMenu();
         MenuWorkflow = new javax.swing.JMenuItem();
-        menuProcess = new javax.swing.JMenuItem();
+        menuFixedJobs = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuOtherCost = new javax.swing.JMenuItem();
         menuProcessExceptions = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuProductLevel1 = new javax.swing.JMenuItem();
         menuProductLevel2 = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        menuFixedJobs = new javax.swing.JMenuItem();
         TabMenuTransactions = new javax.swing.JMenu();
         MenuCreateStudentEventGroup = new javax.swing.JMenuItem();
         menuEmployeeTree = new javax.swing.JMenuItem();
@@ -409,14 +407,14 @@ public class IndexPage extends javax.swing.JFrame {
         });
         TabMenuMainFiles.add(MenuWorkflow);
 
-        menuProcess.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        menuProcess.setText("Process");
-        menuProcess.addActionListener(new java.awt.event.ActionListener() {
+        menuFixedJobs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_MASK));
+        menuFixedJobs.setText("Fixed jobs/ Process");
+        menuFixedJobs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuProcessActionPerformed(evt);
+                menuFixedJobsActionPerformed(evt);
             }
         });
-        TabMenuMainFiles.add(menuProcess);
+        TabMenuMainFiles.add(menuFixedJobs);
         TabMenuMainFiles.add(jSeparator1);
 
         menuOtherCost.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -455,16 +453,6 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         TabMenuMainFiles.add(menuProductLevel2);
-        TabMenuMainFiles.add(jSeparator4);
-
-        menuFixedJobs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_MASK));
-        menuFixedJobs.setText("Fixed jobs");
-        menuFixedJobs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuFixedJobsActionPerformed(evt);
-            }
-        });
-        TabMenuMainFiles.add(menuFixedJobs);
 
         mnBar_menuBar.add(TabMenuMainFiles);
 
@@ -861,19 +849,6 @@ public class IndexPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
-
-private void menuProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessActionPerformed
-    if (subDepartment != null) {
-        if (!subDepartment.isVisible()) {
-            subDepartment.setVisible(true);
-        }
-    } else {
-        subDepartment = new Process();
-        dskPane_RightPanel.add(subDepartment);
-        subDepartment.setVisible(true);
-    }
-
-}//GEN-LAST:event_menuProcessActionPerformed
 
 private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TabMenuMainFilesActionPerformed
 
@@ -1520,7 +1495,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JMenu TabMenuReports;
     private static javax.swing.JMenu TabMenuSettings;
     public static javax.swing.JMenu TabMenuTools;
-    private javax.swing.JMenu TabMenuTransactions;
+    public static javax.swing.JMenu TabMenuTransactions;
     public static javax.swing.JTextField TextCompanyName;
     private javax.swing.JMenu arrowMenuMRN;
     private javax.swing.JMenu arrowMenuTransfer;
@@ -1534,7 +1509,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator9;
@@ -1545,7 +1519,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem menuMeterialRequisitionNote;
     private javax.swing.JMenuItem menuMeterialRequisitionNoteForProItems;
     private javax.swing.JMenuItem menuOtherCost;
-    public static javax.swing.JMenuItem menuProcess;
     private javax.swing.JMenuItem menuProcessExceptions;
     private javax.swing.JMenuItem menuProductLevel1;
     public static javax.swing.JMenuItem menuProductLevel2;

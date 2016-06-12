@@ -237,7 +237,7 @@
                   <Table columnCount="3" rowCount="0">
                     <Column editable="false" title="Exception code" type="java.lang.String"/>
                     <Column editable="false" title="Exception name" type="java.lang.String"/>
-                    <Column editable="false" title="Process" type="java.lang.String"/>
+                    <Column editable="false" title="Fixed job/ Process" type="java.lang.String"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -305,7 +305,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Process"/>
+            <Property name="text" type="java.lang.String" value="Fixed job/ Process"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

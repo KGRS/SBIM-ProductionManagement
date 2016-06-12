@@ -44,13 +44,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
-            , productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = ""
-            , allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = ""
-            , callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = ""
-            , endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = ""
-            , JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE
-            , SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime;
     int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted;
 
     public JobStatus() {
@@ -103,6 +97,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         checkBoxGetJobSavingTime = new javax.swing.JCheckBox();
         lbl_category1 = new javax.swing.JLabel();
         formattedTextItemCompleted = new javax.swing.JFormattedTextField();
+        formattedTextAllocatedTime = new javax.swing.JFormattedTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setIconifiable(true);
@@ -286,7 +281,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 textFinishedTimeKeyPressed(evt);
             }
         });
-        panel1.add(textFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 100, 90, -1));
+        panel1.add(textFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 80, -1));
 
         buttonAddDetails.setText("Add details");
         buttonAddDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -305,7 +300,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 checkBoxGetJobSavingTimeActionPerformed(evt);
             }
         });
-        panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, 110, -1));
+        panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 110, 20));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category1.setText("Order selected jobs by");
@@ -319,6 +314,9 @@ public class JobStatus extends javax.swing.JInternalFrame {
             }
         });
         panel1.add(formattedTextItemCompleted, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 100, 60, -1));
+
+        formattedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        panel1.add(formattedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(589, 100, 60, -1));
 
         javax.swing.GroupLayout pnl_BaseLayout = new javax.swing.GroupLayout(pnl_Base);
         pnl_Base.setLayout(pnl_BaseLayout);
@@ -629,7 +627,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 2);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_TIME"), rowCount, 4);
-                tableJobs.setValueAt(reset.getString("JobFinished_ALLOCATED_TIME"), rowCount, 5);                
+                tableJobs.setValueAt(reset.getString("JobFinished_ALLOCATED_TIME"), rowCount, 5);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_TIME"), rowCount, 6);
                 tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT"), rowCount, 7);
                 tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT_COMPLETED"), rowCount, 8);
@@ -777,24 +775,52 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
         int RowCount = tableJobs.getRowCount();
         if (RowCount >= 1) {
-            loadDateTime();
+            int x = JOptionPane.showConfirmDialog(this, "Are you sure to save status?", "Save?", JOptionPane.YES_NO_OPTION);
+            if (x == JOptionPane.YES_OPTION) {
+                loadDateTime();
+            }
         } else if (RowCount < 1) {
             JOptionPane.showMessageDialog(this, "Jobs are not at the table.", "Not selected", JOptionPane.OK_OPTION);
         }
     }//GEN-LAST:event_buttonSaveActionPerformed
 
     private void buttonAddDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddDetailsActionPerformed
-        int selectedRowOfTable = tableJobs.getSelectedRow();
-        int selectedRowCountOfTable = tableJobs.getSelectedRowCount();
-        String finishedTime = textFinishedTime.getText();
-        itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
-        if(selectedRowCountOfTable == 1 && !finishedTime.equals("") && itemCompleted >= 0){
-            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 6);
-            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 8);
-        }else if(selectedRowCountOfTable != 1 || finishedTime.equals("") || itemCompleted < 0){
-            JOptionPane.showMessageDialog(this, "Row should be selected and finished time cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
+        statusOfJob = comboBoxFilter.getSelectedItem().toString();
+        if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
+            int selectedRowOfTable = tableJobs.getSelectedRow();
+            int selectedRowCountOfTable = tableJobs.getSelectedRowCount();
+            if (selectedRowCountOfTable == 1) {
+                try {
+                    fixedJobID = tableJobs.getValueAt(selectedRowOfTable, 1).toString();
+                    String query = "SELECT JOB_FIXED_EXCEPTION_CODE FROM JobFixedExceptions WHERE JOB_FIXED_ID = '" + fixedJobID + "'";
+                    Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                    ResultSet resultset = statement.executeQuery(query);
+                    if (resultset.next()) {
+                        String finishedTime = textFinishedTime.getText();
+                        allocatedtime = formattedTextAllocatedTime.getText();
+                        itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
+                        if (!finishedTime.equals("") && itemCompleted >= 0 && !allocatedtime.isEmpty()) {
+                            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 6);
+                            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 8);
+                            tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 5);
+                        } else if (finishedTime.equals("") || itemCompleted < 0 || allocatedtime.isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Row should be selected and the fields cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
+                        }
+                    }else if (!resultset.next()) {
+                        JOptionPane.showMessageDialog(this, "Exception is not exsist to this job process.", "Not exsist", JOptionPane.OK_OPTION);
+                    }
+                    statement.close();
+                    resultset.close();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "please contact for support.");
+                }
+            }else if(selectedRowCountOfTable != 1){
+                JOptionPane.showMessageDialog(this, "Please select a single row of the table.", "Invalid selection", JOptionPane.OK_OPTION);
+            }
+        } else if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
+            JOptionPane.showMessageDialog(this, "You cannot change the details of the completed or ignored jobs.", "Cannot change", JOptionPane.OK_OPTION);
         }
-        
     }//GEN-LAST:event_buttonAddDetailsActionPerformed
 
     private void checkBoxGetJobSavingTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxGetJobSavingTimeActionPerformed
@@ -811,7 +837,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     Time = Time.split("\\.")[0];
                     textFinishedTime.setText(Time);
                 }
-
+                statement.close();
+                resultset.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(this, "please contact for support.");
@@ -849,10 +876,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
     private void tableJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableJobsMouseClicked
         selectedRowCountOfTableJobs = tableJobs.getSelectedRowCount();
-        if(selectedRowCountOfTableJobs == 1){
+        if (selectedRowCountOfTableJobs == 1) {
             selectedRowOfTableJobs = tableJobs.getSelectedRow();
             jobFinishTime = tableJobs.getValueAt(selectedRowOfTableJobs, 6).toString();
             textFinishedTime.setText(jobFinishTime);
+            formattedTextAllocatedTime.requestFocus();
         }
     }//GEN-LAST:event_tableJobsMouseClicked
 
@@ -872,7 +900,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 logTime = logTime.split("\\.")[0];
                 Save(logTime, logDate);
             }
-
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "please contact for support.");
@@ -881,7 +908,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
     private void Save(String logTime, String logDate) {
         int RowCount = tableJobs.getRowCount();
-
         try {
             java.sql.Statement stmtMain = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtEmp = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -889,21 +915,21 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             java.sql.Statement stmtSelectEmployeesAtJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtDeleteRunningJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtDeleteEmpInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtUpdateDetailsInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             ResultSet resetSelectJob, resetSelectEmployeesAtJob;
 
             for (int i = 0; i < RowCount; i++) {
-                statusOfJob = tableJobs.getValueAt(i, 8).toString();
-
+                statusOfJob = tableJobs.getValueAt(i, 9).toString();
+                jobID = tableJobs.getValueAt(i, 0).toString();
                 if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
-                    jobID = tableJobs.getValueAt(i, 0).toString();
                     fixedJobID = tableJobs.getValueAt(i, 1).toString();
                     jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();
                     jobAllocatedtime = tableJobs.getValueAt(i, 4).toString();
                     allocatedtime = tableJobs.getValueAt(i, 5).toString();
                     jobFinishedTime = tableJobs.getValueAt(i, 6).toString();
                     itemCount = Integer.parseInt(tableJobs.getValueAt(i, 7).toString());
-
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 8).toString());
                     String querySelectJob = "SELECT\n"
                             + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
                             + "     JobRunning.\"FIXED_JOB_ID\" AS JobRunning_FIXED_JOB_ID,\n"
@@ -949,6 +975,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,[PRODUCT_LEVEL]\n"
                                 + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
                                 + "           ,[ITEM_COUNT]\n"
+                                + "           ,[ITEM_COUNT_COMPLETED]\n"
                                 + "           ,[IS_COMPLETE_CANCLE]\n"
                                 + "           ,[REMARKS]\n"
                                 + "           ,[USER_ID]\n"
@@ -972,6 +999,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + productLevel + "'\n"
                                 + "           ,'" + productLevelItemCode + "'\n"
                                 + "           ,'" + itemCount + "'\n"
+                                + "           ,'" + itemCompleted + "'\n"
                                 + "           ,'" + statusOfJob + "'\n"
                                 + "           ,'" + remarks + "'\n"
                                 + "           ,'" + logUser + "'\n"
@@ -985,7 +1013,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
                     }
-
                     String querySelectEmployeesAtJob = "SELECT\n"
                             + "     EmployeesAtRunningJob.\"JOB_ID\" AS EmployeesAtRunningJob_JOB_ID,\n"
                             + "     EmployeesAtRunningJob.\"EMPLOYEE_CODE\" AS EmployeesAtRunningJob_EMPLOYEE_CODE,\n"
@@ -1017,10 +1044,18 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     String queryDeleteEmployeesAtJobs = "DELETE FROM [EmployeesAtRunningJob]\n"
                             + "      WHERE JOB_ID = '" + jobID + "'";
                     stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
+                } else if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
+                    allocatedtime = tableJobs.getValueAt(i, 5).toString();
+                    jobFinishedTime = tableJobs.getValueAt(i, 6).toString();
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 8).toString());
+
+                    String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET ALLOCATED_TIME = '" + allocatedtime + "'"
+                            + ", SHOULD_FINISHED_AT = '" + jobFinishTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "' WHERE JOB_ID = '" + jobID + "'";
+                    stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
                 }
             }
 
-            JOptionPane.showMessageDialog(this, "Job status are saved successfully.");
+            JOptionPane.showMessageDialog(this, "Details of job status are saved successfully.");
             buttonSave.setEnabled(false);
             stmtMain.close();
             stmtEmp.close();
@@ -1040,22 +1075,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
-
-    private void RefreshForComboAtAll() {
-        RefreshJobsTable();
-        txtSearch.setText("");
-        txtSearch.requestFocus();
-        textNumberTransactions.setText("");
-    }
-
-    private void RefreshForComboAtOthers() {
-        RefreshJobsTable();
-        txtSearch.setText("");
-        txtSearch.requestFocus();
-        textNumberTransactions.setText("");
-    }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonView;
@@ -1069,6 +1088,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JCheckBox checkBoxGetJobSavingTime;
     private javax.swing.JComboBox comboBoxFilter;
     private javax.swing.JComboBox comboBoxOrder;
+    private javax.swing.JFormattedTextField formattedTextAllocatedTime;
     private javax.swing.JFormattedTextField formattedTextItemCompleted;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
