@@ -44,7 +44,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate;
     int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted;
 
     public JobStatus() {
@@ -58,7 +58,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         CalendarEndDate.setText(logDate);
         textFinishedTime.setEditable(true);
         checkBoxGetJobSavingTime.setSelected(false);
-        cmbAtTableAt8();
+        cmbAtTableAt11();
     }
 
     /**
@@ -97,7 +97,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         checkBoxGetJobSavingTime = new javax.swing.JCheckBox();
         lbl_category1 = new javax.swing.JLabel();
         formattedTextItemCompleted = new javax.swing.JFormattedTextField();
-        formattedTextAllocatedTime = new javax.swing.JFormattedTextField();
+        formattedTextTakenTime = new javax.swing.JFormattedTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setIconifiable(true);
@@ -133,7 +133,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
 
         lbl_category.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category.setText("   (Insert in 24 hours)");
-        panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, 110, 20));
+        panel1.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, 110, 20));
 
         lbl_description.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description.setText("Start date");
@@ -206,14 +206,14 @@ public class JobStatus extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Job ID", "Fixed job ID", "Description", "Start date", "Start time", "Allocated time", "Finished time", "Items (allocate)", "Items (complete)", "Status"
+                "Job ID", "Fixed job ID", "Description", "Start date", "Start time", "Allocated time", "Taken time", "Finished date", "Finished time", "Items (allocate)", "Items (complete)", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -232,10 +232,11 @@ public class JobStatus extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tableJobs);
         if (tableJobs.getColumnModel().getColumnCount() > 0) {
-            tableJobs.getColumnModel().getColumn(2).setPreferredWidth(200);
+            tableJobs.getColumnModel().getColumn(0).setPreferredWidth(46);
+            tableJobs.getColumnModel().getColumn(1).setPreferredWidth(46);
+            tableJobs.getColumnModel().getColumn(2).setPreferredWidth(110);
             tableJobs.getColumnModel().getColumn(3).setPreferredWidth(44);
             tableJobs.getColumnModel().getColumn(4).setPreferredWidth(44);
-            tableJobs.getColumnModel().getColumn(5).setPreferredWidth(44);
         }
 
         panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 1040, 350));
@@ -281,7 +282,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 textFinishedTimeKeyPressed(evt);
             }
         });
-        panel1.add(textFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 80, -1));
+        panel1.add(textFinishedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 100, 80, -1));
 
         buttonAddDetails.setText("Add details");
         buttonAddDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +301,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 checkBoxGetJobSavingTimeActionPerformed(evt);
             }
         });
-        panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 110, 20));
+        panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 60, 110, 20));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category1.setText("Order selected jobs by");
@@ -313,10 +314,10 @@ public class JobStatus extends javax.swing.JInternalFrame {
                 formattedTextItemCompletedFocusGained(evt);
             }
         });
-        panel1.add(formattedTextItemCompleted, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 100, 60, -1));
+        panel1.add(formattedTextItemCompleted, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 100, 50, -1));
 
-        formattedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        panel1.add(formattedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(589, 100, 60, -1));
+        formattedTextTakenTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        panel1.add(formattedTextTakenTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 50, -1));
 
         javax.swing.GroupLayout pnl_BaseLayout = new javax.swing.GroupLayout(pnl_Base);
         pnl_Base.setLayout(pnl_BaseLayout);
@@ -351,8 +352,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbAtTableAt8() {
-        TableColumn AuthColumn = tableJobs.getColumnModel().getColumn(9); //Ongoing, New, Completed, Ignored
+    private void cmbAtTableAt11() {
+        TableColumn AuthColumn = tableJobs.getColumnModel().getColumn(11); //Ongoing, New, Completed, Ignored
         JComboBox comboBox = new JComboBox();
         comboBox.addItem("Ongoing");
         comboBox.addItem("New");
@@ -362,7 +363,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     }
 
     private void Refresh() {
-        RefreshJobsTable();
+        model_TableJobs.setRowCount(0);
         txtSearch.setText("");
         CalendarStartDate.setText(logDate);
         CalendarEndDate.setText(logDate);
@@ -373,18 +374,6 @@ public class JobStatus extends javax.swing.JInternalFrame {
         textFinishedTime.setText("hh:mm:ss");
         checkBoxGetJobSavingTime.setSelected(false);
         buttonSave.setEnabled(true);
-    }
-
-    private void RefreshJobsTable() {
-        try {
-            int row = model_TableJobs.getRowCount();
-            for (int j = 0; j < row; j++) {
-                model_TableJobs.removeRow(0);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
     }
 
 private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
@@ -423,7 +412,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet reset; //Job ID, Fixed job ID, Description, Date
             Statement stmt;
             int rowCount = 0;
-            RefreshJobsTable();
+            model_TableJobs.setRowCount(0);
             statusOfJob = "Ongoing";
 
             if (comboOrder.equals("Job ID")) {
@@ -449,6 +438,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobRunning.\"JOB_ALLOCATED_DATE\" AS JobRunning_JOB_ALLOCATED_DATE,\n"
                     + "     JobRunning.\"JOB_ALLOCATED_TIME\" AS JobRunning_JOB_ALLOCATED_TIME,\n"
                     + "     JobRunning.\"ALLOCATED_TIME\" AS JobRunning_ALLOCATED_TIME,\n"
+                    + "     JobRunning.\"TAKEN_TIME\" AS JobRunning_TAKEN_TIME,\n"
                     + "     JobRunning.\"ASSIGNED_BY\" AS JobRunning_ASSIGNED_BY,\n"
                     + "     JobRunning.\"SUPERVISE_BY\" AS JobRunning_SUPERVISE_BY,\n"
                     + "     JobRunning.\"PRODUCT_LEVEL\" AS JobRunning_PRODUCT_LEVEL,\n"
@@ -460,6 +450,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
                     + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
                     + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                    + "     JobRunning.\"SHOULD_FINISHED_DATE\" AS JobRunning_SHOULD_FINISHED_DATE,\n"
                     + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT\n"
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
@@ -478,10 +469,12 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobRunning_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_AT"), rowCount, 6);
-                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT"), rowCount, 7);
-                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"), rowCount, 8);
-                tableJobs.setValueAt(statusOfJob, rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobRunning_TAKEN_TIME"), rowCount, 6);
+                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_DATE"), rowCount, 7);
+                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_AT"), rowCount, 8);
+                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT"), rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"), rowCount, 10);
+                tableJobs.setValueAt(statusOfJob, rowCount, 11);
                 rowCount++;
                 tableJobs.setDefaultRenderer(Object.class, new ColoursOfTable());
             }
@@ -499,7 +492,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet reset; //Job ID, Fixed job ID, Description, Date
             Statement stmt;
             int rowCount = 0;
-            RefreshJobsTable();
+            model_TableJobs.setRowCount(0);
             statusOfJob = "New";
 
             if (comboOrder.equals("Job ID")) {
@@ -525,17 +518,19 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobRunning.\"JOB_ALLOCATED_DATE\" AS JobRunning_JOB_ALLOCATED_DATE,\n"
                     + "     JobRunning.\"JOB_ALLOCATED_TIME\" AS JobRunning_JOB_ALLOCATED_TIME,\n"
                     + "     JobRunning.\"ALLOCATED_TIME\" AS JobRunning_ALLOCATED_TIME,\n"
+                    + "     JobRunning.\"TAKEN_TIME\" AS JobRunning_TAKEN_TIME,\n"
                     + "     JobRunning.\"ASSIGNED_BY\" AS JobRunning_ASSIGNED_BY,\n"
                     + "     JobRunning.\"SUPERVISE_BY\" AS JobRunning_SUPERVISE_BY,\n"
                     + "     JobRunning.\"PRODUCT_LEVEL\" AS JobRunning_PRODUCT_LEVEL,\n"
                     + "     JobRunning.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobRunning_PRODUCT_LEVEL_ITEM_CODE,\n"
                     + "     JobRunning.\"ITEM_COUNT\" AS JobRunning_ITEM_COUNT,\n"
                     + "     JobRunning.\"ITEM_COUNT_COMPLETED\" AS JobRunning_ITEM_COUNT_COMPLETED,\n"
-                    + "     JobRunning.\"IS_NEW_ONGOING\" AS JobRunning_IS_NEW_ONGOING,\n"
+                    + "     JobRunning.\"IS_NEW_ONGOING\" AS JobRunning_IS_NEW_ONGJobRunning_TAKEN_TIMEOING,\n"
                     + "     JobRunning.\"REMARKS\" AS JobRunning_REMARKS,\n"
                     + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
                     + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
                     + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                    + "     JobRunning.\"SHOULD_FINISHED_DATE\" AS JobRunning_SHOULD_FINISHED_DATE,\n"
                     + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT\n"
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
@@ -554,10 +549,13 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobRunning_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobRunning_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(0, rowCount, 6);
-                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT"), rowCount, 7);
-                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"), rowCount, 8);
-                tableJobs.setValueAt(statusOfJob, rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobRunning_TAKEN_TIME"), rowCount, 6);
+//                tableJobs.setValueAt(0, rowCount, 8);
+                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_DATE"), rowCount, 7);
+                tableJobs.setValueAt(reset.getString("JobRunning_SHOULD_FINISHED_AT"), rowCount, 8);
+                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT"), rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"), rowCount, 10);
+                tableJobs.setValueAt(statusOfJob, rowCount, 11);
                 rowCount++;
             }
             reset.close();
@@ -574,7 +572,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet reset;
             Statement stmt;
             int rowCount = 0;
-            RefreshJobsTable();
+            model_TableJobs.setRowCount(0);
             statusOfJob = "Completed";
 
             if (comboOrder.equals("Job ID")) {
@@ -599,6 +597,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobFinished.\"JOB_ALLOCATED_DATE\" AS JobFinished_JOB_ALLOCATED_DATE,\n"
                     + "     JobFinished.\"JOB_ALLOCATED_TIME\" AS JobFinished_JOB_ALLOCATED_TIME,\n"
                     + "     JobFinished.\"ALLOCATED_TIME\" AS JobFinished_ALLOCATED_TIME,\n"
+                    + "     JobFinished.\"TAKEN_TIME\" AS JobFinished_TAKEN_TIME,\n"
+                    + "     JobFinished.\"JOB_FINISHED_DATE\" AS JobFinished_JOB_FINISHED_DATE,\n"
                     + "     JobFinished.\"JOB_FINISHED_TIME\" AS JobFinished_JOB_FINISHED_TIME,\n"
                     + "     JobFinished.\"ASSIGNED_BY\" AS JobFinished_ASSIGNED_BY,\n"
                     + "     JobFinished.\"SUPERVISE_BY\" AS JobFinished_SUPERVISE_BY,\n"
@@ -628,10 +628,12 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobFinished_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_TIME"), rowCount, 6);
-                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT"), rowCount, 7);
-                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT_COMPLETED"), rowCount, 8);
-                tableJobs.setValueAt(statusOfJob, rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobFinished_TAKEN_TIME"), rowCount, 6);
+                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_DATE"), rowCount, 7);
+                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_TIME"), rowCount, 8);
+                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT"), rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT_COMPLETED"), rowCount, 10);
+                tableJobs.setValueAt(statusOfJob, rowCount, 11);
                 rowCount++;
             }
             reset.close();
@@ -648,7 +650,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet reset;
             Statement stmt;
             int rowCount = 0;
-            RefreshJobsTable();
+            model_TableJobs.setRowCount(0);
             statusOfJob = "Ignored";
 
             if (comboOrder.equals("Job ID")) {
@@ -674,6 +676,9 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     + "     JobFinished.\"JOB_ALLOCATED_DATE\" AS JobFinished_JOB_ALLOCATED_DATE,\n"
                     + "     JobFinished.\"JOB_ALLOCATED_TIME\" AS JobFinished_JOB_ALLOCATED_TIME,\n"
                     + "     JobFinished.\"ALLOCATED_TIME\" AS JobFinished_ALLOCATED_TIME,\n"
+                    + "     JobFinished.\"TAKEN_TIME\" AS JobFinished_TAKEN_TIME,\n"
+                    + "     JobFinished.\"JOB_FINISHED_DATE\" AS JobFinished_JOB_FINISHED_DATE,\n"
+                    + "     JobFinished.\"JOB_FINISHED_TIME\" AS JobFinished_JOB_FINISHED_TIME,\n"
                     + "     JobFinished.\"ASSIGNED_BY\" AS JobFinished_ASSIGNED_BY,\n"
                     + "     JobFinished.\"SUPERVISE_BY\" AS JobFinished_SUPERVISE_BY,\n"
                     + "     JobFinished.\"PRODUCT_LEVEL\" AS JobFinished_PRODUCT_LEVEL,\n"
@@ -702,10 +707,12 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_DATE"), rowCount, 3);
                 tableJobs.setValueAt(reset.getString("JobFinished_JOB_ALLOCATED_TIME"), rowCount, 4);
                 tableJobs.setValueAt(reset.getString("JobFinished_ALLOCATED_TIME"), rowCount, 5);
-                tableJobs.setValueAt(0, rowCount, 6);
-                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT"), rowCount, 7);
-                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT_COMPLETED"), rowCount, 8);
-                tableJobs.setValueAt(statusOfJob, rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobFinished_TAKEN_TIME"), rowCount, 6);
+                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_DATE"), rowCount, 7);
+                tableJobs.setValueAt(reset.getString("JobFinished_JOB_FINISHED_TIME"), rowCount, 8);
+                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT"), rowCount, 9);
+                tableJobs.setValueAt(reset.getString("JobFinished_ITEM_COUNT_COMPLETED"), rowCount, 10);
+                tableJobs.setValueAt(statusOfJob, rowCount, 11);
                 rowCount++;
             }
             reset.close();
@@ -797,16 +804,16 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     ResultSet resultset = statement.executeQuery(query);
                     if (resultset.next()) {
                         String finishedTime = textFinishedTime.getText();
-                        allocatedtime = formattedTextAllocatedTime.getText();
+                        allocatedtime = formattedTextTakenTime.getText();
                         itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
                         if (!finishedTime.equals("") && itemCompleted >= 0 && !allocatedtime.isEmpty()) {
-                            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 6);
-                            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 8);
-                            tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 5);
+                            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 8);
+                            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 10);
+                            tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 6);
                         } else if (finishedTime.equals("") || itemCompleted < 0 || allocatedtime.isEmpty()) {
                             JOptionPane.showMessageDialog(this, "Row should be selected and the fields cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
                         }
-                    }else if (!resultset.next()) {
+                    } else if (!resultset.next()) {
                         JOptionPane.showMessageDialog(this, "Exception is not exsist to this job process.", "Not exsist", JOptionPane.OK_OPTION);
                     }
                     statement.close();
@@ -815,7 +822,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     JOptionPane.showMessageDialog(this, "please contact for support.");
                 }
-            }else if(selectedRowCountOfTable != 1){
+            } else if (selectedRowCountOfTable != 1) {
                 JOptionPane.showMessageDialog(this, "Please select a single row of the table.", "Invalid selection", JOptionPane.OK_OPTION);
             }
         } else if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
@@ -878,9 +885,9 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         selectedRowCountOfTableJobs = tableJobs.getSelectedRowCount();
         if (selectedRowCountOfTableJobs == 1) {
             selectedRowOfTableJobs = tableJobs.getSelectedRow();
-            jobFinishTime = tableJobs.getValueAt(selectedRowOfTableJobs, 6).toString();
+            jobFinishTime = tableJobs.getValueAt(selectedRowOfTableJobs, 8).toString();
             textFinishedTime.setText(jobFinishTime);
-            formattedTextAllocatedTime.requestFocus();
+            formattedTextTakenTime.requestFocus();
         }
     }//GEN-LAST:event_tableJobsMouseClicked
 
@@ -920,16 +927,18 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ResultSet resetSelectJob, resetSelectEmployeesAtJob;
 
             for (int i = 0; i < RowCount; i++) {
-                statusOfJob = tableJobs.getValueAt(i, 9).toString();
+                statusOfJob = tableJobs.getValueAt(i, 11).toString();
                 jobID = tableJobs.getValueAt(i, 0).toString();
                 if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
                     fixedJobID = tableJobs.getValueAt(i, 1).toString();
                     jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();
                     jobAllocatedtime = tableJobs.getValueAt(i, 4).toString();
                     allocatedtime = tableJobs.getValueAt(i, 5).toString();
-                    jobFinishedTime = tableJobs.getValueAt(i, 6).toString();
-                    itemCount = Integer.parseInt(tableJobs.getValueAt(i, 7).toString());
-                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 8).toString());
+                    takenTime = tableJobs.getValueAt(i, 6).toString();
+                    jobFinishedDate = tableJobs.getValueAt(i, 7).toString();
+                    jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
+                    itemCount = Integer.parseInt(tableJobs.getValueAt(i, 9).toString());
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
                     String querySelectJob = "SELECT\n"
                             + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
                             + "     JobRunning.\"FIXED_JOB_ID\" AS JobRunning_FIXED_JOB_ID,\n"
@@ -969,6 +978,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,[JOB_ALLOCATED_DATE]\n"
                                 + "           ,[JOB_ALLOCATED_TIME]\n"
                                 + "           ,[ALLOCATED_TIME]\n"
+                                + "           ,[TAKEN_TIME]\n"
+                                + "           ,[JOB_FINISHED_DATE]\n"
                                 + "           ,[JOB_FINISHED_TIME]\n"
                                 + "           ,[ASSIGNED_BY]\n"
                                 + "           ,[SUPERVISE_BY]\n"
@@ -993,6 +1004,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + jobAllocatedDate + "'\n"
                                 + "           ,'" + jobAllocatedtime + "'\n"
                                 + "           ,'" + allocatedtime + "'\n"
+                                + "           ,'" + takenTime + "'\n"
+                                + "           ,'" + jobFinishedDate + "'\n"
                                 + "           ,'" + jobFinishedTime + "'\n"
                                 + "           ,'" + JobRunning_ASSIGNED_BY + "'\n"
                                 + "           ,'" + JobRunning_SUPERVISE_BY + "'\n"
@@ -1045,11 +1058,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             + "      WHERE JOB_ID = '" + jobID + "'";
                     stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
                 } else if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
-                    allocatedtime = tableJobs.getValueAt(i, 5).toString();
-                    jobFinishedTime = tableJobs.getValueAt(i, 6).toString();
-                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 8).toString());
+                    takenTime = tableJobs.getValueAt(i, 6).toString();
+                    jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
 
-                    String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET ALLOCATED_TIME = '" + allocatedtime + "'"
+                    String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET TAKEN_TIME = '" + takenTime + "'"
                             + ", SHOULD_FINISHED_AT = '" + jobFinishTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "' WHERE JOB_ID = '" + jobID + "'";
                     stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
                 }
@@ -1088,8 +1101,8 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JCheckBox checkBoxGetJobSavingTime;
     private javax.swing.JComboBox comboBoxFilter;
     private javax.swing.JComboBox comboBoxOrder;
-    private javax.swing.JFormattedTextField formattedTextAllocatedTime;
     private javax.swing.JFormattedTextField formattedTextItemCompleted;
+    private javax.swing.JFormattedTextField formattedTextTakenTime;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lableNoOfJobs;

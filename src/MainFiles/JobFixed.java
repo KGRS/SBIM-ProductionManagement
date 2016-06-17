@@ -29,7 +29,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final String menuName = "Fixed Job/ Process";
     private DocNumGenerator AutoID;
-    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName;
+    String Code = "", Name = "", productLevel = "", productLevelItemCode = ""
+            , productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment;
     int itemCount = 0, allocateTime = 0, employeeCount = 0;
 
     public JobFixed() {
@@ -46,6 +47,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
         getItemLevel();
         loadAllJobsToTable();
         loadWorkFlowsToCombo();
+        loadSubDepartmentsToCombo();
     }
 
     private void loadAllJobsToTable() {
@@ -142,6 +144,28 @@ public class JobFixed extends javax.swing.JInternalFrame {
 
     }
 
+    private void loadSubDepartmentsToCombo() {
+        try {            
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments order by SUB_DEPARTMENT_NAME";
+            ResultSet rset = stmt.executeQuery(query);
+
+            comboSubDepartment.removeAllItems();
+            comboSubDepartment.insertItemAt(select, 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + spliter + rset.getString("SUB_DEPARTMENT_CODE"), position);
+                    position++;
+                } while (rset.next());
+            }
+            comboSubDepartment.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -182,6 +206,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
         spinnerEmpCount = new javax.swing.JSpinner();
         lbl_category2 = new javax.swing.JLabel();
         cmbWorkflow = new javax.swing.JComboBox();
+        lbl_description6 = new javax.swing.JLabel();
+        comboSubDepartment = new javax.swing.JComboBox();
+        buttonGetSuggestTime = new javax.swing.JButton();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1000, 533));
@@ -372,15 +399,15 @@ public class JobFixed extends javax.swing.JInternalFrame {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 80, -1));
+        panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 60, -1));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category1.setText("Fixed job code *");
-        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 110, 20));
+        lbl_category1.setText("Fixed job/ Process code *");
+        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 150, 20));
 
         lbl_description1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description1.setText("Fixed job name *");
-        panel1.add(lbl_description1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 100, 110, 20));
+        lbl_description1.setText("Fixed job/ Process name *");
+        panel1.add(lbl_description1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 100, 150, 20));
 
         cmbProductLevelItem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         cmbProductLevelItem.setToolTipText("");
@@ -393,11 +420,11 @@ public class JobFixed extends javax.swing.JInternalFrame {
         formatedTextAllocatedTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         formatedTextAllocatedTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         formatedTextAllocatedTime.setText("30");
-        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 260, 80, -1));
+        panel1.add(formatedTextAllocatedTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 260, 60, -1));
 
         lbl_description4.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description4.setText("Employee count *");
-        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 140, 20));
+        panel1.add(lbl_description4, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 220, 100, 20));
 
         textAreaRemarks.setColumns(20);
         textAreaRemarks.setRows(5);
@@ -410,14 +437,14 @@ public class JobFixed extends javax.swing.JInternalFrame {
         panel1.add(lbl_description3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 140, 20));
 
         spinnerItemCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-        panel1.add(spinnerItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 220, 80, -1));
+        panel1.add(spinnerItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 220, 60, -1));
 
         lbl_description5.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description5.setText("Allocated time (minutes) *");
         panel1.add(lbl_description5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 140, 20));
 
         spinnerEmpCount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-        panel1.add(spinnerEmpCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 80, -1));
+        panel1.add(spinnerEmpCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 220, 60, -1));
 
         lbl_category2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category2.setText("Workflow *");
@@ -425,6 +452,16 @@ public class JobFixed extends javax.swing.JInternalFrame {
 
         cmbWorkflow.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
         panel1.add(cmbWorkflow, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, 270, -1));
+
+        lbl_description6.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description6.setText("Sub department *");
+        panel1.add(lbl_description6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 130, 20));
+
+        comboSubDepartment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Select--" }));
+        panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 270, -1));
+
+        buttonGetSuggestTime.setText("Get suggest time");
+        panel1.add(buttonGetSuggestTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 260, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -484,14 +521,16 @@ public class JobFixed extends javax.swing.JInternalFrame {
         productLevel = cmbProductLevel.getSelectedItem().toString();
         productLevelItemCode = cmbProductLevelItem.getSelectedItem().toString();
         workFlowCode = cmbWorkflow.getSelectedItem().toString();
-        String productLevelItemCodeInArray[] = cmbProductLevelItem.getSelectedItem().toString().split("--");
-        String workFlowCodeInArray[] = cmbWorkflow.getSelectedItem().toString().split("--");
+        subDepartment = comboSubDepartment.getSelectedItem().toString();
+        String productLevelItemCodeInArray[] = cmbProductLevelItem.getSelectedItem().toString().split(spliter);
+        String workFlowCodeInArray[] = cmbWorkflow.getSelectedItem().toString().split(spliter);
+        String subDepartmentCodeInArray[] = comboSubDepartment.getSelectedItem().toString().split(spliter);
         itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
         allocateTime = Integer.parseInt(formatedTextAllocatedTime.getText());
         employeeCount = Integer.parseInt(spinnerEmpCount.getValue().toString());
         remarks = textAreaRemarks.getText();
 
-        if (!Name.isEmpty() && !productLevelItemCode.equals(select) && !workFlowCode.equals(select)) {
+        if (!Name.isEmpty() && !productLevelItemCode.equals(select) && !workFlowCode.equals(select) && !subDepartment.equals(select)) {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 String query = "select JOB_FIXED_ID From JobFixed where JOB_FIXED_ID = '" + Code + "'";
@@ -508,6 +547,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                                 + "      ,[ITEM_COUNT] = '" + itemCount + "'\n"
                                 + "      ,[ALLOCATED_TIME] = '" + allocateTime + "'\n"
                                 + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
+                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
                                 + "      ,[REMARKS] = '" + remarks + "'\n"
                                 + " WHERE JOB_FIXED_ID = '" + Code + "'";
                         stmt.execute(UpdateQuery);
@@ -555,7 +595,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(this, "Please contact for support.");
             }
-        } else if (Name.isEmpty() || productLevelItemCode.equals(select) || workFlowCode.equals(select)) {
+        } else if (Name.isEmpty() || productLevelItemCode.equals(select) || workFlowCode.equals(select) || subDepartment.equals(select)) {
             JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
             textFixedJobName.requestFocus();
         }
@@ -909,10 +949,12 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton buttonGetSuggestTime;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbProductLevel;
     private javax.swing.JComboBox cmbProductLevelItem;
     private javax.swing.JComboBox cmbWorkflow;
+    private javax.swing.JComboBox comboSubDepartment;
     private javax.swing.JFormattedTextField formatedTextAllocatedTime;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -926,6 +968,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description4;
     private javax.swing.JLabel lbl_description5;
+    private javax.swing.JLabel lbl_description6;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
     private javax.swing.JRadioButton rBtnCode;
