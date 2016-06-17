@@ -52,5 +52,22 @@ public class AverageTimeOfPLItems {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static int getAverageSuggestTimeForPLItems(String productLevelItemCode, int itemCount){
+        ResultSet resetSelectPLItemsAtAverageTimeTable;
+        int AVERAGE_TIME, calculatedAverageTime=0;
+        try {
+            java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String selectPLItemsAtAverageTimeTable = "SELECT AVERAGE_TIME FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
+            resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
+            if (resetSelectPLItemsAtAverageTimeTable.next()) {
+                AVERAGE_TIME = resetSelectPLItemsAtAverageTimeTable.getInt("AVERAGE_TIME");
+                calculatedAverageTime = AVERAGE_TIME * itemCount;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return calculatedAverageTime;
+    }
 
 }

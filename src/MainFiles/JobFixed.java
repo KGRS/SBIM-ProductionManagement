@@ -7,6 +7,7 @@ package MainFiles;
 
 import static MainFiles.IndexPage.jobFixed;
 import db.ConnectSql;
+import functions.AverageTimeOfPLItems;
 import functions.DocNumGenerator;
 import functions.ValidateFields;
 import java.awt.HeadlessException;
@@ -29,8 +30,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final String menuName = "Fixed Job/ Process";
     private DocNumGenerator AutoID;
-    String Code = "", Name = "", productLevel = "", productLevelItemCode = ""
-            , productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment;
+    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment;
     int itemCount = 0, allocateTime = 0, employeeCount = 0;
 
     public JobFixed() {
@@ -145,7 +145,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     }
 
     private void loadSubDepartmentsToCombo() {
-        try {            
+        try {
             java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments order by SUB_DEPARTMENT_NAME";
             ResultSet rset = stmt.executeQuery(query);
@@ -165,7 +165,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -461,6 +461,11 @@ public class JobFixed extends javax.swing.JInternalFrame {
         panel1.add(comboSubDepartment, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 270, -1));
 
         buttonGetSuggestTime.setText("Get suggest time");
+        buttonGetSuggestTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGetSuggestTimeActionPerformed(evt);
+            }
+        });
         panel1.add(buttonGetSuggestTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 260, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -784,7 +789,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                         + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel2.\"PL2_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
                         + "     INNER JOIN \"dbo\".\"Workflow\" Workflow ON JobFixed.\"WORK_FLOW_CODE\" = Workflow.\"WORK_FLOW_CODE\"\n"
                         + "WHERE\n"
-                        + "     JobFixed.\"JOB_FIXED_ID\" = '"+Code+"'";
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
 
                 stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 reset = stmt.executeQuery(query);
@@ -911,6 +916,16 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private void cmbProductLevelPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbProductLevelPopupMenuWillBecomeInvisible
         getItemLevel();
     }//GEN-LAST:event_cmbProductLevelPopupMenuWillBecomeInvisible
+
+    private void buttonGetSuggestTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGetSuggestTimeActionPerformed
+        productLevelItemCode = cmbProductLevelItem.getSelectedItem().toString();
+        itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
+        if (!productLevelItemCode.equals(select)) {
+            String productLevelItemCodeInArray[] = cmbProductLevelItem.getSelectedItem().toString().split(spliter);
+            int suggestTime = AverageTimeOfPLItems.getAverageSuggestTimeForPLItems(productLevelItemCodeInArray[1], itemCount);
+            formatedTextAllocatedTime.setText(String.valueOf(suggestTime));
+        }
+    }//GEN-LAST:event_buttonGetSuggestTimeActionPerformed
 
     private void getItemLevel() {
         int level = Integer.parseInt(cmbProductLevel.getSelectedItem().toString());
