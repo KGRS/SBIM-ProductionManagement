@@ -13,6 +13,7 @@ package Transactions;
 import MainFiles.IndexPage;
 import static MainFiles.IndexPage.jobStatus;
 import db.ConnectSql;
+import functions.AverageTimeOfPLItems;
 import functions.ColoursOfTable;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -374,6 +375,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
         textFinishedTime.setText("hh:mm:ss");
         checkBoxGetJobSavingTime.setSelected(false);
         buttonSave.setEnabled(true);
+        formattedTextTakenTime.setText("");
+        formattedTextItemCompleted.setText("");
     }
 
 private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
@@ -1025,6 +1028,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + IS_LATE + "'\n"
                                 + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
+                        AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode);
                     }
                     String querySelectEmployeesAtJob = "SELECT\n"
                             + "     EmployeesAtRunningJob.\"JOB_ID\" AS EmployeesAtRunningJob_JOB_ID,\n"

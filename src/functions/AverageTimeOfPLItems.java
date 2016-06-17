@@ -16,21 +16,38 @@ import java.util.logging.Logger;
  * @author KGRS
  */
 public class AverageTimeOfPLItems {
-
-    public void calculateAverageTimeOfPLItems(String productLevelItemCode) {
+    public static void calculateAverageTimeOfPLItems(String productLevelItemCode) {
         String statusOfJob = "Completed";
-        float ITEM_COUNT_COMPLETED_SUM=0, TAKEN_TIME_SUM=0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM=0;
-        ResultSet resetSelectJobsAtFinished;
+        int ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM = 0;
+        ResultSet resetSelectJobsAtFinished, resetSelectPLItemsAtAverageTimeTable;
         try {
             java.sql.Statement stmtSelectJobsAtFinished = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '"+productLevelItemCode+"' AND IS_COMPLETE_CANCLE = '"+statusOfJob+"'";
+            java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtInsertAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtUpdateAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND IS_COMPLETE_CANCLE = '" + statusOfJob + "'";
             resetSelectJobsAtFinished = stmtSelectJobsAtFinished.executeQuery(selectJobsAtFinished);
-            while(resetSelectJobsAtFinished.next()){
-                ITEM_COUNT_COMPLETED_SUM = ITEM_COUNT_COMPLETED_SUM + resetSelectJobsAtFinished.getFloat("ITEM_COUNT_COMPLETED");
-                TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getFloat("TAKEN_TIME");
-                AVERAGE_TAKEN_TIME_TO_ONE_ITEM = TAKEN_TIME_SUM/ITEM_COUNT_COMPLETED_SUM;
+            while (resetSelectJobsAtFinished.next()) {
+                ITEM_COUNT_COMPLETED_SUM = ITEM_COUNT_COMPLETED_SUM + resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
+                TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getInt("TAKEN_TIME");
+                AVERAGE_TAKEN_TIME_TO_ONE_ITEM = TAKEN_TIME_SUM / ITEM_COUNT_COMPLETED_SUM;
             }
-            System.out.println(AVERAGE_TAKEN_TIME_TO_ONE_ITEM);
+            String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
+            resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
+            if (resetSelectPLItemsAtAverageTimeTable.next()) {
+                String updatePLItemsAtAverageTimeTable = "UPDATE AverageTimeOfPLItems SET AVERAGE_TIME = '" + AVERAGE_TAKEN_TIME_TO_ONE_ITEM + "', TOTAL_ITEM_COUNT = '" + ITEM_COUNT_COMPLETED_SUM + "' WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
+                stmtUpdateAverageTime.execute(updatePLItemsAtAverageTimeTable);
+            } else if (!resetSelectPLItemsAtAverageTimeTable.next()) {
+                String insertPLItemsAtAverageTimeTable = "INSERT INTO AverageTimeOfPLItems (PRODUCT_LEVEL_ITEM_CODE, AVERAGE_TIME, TOTAL_ITEM_COUNT) VALUES ('" + productLevelItemCode + "', '" + AVERAGE_TAKEN_TIME_TO_ONE_ITEM + "', '" + ITEM_COUNT_COMPLETED_SUM + "')";
+                stmtInsertAverageTime.execute(insertPLItemsAtAverageTimeTable);
+            }
+//            System.out.println(AVERAGE_TAKEN_TIME_TO_ONE_ITEM);
+            stmtSelectJobsAtFinished.close();
+            stmtSelectPLItemsAtAverageTimeTable.close();
+            stmtInsertAverageTime.close();
+            stmtUpdateAverageTime.close();
+            resetSelectJobsAtFinished.close();
+            resetSelectPLItemsAtAverageTimeTable.close();
         } catch (SQLException ex) {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
         }
