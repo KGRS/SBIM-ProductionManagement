@@ -14,6 +14,7 @@ import MainFiles.IndexPage;
 import static MainFiles.IndexPage.jobStatus;
 import db.ConnectSql;
 import functions.AverageTimeOfPLItems;
+import functions.CalculatePLItemDifference;
 import functions.ColoursOfTable;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -45,8 +46,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate;
-    int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate, IS_WASTAGE;
+    int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted, plItemDifference;
 
     public JobStatus() {
         initComponents();
@@ -1029,6 +1030,21 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
                         AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode);
+
+                        if (itemCount != itemCompleted) {
+                            plItemDifference = itemCount - itemCompleted;
+                            if (plItemDifference > 0) {
+                                int x = JOptionPane.showConfirmDialog(this, "Set this as wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
+                                if (x == JOptionPane.YES_OPTION) {
+                                    IS_WASTAGE = "Yes";
+                                } else if (x == JOptionPane.NO_OPTION) {
+                                    IS_WASTAGE = "No";
+                                }
+                            } else if (plItemDifference < 0) {
+                                IS_WASTAGE = "No";
+                            }
+                            CalculatePLItemDifference.PLItemDifference(jobID, plItemDifference, IS_WASTAGE);
+                        }
                     }
                     String querySelectEmployeesAtJob = "SELECT\n"
                             + "     EmployeesAtRunningJob.\"JOB_ID\" AS EmployeesAtRunningJob_JOB_ID,\n"
