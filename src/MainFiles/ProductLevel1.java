@@ -568,29 +568,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "please contact for support.");
         }
     }
-
-//    private void loadProcessToCombo() {
-//        try {
-//            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split("--");
-//            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            String query = "select PROCESS_CODE, PROCESS_NAME From Process WHERE SUB_DEPARTMENT_CODE = '"+subDepartmentCode[1]+"' order by PROCESS_NAME";
-//            ResultSet rset = stmt.executeQuery(query);
-//
-//            comboProcess.removeAllItems();
-//            comboProcess.insertItemAt("--Select--", 0);
-//            int position = 1;
-//            if (rset.next()) {
-//                do {
-//                    comboProcess.insertItemAt(rset.getString("PROCESS_NAME") + "--" + rset.getString("PROCESS_CODE"), position); // 
-//                    position++;
-//                } while (rset.next());
-//            }
-//            comboProcess.setSelectedIndex(0);
-//
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
-//        }
-//    }
+    
     private void LoadAllRawItems() {
         try {
             ResultSet reset;
@@ -1141,6 +1119,7 @@ public class ProductLevel1 extends javax.swing.JInternalFrame {
                             JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
                             FullRefresh();
                         }
+                        stmt.close();
                         rset.close();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

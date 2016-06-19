@@ -46,6 +46,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
+    private final String departmentCode[] = IndexPage.labelDepartmentCode.getText().split(spliter);
     String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate, IS_WASTAGE;
     int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted, plItemDifference;
 
@@ -927,9 +928,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             java.sql.Statement stmtDeleteRunningJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtDeleteEmpInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtUpdateDetailsInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
             ResultSet resetSelectJob, resetSelectEmployeesAtJob;
-
             for (int i = 0; i < RowCount; i++) {
                 statusOfJob = tableJobs.getValueAt(i, 11).toString();
                 jobID = tableJobs.getValueAt(i, 0).toString();
@@ -1029,7 +1028,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + IS_LATE + "'\n"
                                 + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
-                        AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode);
+                        AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, departmentCode[1]);
 
                         if (itemCount != itemCompleted) {
                             plItemDifference = itemCount - itemCompleted;

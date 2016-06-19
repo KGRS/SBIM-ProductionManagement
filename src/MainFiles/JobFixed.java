@@ -9,6 +9,7 @@ import static MainFiles.IndexPage.jobFixed;
 import db.ConnectSql;
 import functions.AverageTimeOfPLItems;
 import functions.DocNumGenerator;
+import functions.SavePLItemsInItemsAtDepartments;
 import functions.ValidateFields;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -546,13 +547,13 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     if (x == JOptionPane.YES_OPTION) {
                         String UpdateQuery = "UPDATE [JobFixed]\n"
                                 + "   SET [JOB_FIXED_NAME] = '" + Name + "'\n"
-                                + "      ,[WORK_FLOW_CODE] = '" + workFlowCodeInArray[1] + "'\n"
-                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
-                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
+//                                + "      ,[WORK_FLOW_CODE] = '" + workFlowCodeInArray[1] + "'\n"
+//                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
+//                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
                                 + "      ,[ITEM_COUNT] = '" + itemCount + "'\n"
                                 + "      ,[ALLOCATED_TIME] = '" + allocateTime + "'\n"
                                 + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
-                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
+//                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
                                 + "      ,[REMARKS] = '" + remarks + "'\n"
                                 + " WHERE JOB_FIXED_ID = '" + Code + "'";
                         stmt.execute(UpdateQuery);
@@ -577,6 +578,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                             + "           ,[ITEM_COUNT]\n"
                             + "           ,[ALLOCATED_TIME]\n"
                             + "           ,[EMPLOYEE_COUNT]\n"
+                            + "           ,[SUB_DEPARTMENT_CODE]\n"
                             + "           ,[REMARKS])\n"
                             + "     VALUES\n"
                             + "           ('" + Code + "'\n"
@@ -587,8 +589,10 @@ public class JobFixed extends javax.swing.JInternalFrame {
                             + "           ,'" + itemCount + "'\n"
                             + "           ,'" + allocateTime + "'\n"
                             + "           ,'" + employeeCount + "'\n"
+                            + "           ,'" + subDepartmentCodeInArray[1] + "'\n"
                             + "           ,'" + remarks + "')";
                     stmt.execute(InsertQuery);
+                    SavePLItemsInItemsAtDepartments.savePLItem(productLevelItemCodeInArray[1], productLevel);
                     JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
                     Refresh();
                 }

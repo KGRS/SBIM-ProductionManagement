@@ -17,9 +17,9 @@ import java.util.logging.Logger;
  */
 public class AverageTimeOfPLItems {
 
-    public static void calculateAverageTimeOfPLItems(String productLevelItemCode) {
+    public static void calculateAverageTimeOfPLItems(String productLevelItemCode, String productLevel, String departmentCode) {
         String statusOfJob = "Completed";
-        int ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM = 0;
+        int ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM = 0, ITEM_COUNT_COMPLETED=0;
         ResultSet resetSelectJobsAtFinished, resetSelectPLItemsAtAverageTimeTable;
         try {
             java.sql.Statement stmtSelectJobsAtFinished = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -32,6 +32,7 @@ public class AverageTimeOfPLItems {
                 ITEM_COUNT_COMPLETED_SUM = ITEM_COUNT_COMPLETED_SUM + resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
                 TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getInt("TAKEN_TIME");
                 AVERAGE_TAKEN_TIME_TO_ONE_ITEM = TAKEN_TIME_SUM / ITEM_COUNT_COMPLETED_SUM;
+                ITEM_COUNT_COMPLETED = resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
             }
             String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
             resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
@@ -47,7 +48,8 @@ public class AverageTimeOfPLItems {
             stmtInsertAverageTime.close();
             stmtUpdateAverageTime.close();
             resetSelectJobsAtFinished.close();
-            resetSelectPLItemsAtAverageTimeTable.close();
+            resetSelectPLItemsAtAverageTimeTable.close();            
+            CalculateSubDepartmentStockAtJobComplete.reduceStockOfSubDepartmentAtJobComplete(productLevel, productLevelItemCode, ITEM_COUNT_COMPLETED, statusOfJob);
         } catch (SQLException ex) {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
         }
