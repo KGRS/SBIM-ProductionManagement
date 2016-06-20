@@ -31,7 +31,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final String menuName = "Fixed Job/ Process";
     private DocNumGenerator AutoID;
-    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment;
+    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment, DepartmentCode;
     int itemCount = 0, allocateTime = 0, employeeCount = 0;
 
     public JobFixed() {
@@ -210,6 +210,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
         lbl_description6 = new javax.swing.JLabel();
         comboSubDepartment = new javax.swing.JComboBox();
         buttonGetSuggestTime = new javax.swing.JButton();
+        buttonEmailSendTo = new javax.swing.JButton();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1000, 533));
@@ -469,6 +470,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
         });
         panel1.add(buttonGetSuggestTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 260, 160, -1));
 
+        buttonEmailSendTo.setText("Email send to");
+        panel1.add(buttonEmailSendTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 380, 120, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -547,13 +551,13 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     if (x == JOptionPane.YES_OPTION) {
                         String UpdateQuery = "UPDATE [JobFixed]\n"
                                 + "   SET [JOB_FIXED_NAME] = '" + Name + "'\n"
-//                                + "      ,[WORK_FLOW_CODE] = '" + workFlowCodeInArray[1] + "'\n"
-//                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
-//                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
+                                //                                + "      ,[WORK_FLOW_CODE] = '" + workFlowCodeInArray[1] + "'\n"
+                                //                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
+                                //                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
                                 + "      ,[ITEM_COUNT] = '" + itemCount + "'\n"
                                 + "      ,[ALLOCATED_TIME] = '" + allocateTime + "'\n"
                                 + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
-//                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
+                                //                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
                                 + "      ,[REMARKS] = '" + remarks + "'\n"
                                 + " WHERE JOB_FIXED_ID = '" + Code + "'";
                         stmt.execute(UpdateQuery);
@@ -592,9 +596,18 @@ public class JobFixed extends javax.swing.JInternalFrame {
                             + "           ,'" + subDepartmentCodeInArray[1] + "'\n"
                             + "           ,'" + remarks + "')";
                     stmt.execute(InsertQuery);
-                    SavePLItemsInItemsAtDepartments.savePLItem(productLevelItemCodeInArray[1], productLevel);
+                    ResultSet resetAtItemsAtDepartments;
+                    java.sql.Statement stmtAtDepartmentsTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    String selectAtItemsAtDepartmentsTable = "SELECT DepartmentCode FROM SubDepartments WHERE SUB_DEPARTMENT_CODE = '" + subDepartmentCodeInArray[1] + "'";
+                    resetAtItemsAtDepartments = stmtAtDepartmentsTable.executeQuery(selectAtItemsAtDepartmentsTable);
+                    if (resetAtItemsAtDepartments.next()) {
+                        DepartmentCode = resetAtItemsAtDepartments.getString("DepartmentCode");
+                        SavePLItemsInItemsAtDepartments.savePLItem(productLevelItemCodeInArray[1], productLevel, DepartmentCode);
+                    }
                     JOptionPane.showMessageDialog(this, "New '" + menuName + "' is saved.");
                     Refresh();
+                    stmtAtDepartmentsTable.close();
+                    resetAtItemsAtDepartments.close();
                 }
                 rset.close();
             } catch (SQLException ex) {
@@ -948,6 +961,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
         spinnerItemCount.setValue(1);
         textAreaRemarks.setText("");
         txtSearch.setText("");
+        comboSubDepartment.setSelectedIndex(0);
         getItemLevel();
         loadAllJobsToTable();
     }
@@ -968,6 +982,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton buttonEmailSendTo;
     private javax.swing.JButton buttonGetSuggestTime;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbProductLevel;

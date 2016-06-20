@@ -6,21 +6,17 @@
 	<queryString>
 		<![CDATA[SELECT
      JobFixed."SUB_DEPARTMENT_CODE" AS JobFixed_SUB_DEPARTMENT_CODE,
-     SubDepartments."DepartmentCode" AS SubDepartments_DepartmentCode,
-     ProductLevel2."PL2_ITEM_CODE" AS ProductLevel2_PL2_ITEM_CODE,
-     ProductLevel2."UnitCode" AS ProductLevel2_UnitCode,
-     ProductLevel2."SellPrice" AS ProductLevel2_SellPrice
+     ItemsAtDepartments."ItemCode" AS ItemsAtDepartments_ItemCode,
+     ItemsAtDepartments."DepartmentCode" AS ItemsAtDepartments_DepartmentCode
 FROM
      "dbo"."JobFixed" JobFixed INNER JOIN "dbo"."SubDepartments" SubDepartments ON JobFixed."SUB_DEPARTMENT_CODE" = SubDepartments."SUB_DEPARTMENT_CODE"
-     INNER JOIN "dbo"."ProductLevel2" ProductLevel2 ON JobFixed."PRODUCT_LEVEL_ITEM_CODE" = ProductLevel2."PL2_ITEM_CODE"
+     INNER JOIN "dbo"."ItemsAtDepartments" ItemsAtDepartments ON SubDepartments."DepartmentCode" = ItemsAtDepartments."DepartmentCode"
 WHERE
-     ProductLevel2."PL2_ITEM_CODE" = '']]>
+     ItemsAtDepartments."ItemCode" = '' AND  JobFixed."SUB_DEPARTMENT_CODE" = '']]>
 	</queryString>
 	<field name="JobFixed_SUB_DEPARTMENT_CODE" class="java.lang.String"/>
-	<field name="SubDepartments_DepartmentCode" class="java.lang.String"/>
-	<field name="ProductLevel2_PL2_ITEM_CODE" class="java.lang.String"/>
-	<field name="ProductLevel2_UnitCode" class="java.lang.String"/>
-	<field name="ProductLevel2_SellPrice" class="java.lang.Double"/>
+	<field name="ItemsAtDepartments_ItemCode" class="java.lang.String"/>
+	<field name="ItemsAtDepartments_DepartmentCode" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
