@@ -35,10 +35,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private final String menuName = "Job allocation";
     private final String logUser = IndexPage.LabelUser.getText();
     private DocNumGenerator AutoID;
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = ""
-            , productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = ""
-            , allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = ""
-            , callName = "", fixedJobID = "", statusOfJob = "", emptyField = "", jobFinishedTime = "", jobFinishedDate = "";
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", emptyField = "", jobFinishedTime = "", jobFinishedDate = "", superviseBy;
     int itemCount, itemCompleted = 0;
     String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
     int ALLOCATED_TIME;
@@ -701,7 +698,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             comboDepartment.setSelectedIndex(0);
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -724,7 +721,43 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             comboSubDepartment.setSelectedIndex(0);
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadSuperviseByToCombo(String subDepartmentCode) {
+        try {
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "SELECT\n"
+                    + "     EmployeeDesignationTree.\"SUB_DEPARTMENT_CODE\" AS EmployeeDesignationTree_SUB_DEPARTMENT_CODE,\n"
+                    + "     EmployeeTree.\"EMPLOYEE_CODE\" AS EmployeeTree_EMPLOYEE_CODE,\n"
+                    + "     EmployeeTree.\"RANK_CODE\" AS EmployeeTree_RANK_CODE,\n"
+                    + "     EmployeeDesignation.\"EMPLOYEE_DESIGNATION_CODE\" AS EmployeeDesignation_EMPLOYEE_DESIGNATION_CODE,\n"
+                    + "     EmployeeDesignation.\"IS_SUPERVISING\" AS EmployeeDesignation_IS_SUPERVISING,\n"
+                    + "     Employees.\"FIRST_NAME\" AS Employees_FIRST_NAME,\n"
+                    + "     Employees.\"SUR_NAME\" AS Employees_SUR_NAME\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"EmployeeDesignationTree\" EmployeeDesignationTree INNER JOIN \"dbo\".\"EmployeeTree\" EmployeeTree ON EmployeeDesignationTree.\"RANK_CODE\" = EmployeeTree.\"RANK_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeeTree.\"EMPLOYEE_CODE\" = Employees.\"EMPLOYEE_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"EmployeeDesignation\" EmployeeDesignation ON EmployeeDesignationTree.\"EMPLOYEE_DESIGNATION_CODE\" = EmployeeDesignation.\"EMPLOYEE_DESIGNATION_CODE\"\n"
+                    + "WHERE\n"
+                    + "     EmployeeDesignationTree.\"SUB_DEPARTMENT_CODE\" = '"+subDepartmentCode+"'\n"
+                    + " AND EmployeeDesignation.\"IS_SUPERVISING\" = 'Yes'\n"
+                    + "ORDER BY Employees.\"FIRST_NAME\"";
+            ResultSet rset = stmt.executeQuery(query);
+            comboSuperviousBy.removeAllItems();
+            comboSuperviousBy.insertItemAt(select, 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    comboSuperviousBy.insertItemAt(rset.getString("Employees_FIRST_NAME") + spliter + rset.getString("Employees_SUR_NAME") + spliter + rset.getString("EmployeeTree_EMPLOYEE_CODE"), position);
+                    position++;
+                } while (rset.next());
+            }
+            comboSuperviousBy.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -771,6 +804,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
             loadFixedJobsToTable(subDepartmentCode[1]);
             loadAllEmployeesToTable(departmentCode[1]);
+            loadSuperviseByToCombo(subDepartmentCode[1]);
         } else if (subDepartment.equals(select)) {
             JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
             comboSubDepartment.requestFocus();
@@ -973,9 +1007,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_calendarButtonEndDatePropertyChange
 
     private void buttonGetSuggestTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGetSuggestTimeActionPerformed
-        int selectedRowCountAtFixJob = tableFixedJobs.getSelectedRowCount();        
+        int selectedRowCountAtFixJob = tableFixedJobs.getSelectedRowCount();
         itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
-        if (selectedRowCountAtFixJob==1) {
+        if (selectedRowCountAtFixJob == 1) {
             int selectedRowAtFixJob = tableFixedJobs.getSelectedRow();
             productLevelItemCode = tableFixedJobs.getValueAt(selectedRowAtFixJob, 3).toString();
             int suggestTime = AverageTimeOfPLItems.getAverageSuggestTimeForPLItems(productLevelItemCode, itemCount);
@@ -1004,14 +1038,15 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         int selectedRowCountAtFixJob = tableFixedJobs.getSelectedRowCount();
         String subDepartment = comboSubDepartment.getSelectedItem().toString();
         String department = comboDepartment.getSelectedItem().toString();
+        superviseBy = comboSuperviousBy.getSelectedItem().toString();
 
-        if (department.equals(select) || subDepartment.equals(select)) {
-            JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
+        if (department.equals(select) || subDepartment.equals(select) || superviseBy.equals(select)) {
+            JOptionPane.showMessageDialog(this, "Sub department or supervisor is not selected.", "Not selected", JOptionPane.OK_OPTION);
         } else if (RowCount <= 0) {
             JOptionPane.showMessageDialog(this, "Employees are not available at table.", "No employees", JOptionPane.OK_OPTION);
         } else if (selectedRowCountAtFixJob != 1) {
             JOptionPane.showMessageDialog(this, "Job selection is not correct.", "Incorrect selection", JOptionPane.OK_OPTION);
-        } else if (!department.equals(select) && RowCount > 0 && !subDepartment.equals(select) && selectedRowCountAtFixJob == 1) {
+        } else if (!department.equals(select) && RowCount > 0 && !subDepartment.equals(select) && !superviseBy.equals(select) && selectedRowCountAtFixJob == 1) {
             int x = JOptionPane.showConfirmDialog(this, "Are you sure to allocate these employees?", "Save?", JOptionPane.YES_NO_OPTION);
             if (x == JOptionPane.YES_OPTION) {
                 loadDateTime();
@@ -1064,6 +1099,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         allocatedtime = formatedTextAllocatedTime.getText();
         jobFinishedDate = calendarButtonEndDate.getText();
         jobFinishedTime = calendarButtonStartDate.getText();
+        String superviseByCode[] = comboSuperviousBy.getSelectedItem().toString().split(spliter);
 
         try {
             AutoID = new DocNumGenerator();
@@ -1105,7 +1141,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + allocatedtime + "'\n"
                     + "           ,'" + allocatedtime + "'\n"
                     + "           ,'" + logUser + "'\n"
-                    + "           ,'" + emptyFields + "'\n"
+                    + "           ,'" + superviseByCode[2] + "'\n"
                     + "           ,'" + productLevel + "'\n"
                     + "           ,'" + productLevelItemCode + "'\n"
                     + "           ,'" + itemCount + "'\n"

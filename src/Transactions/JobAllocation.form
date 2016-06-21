@@ -490,15 +490,10 @@
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="lbl_description6" min="-2" pref="84" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="lbl_description4" min="-2" pref="99" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="lbl_description6" alignment="0" min="-2" pref="84" max="-2" attributes="0"/>
+                                          <Component id="lbl_description4" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="textStartTime" min="-2" pref="80" max="-2" attributes="0"/>
                                           <Component id="spinnerEmpCount" min="-2" pref="79" max="-2" attributes="0"/>

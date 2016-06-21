@@ -344,6 +344,7 @@ public class LoginPage extends javax.swing.JFrame {
                     + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME,\n"
                     + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
                     + "     Employees.\"SUB_DEPARTMENT_CODE\" AS Employees_SUB_DEPARTMENT_CODE,\n"
+                    + "     Employees.\"EMPLOYEE_CODE\" AS Employees_EMPLOYEE_CODE,\n"
                     + "     Departments.\"BranchCode\" AS Departments_BranchCode,\n"
                     + "     Branches.\"BranchName\" AS Branches_BranchName\n"
                     + "FROM\n"
@@ -360,12 +361,14 @@ public class LoginPage extends javax.swing.JFrame {
                 String subDepartmentCode = rsetGetLoginDetails.getString("Employees_SUB_DEPARTMENT_CODE");
                 String departmentName = rsetGetLoginDetails.getString("Departments_DepartmentName");
                 String subDepartmentName = rsetGetLoginDetails.getString("SubDepartments_SUB_DEPARTMENT_NAME");
+                String employeeCode = rsetGetLoginDetails.getString("Employees_EMPLOYEE_CODE");
                 if (dbPassword.equals(password)) {
                     IndexPage.user = textUserName.getText().trim();
                     IndexPage.departmentCode = departmentCode;
                     IndexPage.subDepartmentCode = subDepartmentCode;
                     IndexPage.departmentName = departmentName;
                     IndexPage.subDepartmentName = subDepartmentName;
+                    IndexPage.employeeCode = employeeCode;
                     IndexPage mainpage = new IndexPage();
                     mainpage.setExtendedState(Frame.MAXIMIZED_BOTH);
                     mainpage.setVisible(true);
