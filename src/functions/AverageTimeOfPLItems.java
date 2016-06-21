@@ -49,7 +49,7 @@ public class AverageTimeOfPLItems {
             stmtUpdateAverageTime.close();
             resetSelectJobsAtFinished.close();
             resetSelectPLItemsAtAverageTimeTable.close();            
-            CalculateSubDepartmentStockAtJobComplete.reduceStockOfSubDepartmentAtJobComplete(productLevel, productLevelItemCode, ITEM_COUNT_COMPLETED, statusOfJob);
+            CalculateSubDepartmentStockAtJobComplete.reduceStockOfSubDepartmentAtJobComplete(productLevel, productLevelItemCode, ITEM_COUNT_COMPLETED, departmentCode);
         } catch (SQLException ex) {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
         }

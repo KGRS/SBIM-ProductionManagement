@@ -891,7 +891,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         if (selectedRowCountOfTableJobs == 1) {
             selectedRowOfTableJobs = tableJobs.getSelectedRow();
             jobFinishTime = tableJobs.getValueAt(selectedRowOfTableJobs, 8).toString();
+            takenTime = tableJobs.getValueAt(selectedRowOfTableJobs, 6).toString();
+            itemCompleted = Integer.parseInt(tableJobs.getValueAt(selectedRowOfTableJobs, 10).toString());
             textFinishedTime.setText(jobFinishTime);
+            formattedTextTakenTime.setText(takenTime);
+            formattedTextItemCompleted.setText(String.valueOf(itemCompleted));
             formattedTextTakenTime.requestFocus();
         }
     }//GEN-LAST:event_tableJobsMouseClicked
