@@ -910,7 +910,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
-
             if (resultset.next()) {
                 logTime = resultset.getString("CurrentDateTime").split(" ")[1];
                 logTime = logTime.split("\\.")[0];

@@ -569,7 +569,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
 
                 } else if (!rset.next()) {
                     AutoID = new DocNumGenerator();
-                    AutoID.methodNumGen("FJOB");
+                    AutoID.methodNumGen(workFlowCodeInArray[1]+spliter+"FJOB");
                     Code = AutoID.getDocChar() + AutoID.getDocNumber();
                     textFixedJobCode.setText(Code);
                     Code = textFixedJobCode.getText();

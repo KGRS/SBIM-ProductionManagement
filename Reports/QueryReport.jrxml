@@ -5,30 +5,19 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     EmployeeDesignationTree."SUB_DEPARTMENT_CODE" AS EmployeeDesignationTree_SUB_DEPARTMENT_CODE,
-     EmployeeTree."EMPLOYEE_CODE" AS EmployeeTree_EMPLOYEE_CODE,
-     EmployeeTree."RANK_CODE" AS EmployeeTree_RANK_CODE,
-     EmployeeDesignation."EMPLOYEE_DESIGNATION_CODE" AS EmployeeDesignation_EMPLOYEE_DESIGNATION_CODE,
-     EmployeeDesignation."IS_SUPERVISING" AS EmployeeDesignation_IS_SUPERVISING,
      Employees."FIRST_NAME" AS Employees_FIRST_NAME,
-     Employees."SUR_NAME" AS Employees_SUR_NAME
+     Employees."SUR_NAME" AS Employees_SUR_NAME,
+     Employees."EMAIL" AS Employees_EMAIL,
+     Employees."EMPLOYEE_CODE" AS Employees_EMPLOYEE_CODE
 FROM
-     "dbo"."EmployeeDesignationTree" EmployeeDesignationTree INNER JOIN "dbo"."EmployeeTree" EmployeeTree ON EmployeeDesignationTree."RANK_CODE" = EmployeeTree."RANK_CODE"
-     INNER JOIN "dbo"."Employees" Employees ON EmployeeTree."EMPLOYEE_CODE" = Employees."EMPLOYEE_CODE"
-     INNER JOIN "dbo"."EmployeeDesignation" EmployeeDesignation ON EmployeeDesignationTree."EMPLOYEE_DESIGNATION_CODE" = EmployeeDesignation."EMPLOYEE_DESIGNATION_CODE"
+     "dbo"."Employees" Employees
 WHERE
-     EmployeeDesignationTree."SUB_DEPARTMENT_CODE" = ''
- AND EmployeeDesignation."IS_SUPERVISING" = 'Yes'
-ORDER BY
-     Employees."FIRST_NAME" ASC]]>
+     Employees."EMPLOYEE_CODE" = '']]>
 	</queryString>
-	<field name="EmployeeDesignationTree_SUB_DEPARTMENT_CODE" class="java.lang.String"/>
-	<field name="EmployeeTree_EMPLOYEE_CODE" class="java.lang.String"/>
-	<field name="EmployeeTree_RANK_CODE" class="java.lang.String"/>
-	<field name="EmployeeDesignation_EMPLOYEE_DESIGNATION_CODE" class="java.lang.String"/>
-	<field name="EmployeeDesignation_IS_SUPERVISING" class="java.lang.String"/>
 	<field name="Employees_FIRST_NAME" class="java.lang.String"/>
 	<field name="Employees_SUR_NAME" class="java.lang.String"/>
+	<field name="Employees_EMAIL" class="java.lang.String"/>
+	<field name="Employees_EMPLOYEE_CODE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

@@ -27,13 +27,16 @@ import net.java.balloontip.utils.ToolTipUtils;
  */
 public class TimerMethods extends TimerTask {
 
-    String logDate, logTime, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, JOB_ID, emptyField = "";
+    String logDate, logTime, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, JOB_ID
+            , emptyField = "", SUPERVISE_BY, PRODUCT_LEVEL_ITEM_CODE, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT;
     int ALLOCATED_TIME;
     long millisecondsjobAllocatedTime, millisecondsjobAllocatedTimeToCompare, millisecondsAllocatedTime, millisecondsShouldFinishIn, millisecondsShouldFinishInToCompare, millisecondsCurrentTime, millisecondsCurrentTimeToCompare;
     SimpleDateFormat commonTimeFormate = new SimpleDateFormat("hh:mm:ss");
 
     private void checkLateOngoingJobs(String logTime) {
-        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE FROM JobRunning WHERE IS_LATE = 'No'";
+        String query = "SELECT JOB_ID, ALLOCATED_TIME, JOB_ALLOCATED_TIME"
+                + ", JOB_ALLOCATED_DATE, SUPERVISE_BY, PRODUCT_LEVEL_ITEM_CODE"
+                + ", SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT FROM JobRunning WHERE IS_LATE = 'No'";
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
@@ -42,6 +45,10 @@ public class TimerMethods extends TimerTask {
                 ALLOCATED_TIME = resultset.getInt("ALLOCATED_TIME");
                 JOB_ALLOCATED_TIME = resultset.getString("JOB_ALLOCATED_TIME");
                 JOB_ALLOCATED_DATE = resultset.getString("JOB_ALLOCATED_DATE");
+                SUPERVISE_BY = resultset.getString("SUPERVISE_BY");
+                PRODUCT_LEVEL_ITEM_CODE = resultset.getString("PRODUCT_LEVEL_ITEM_CODE");
+                SHOULD_FINISHED_DATE = resultset.getString("SHOULD_FINISHED_DATE");
+                SHOULD_FINISHED_AT = resultset.getString("SHOULD_FINISHED_AT");
 
                 Calendar caljobAllocatedTime = Calendar.getInstance();
                 caljobAllocatedTime.setTime(commonTimeFormate.parse(JOB_ALLOCATED_TIME));
@@ -74,6 +81,8 @@ public class TimerMethods extends TimerTask {
                     String UpdateQuery = "update JobRunning set IS_LATE = 'Yes' WHERE JOB_ID = '" + JOB_ID + "'";
                     stmt.execute(UpdateQuery);
                     stmt.close();
+                    SendEMails sendEMails = new SendEMails();
+                    sendEMails.notifyAboutLateJobsToSupervisourByEmail(SUPERVISE_BY, JOB_ID, JOB_ALLOCATED_DATE, JOB_ALLOCATED_TIME, ALLOCATED_TIME, PRODUCT_LEVEL_ITEM_CODE, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT);
                     IndexPage.buttonJobStatus.setBackground(Color.red);
                     IndexPage.buttonJobStatus.setForeground(Color.red);
                     BalloonTip tooltipBalloon = new BalloonTip(IndexPage.buttonJobStatus, "Reserved time is exceed for '" + JOB_ID + "'. Please check.");
