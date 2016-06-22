@@ -128,7 +128,7 @@ public class SendEMails {
                         + "\nIt should start on '" + JOB_ALLOCATED_DATE + "' at '" + JOB_ALLOCATED_TIME + "' and should"
                         + "\nends on '" + SHOULD_FINISHED_DATE + "' at '" + SHOULD_FINISHED_AT + "'. Job is reserved only '"+ALLOCATED_TIME+"' minutes."
                         + "\nThe production item code is '" + PRODUCT_LEVEL_ITEM_CODE + "'."
-                        + "\nPlease be kind to check it."
+                        + "\nPlease be kind to check this."
                         + "\n"
                         + "\nThank you."
                         + "\n'"+BUSINESS_NAME+"'.");
@@ -146,11 +146,10 @@ public class SendEMails {
         }
     }
 
-    public void groupCreationEmailToSfatt(String groupID, String DEPARTMENT_CODE) {
-
+    public void notifyAboutWastageOfCompleteJobsToSupervisourByEmail(String SUPERVISE_BY, String JOB_ID, int plItemDifference,int itemCount, int itemCompleted, String PRODUCT_LEVEL_ITEM_CODE) {
+        final String BUSINESS_NAME;
         final String username = "ravindu.it10005040@gmail.com";
         final String password = "ravIT10005040";
-
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.auth", "true");
@@ -169,61 +168,42 @@ public class SendEMails {
             Statement stmt;
             String query;
             query = "SELECT\n"
-                    + "     student_event_groups.`GROUP_ID` AS student_event_groups_GROUP_ID,\n"
-                    + "     student_event_groups.`GROUP_NAME` AS student_event_groups_GROUP_NAME,\n"
-                    + "     student_event_groups.`START_DATE` AS student_event_groups_START_DATE,\n"
-                    + "     student_event_groups.`END_DATE` AS student_event_groups_END_DATE,\n"
-                    + "     student_event_groups.`TIME` AS student_event_groups_TIME,\n"
-                    + "     student_event_groups.`STATUS` AS student_event_groups_STATUS,\n"
-                    + "     student_event_groups.`events_EVENT_CODE` AS student_event_groups_events_EVENT_CODE,\n"
-                    + "     student_event_groups.`student_batch_BATCH_WITH_DEPARTMENT_CODE` AS student_event_groups_student_batch_BATCH_WITH_DEPARTMENT_CODE,\n"
-                    + "     student_batch.`BATCH_WITH_DEPARTMENT_CODE` AS student_batch_BATCH_WITH_DEPARTMENT_CODE,\n"
-                    + "     student_batch.`BATCH_YEAR` AS student_batch_BATCH_YEAR,\n"
-                    + "     student_batch.`departments_DEPARTMENT_CODE` AS student_batch_departments_DEPARTMENT_CODE,\n"
-                    + "     departments.`DEPARTMENT_NAME` AS departments_DEPARTMENT_NAME,\n"
-                    + "     staff_members.`MEMBER_ID` AS staff_members_MEMBER_ID,\n"
-                    + "     staff_members.`MEMBER_FIRST_NAME` AS staff_members_MEMBER_FIRST_NAME,\n"
-                    + "     staff_members.`EMAIL` AS staff_members_EMAIL,\n"
-                    + "     events.`EVENT_NAME` AS events_EVENT_NAME,\n"
-                    + "     student_event_groups.`IS_REPORT_SENT_TO_DEPARTMENT` AS student_event_groups_IS_REPORT_SENT_TO_DEPARTMENT\n"
+                    + "     Employees.\"FIRST_NAME\" AS Employees_FIRST_NAME,\n"
+                    + "     Employees.\"SUR_NAME\" AS Employees_SUR_NAME,\n"
+                    + "     Employees.\"EMAIL\" AS Employees_EMAIL,\n"
+                    + "     Employees.\"EMPLOYEE_CODE\" AS Employees_EMPLOYEE_CODE,\n"
+                    + "     Modules.\"BUSINESS_NAME\" AS Modules_BUSINESS_NAME\n"
                     + "FROM\n"
-                    + "     `student_batch` student_batch INNER JOIN `student_event_groups` student_event_groups ON student_batch.`BATCH_WITH_DEPARTMENT_CODE` = student_event_groups.`student_batch_BATCH_WITH_DEPARTMENT_CODE`\n"
-                    + "     INNER JOIN `departments` departments ON student_batch.`departments_DEPARTMENT_CODE` = departments.`DEPARTMENT_CODE`\n"
-                    + "     INNER JOIN `staff_members` staff_members ON departments.`DEPARTMENT_CODE` = staff_members.`departments_DEPARTMENT_CODE`\n"
-                    + "     INNER JOIN `events` events ON student_event_groups.`events_EVENT_CODE` = events.`EVENT_CODE`\n"
+                    + "     \"dbo\".\"Employees\" Employees,\n"
+                    + "     \"dbo\".\"Modules\" Modules\n"
                     + "WHERE\n"
-                    + "     student_event_groups.`GROUP_ID` = '" + groupID + "' AND student_batch.`departments_DEPARTMENT_CODE` = '" + DEPARTMENT_CODE + "'";
+                    + "     Employees.\"EMPLOYEE_CODE\" = '"+SUPERVISE_BY+"'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
-            while (reset.next()) {
-                String senderEmail = reset.getString("staff_members_EMAIL");
-                String firstName = reset.getString("staff_members_MEMBER_FIRST_NAME");
-                String GROUP_NAME = reset.getString("student_event_groups_GROUP_NAME");
-                String START_DATE = reset.getString("student_event_groups_START_DATE");
-                String END_DATE = reset.getString("student_event_groups_END_DATE");
-                String TIME = reset.getString("student_event_groups_TIME");
-                String eventName = reset.getString("events_EVENT_NAME");
-
+            if (reset.next()) {
+                String senderEmail = reset.getString("Employees_EMAIL");
+                String firstName = reset.getString("Employees_FIRST_NAME");
+                String surName = reset.getString("Employees_SUR_NAME");
+                BUSINESS_NAME = reset.getString("Modules_BUSINESS_NAME");
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress("ravindu.it10005040@gmail.com"));
                 message.setRecipients(Message.RecipientType.TO,
                         InternetAddress.parse(senderEmail));
-                message.setSubject("A new group named '" + GROUP_NAME + "' is created.");
-                message.setText("Dear '" + firstName + "',"
-                        + "\n\nA new group is created which is allocate to '" + eventName + "' event which organized by EDU."
-                        + "\nIt will held on '" + START_DATE + "' to '" + END_DATE + "' at '" + TIME + "'."
-                        + "\nGroup ID is '" + groupID + "' and group name is '" + GROUP_NAME + "'."
-                        + "\nPlease be ready to organize necessary things."
+                message.setSubject("Row item wastage occured in the job '" + JOB_ID + "'.");
+                message.setText("Dear '" + firstName + "''" + " " + "''" + surName + "',"
+                        + "\n\nAt the job '" + JOB_ID + "' which supervise by you is occured a row item wastage."
+                        + "\nThe number of production items should complete is '" + itemCount + "'."
+                        + "\nBut the job completed only '"+itemCompleted+"'. Difference is '"+plItemDifference+"'"
+                        + "\nThe production item code is '" + PRODUCT_LEVEL_ITEM_CODE + "'."
+                        + "\nPlease be kind to check this."
                         + "\n"
                         + "\nThank you."
-                        + "\nEDU team.");
+                        + "\n'"+BUSINESS_NAME+"'.");
 
                 Transport.send(message);
                 System.out.println("Done");
-                JOptionPane.showMessageDialog(null, "Group creation email is sent to '" + firstName + "'.");
             }
-
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         } catch (SQLException ex) {

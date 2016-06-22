@@ -379,6 +379,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         buttonSave.setEnabled(true);
         formattedTextTakenTime.setText("");
         formattedTextItemCompleted.setText("");
+        buttonAddDetails.setEnabled(true);
     }
 
 private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
@@ -764,12 +765,16 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         endDate = CalendarEndDate.getText();
 
         if (comboSelected.equals("Ongoing")) {
+            buttonAddDetails.setEnabled(true);
             SearchOngoing(comboOrder, startDate, endDate);
         } else if (comboSelected.equals("New")) {
+            buttonAddDetails.setEnabled(true);
             SearchNew(comboOrder, startDate, endDate);
         } else if (comboSelected.equals("Completed")) {
+            buttonAddDetails.setEnabled(false);
             SearchCompleted(comboOrder, startDate, endDate);
         } else if (comboSelected.equals("Ignored")) {
+            buttonAddDetails.setEnabled(false);
             SearchIgnored(comboOrder, startDate, endDate);
         } else if (comboSelected.equals("All")) {
 //            SeaarchAll(comboOrder);
@@ -1045,7 +1050,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             } else if (plItemDifference < 0) {
                                 IS_WASTAGE = "No";
                             }
-                            CalculatePLItemDifference.PLItemDifference(jobID, plItemDifference, IS_WASTAGE);
+                            CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
                         }
                     }
                     String querySelectEmployeesAtJob = "SELECT\n"

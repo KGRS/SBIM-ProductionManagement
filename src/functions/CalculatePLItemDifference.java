@@ -14,12 +14,17 @@ import javax.swing.JOptionPane;
  * @author KGRS
  */
 public class CalculatePLItemDifference {
-    public static void PLItemDifference(String jobID, int plItemDifference, String IS_WASTAGE) {
+    public static void PLItemDifference(String JobRunning_SUPERVISE_BY, String jobID, int plItemDifference, String IS_WASTAGE, int itemCount, String PRODUCT_LEVEL_ITEM_CODE, int itemCompleted) {
         String IS_RETURN = "No";
         try {
             java.sql.Statement stmtInsertAtPLItemDifferenceTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);            
-            String insertAtPLItemDifferenceTable = "INSERT INTO PLItemDifference (JOB_ID, CHANGE_ITEM_COUNT, IS_WASTAGE, IS_RETURN) VALUES ('" + jobID + "', '" + plItemDifference + "', '" + IS_WASTAGE + "', '" + IS_RETURN + "')";
+            String insertAtPLItemDifferenceTable = "INSERT INTO PLItemDifference (JOB_ID, CHANGE_ITEM_COUNT, IS_WASTAGE"
+                    + ", IS_RETURN) VALUES ('" + jobID + "', '" + plItemDifference + "', '" + IS_WASTAGE + "'"
+                    + ", '" + IS_RETURN + "')";
             stmtInsertAtPLItemDifferenceTable.execute(insertAtPLItemDifferenceTable);
+            SendEMails sendEMails = new SendEMails();
+            sendEMails.notifyAboutWastageOfCompleteJobsToSupervisourByEmail(JobRunning_SUPERVISE_BY, jobID, plItemDifference, itemCount, itemCompleted, PRODUCT_LEVEL_ITEM_CODE);
+//            sendEMails.notifyAboutLateJobsToSupervisourByEmail(SUPERVISE_BY, JOB_ID, JOB_ALLOCATED_DATE, JOB_ALLOCATED_TIME, ALLOCATED_TIME, PRODUCT_LEVEL_ITEM_CODE, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(null, "please contact for support.");
