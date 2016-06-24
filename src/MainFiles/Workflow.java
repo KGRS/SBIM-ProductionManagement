@@ -5,21 +5,15 @@
  */
 package MainFiles;
 
-import static MainFiles.IndexPage.department;
+import static MainFiles.IndexPage.workflow;
 import db.ConnectSql;
 import functions.ValidateFields;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,9 +28,6 @@ public class Workflow extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final String menuName = "Workflow";
 
-    /**
-     * Creates new form Department
-     */
     public Workflow() {
         initComponents();
 
@@ -709,7 +700,7 @@ public class Workflow extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cmbProductLevel2ItemKeyPressed
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
-        department.toFront();
+        workflow.toFront();
     }//GEN-LAST:event_formInternalFrameIconified
 
     private void Refresh() {
@@ -758,8 +749,8 @@ public class Workflow extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void exit() {
-        if (department != null) {
-            department = null;
+        if (workflow != null) {
+            workflow = null;
         }
         this.dispose();
     }

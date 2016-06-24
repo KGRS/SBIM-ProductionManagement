@@ -24,7 +24,7 @@ public class CalculatePLItemDifference {
             stmtInsertAtPLItemDifferenceTable.execute(insertAtPLItemDifferenceTable);
             SendEMails sendEMails = new SendEMails();
             sendEMails.notifyAboutWastageOfCompleteJobsToSupervisourByEmail(JobRunning_SUPERVISE_BY, jobID, plItemDifference, itemCount, itemCompleted, PRODUCT_LEVEL_ITEM_CODE);
-//            sendEMails.notifyAboutLateJobsToSupervisourByEmail(SUPERVISE_BY, JOB_ID, JOB_ALLOCATED_DATE, JOB_ALLOCATED_TIME, ALLOCATED_TIME, PRODUCT_LEVEL_ITEM_CODE, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT);
+            stmtInsertAtPLItemDifferenceTable.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(null, "please contact for support.");

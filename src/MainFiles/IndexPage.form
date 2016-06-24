@@ -198,12 +198,12 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
           </AuxValues>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="MenuStockReports">
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemJobMonitor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Attachments"/>
+                <Property name="text" type="java.lang.String" value="Job monitor"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuStockReportsActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemJobMonitorActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="MenuReports">

@@ -5,19 +5,28 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     Employees."FIRST_NAME" AS Employees_FIRST_NAME,
-     Employees."SUR_NAME" AS Employees_SUR_NAME,
-     Employees."EMAIL" AS Employees_EMAIL,
-     Employees."EMPLOYEE_CODE" AS Employees_EMPLOYEE_CODE
+     SUM(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_SUM,
+     SUM(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_SUM,
+     COUNT(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_COUNT,
+     COUNT(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_COUNT,
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE
 FROM
-     "dbo"."Employees" Employees
+     "dbo"."JobFinished" JobFinished INNER JOIN "dbo"."PLItemDifference" PLItemDifference ON JobFinished."JOB_ID" = PLItemDifference."JOB_ID"
+     INNER JOIN "dbo"."JobFixed" JobFixed ON JobFinished."FIXED_JOB_ID" = JobFixed."JOB_FIXED_ID"
 WHERE
-     Employees."EMPLOYEE_CODE" = '']]>
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" = '"+PRODUCT_LEVEL_ITEM_CODE+"'
+ AND PLItemDifference."IS_WASTAGE" = 'No'
+ AND JobFinished."IS_COMPLETE_CANCLE" = 'Completed'
+GROUP BY
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE",
+     JobFinished."ITEM_COUNT",
+     JobFinished."ITEM_COUNT_COMPLETED"]]>
 	</queryString>
-	<field name="Employees_FIRST_NAME" class="java.lang.String"/>
-	<field name="Employees_SUR_NAME" class="java.lang.String"/>
-	<field name="Employees_EMAIL" class="java.lang.String"/>
-	<field name="Employees_EMPLOYEE_CODE" class="java.lang.String"/>
+	<field name="JobFinished_ITEM_COUNT_SUM" class="java.lang.Integer"/>
+	<field name="JobFinished_ITEM_COUNT_COMPLETED_SUM" class="java.lang.Integer"/>
+	<field name="JobFinished_ITEM_COUNT_COUNT" class="java.lang.Integer"/>
+	<field name="JobFinished_ITEM_COUNT_COMPLETED_COUNT" class="java.lang.Integer"/>
+	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

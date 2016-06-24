@@ -1051,6 +1051,10 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 IS_WASTAGE = "No";
                             }
                             CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
+                        }else if (itemCount == itemCompleted) {
+                            plItemDifference = 0;
+                            IS_WASTAGE = "No";
+                            CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
                         }
                     }
                     String querySelectEmployeesAtJob = "SELECT\n"

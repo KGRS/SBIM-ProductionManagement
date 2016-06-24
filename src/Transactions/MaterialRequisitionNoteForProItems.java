@@ -9,6 +9,7 @@ import MainFiles.IndexPage;
 import static MainFiles.IndexPage.materialRequisitionNoteForProItems;
 import OtherDialogs.WriteNotesCommon;
 import db.ConnectSql;
+import functions.CalculatePLItemProductionDetails;
 import functions.DocNumGenerator;
 import functions.ReadConfig;
 import functions.ValidateFields;
@@ -52,7 +53,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
     private final String CheckAvailableQuantity = ReadConfig.checkAvailableQuantity;
     String jobID, proItemCode, itemCode;
     double itemsPurchasePrice, itemQuantity, itemAmount, itemCalQuantity, productLevel1RawItemsQUANTITY, productLevel1RawItemsCount;
-
+    int itemCount;
     /**
      * Creates new form MaterialRequisitionNoteForProItems
      */
@@ -136,6 +137,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         backgroundCornerLabel = new javax.swing.JLabel();
         lbl_subAccount1 = new javax.swing.JLabel();
         comboBoxJobsToRequest = new javax.swing.JComboBox();
+        buttonSuggestQuantities = new javax.swing.JButton();
         backgroundLabel = new javax.swing.JLabel();
         labelIcon = new javax.swing.JLabel();
         buttonView = new javax.swing.JButton();
@@ -580,6 +582,14 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             }
         });
         panel1.add(comboBoxJobsToRequest, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 280, -1));
+
+        buttonSuggestQuantities.setText("Suggest quantities");
+        buttonSuggestQuantities.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSuggestQuantitiesActionPerformed(evt);
+            }
+        });
+        panel1.add(buttonSuggestQuantities, new org.netbeans.lib.awtextra.AbsoluteConstraints(243, 610, 130, -1));
 
         backgroundLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         panel1.add(backgroundLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 184, 1080, 460));
@@ -1710,6 +1720,16 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         }
     }//GEN-LAST:event_buttonViewActionPerformed
 
+    private void buttonSuggestQuantitiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSuggestQuantitiesActionPerformed
+        int x = JOptionPane.showConfirmDialog(this, "Are you sure to load suggested row items quantities which calculated from past data?", "Load suggest?", JOptionPane.YES_NO_OPTION);
+        if(x == JOptionPane.YES_OPTION){
+            String searchjobCombo[] = comboBoxJobsToRequest.getSelectedItem().toString().split(spliter);
+            proItemCode = searchjobCombo[3];
+            itemCount = Integer.parseInt(searchjobCombo[4]);
+            CalculatePLItemProductionDetails.plItemsProductionCount(itemCount, proItemCode);
+        }
+    }//GEN-LAST:event_buttonSuggestQuantitiesActionPerformed
+
     private void RefreshForJobSearch() {
         int x = JOptionPane.showConfirmDialog(this, "Chaning the job will refresh the whole window. Are you sure to change?", "Change", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
@@ -1877,6 +1897,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonRefresh;
     public static javax.swing.JButton buttonSave;
+    private javax.swing.JButton buttonSuggestQuantities;
     private javax.swing.JButton buttonUpdate;
     private javax.swing.JButton buttonView;
     private javax.swing.JButton buttonWriteNotes;

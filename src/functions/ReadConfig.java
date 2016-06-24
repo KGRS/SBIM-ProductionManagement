@@ -23,6 +23,7 @@ public class ReadConfig {
     public static String BarCodeImageType;
     public static String Date;
     public static String checkAvailableQuantity;
+    public static String timerRunsAccordingTo;
 
     static {
         try {
@@ -56,6 +57,7 @@ public class ReadConfig {
 
             Date = prop.getProperty("DateType");
             checkAvailableQuantity =prop.getProperty("CheckAvailableQuantity");
+            timerRunsAccordingTo =prop.getProperty("TimerRunsAccordingTo");
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Can't read cofig files");

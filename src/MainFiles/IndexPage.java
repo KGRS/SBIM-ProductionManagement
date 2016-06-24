@@ -5,13 +5,10 @@
 package MainFiles;
 
 import Transactions.ItemTransferDepartmentWise;
-import Transactions.UserLogins;
-import reports.Attachements;
 import Transactions.JobAllocation;
 import Transactions.JobStatus;
 import Transactions.MaterialRequisitionNote;
 import Transactions.MaterialRequisitionNoteForProItems;
-import Transactions.UserPrivilege;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
 import db.ConnectSql;
@@ -44,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import reports.JobMoniter;
 
 /**
  *
@@ -63,7 +61,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static Date SYSTEM_DATE;
     private final String spliter = "--";
 
-    public static Workflow department = null;
+    public static Workflow workflow = null;
     public static Process subDepartment = null;
     public static OtherCost otherCost = null;
     public static ProcessExceptions processExceptions = null;
@@ -76,10 +74,8 @@ public class IndexPage extends javax.swing.JFrame {
     public static MaterialRequisitionNote materialRequisitionNote = null;
     public static MaterialRequisitionNoteForProItems materialRequisitionNoteForProItems = null;
     public static ItemTransferDepartmentWise ITDW = null;
-    public static UserPrivilege userPrivilege = null;
-    public static UserLogins userLogins = null;
-
-    public static Attachements attachments = null;
+    
+    public static JobMoniter jobMoniter = null;
 
     public IndexPage() {
 
@@ -186,7 +182,7 @@ public class IndexPage extends javax.swing.JFrame {
         arrowMenuTransfer = new javax.swing.JMenu();
         menuTransferDepartment = new javax.swing.JMenuItem();
         TabMenuReports = new javax.swing.JMenu();
-        MenuStockReports = new javax.swing.JMenuItem();
+        menuItemJobMonitor = new javax.swing.JMenuItem();
         MenuReports = new javax.swing.JMenuItem();
         TabMenuTools = new javax.swing.JMenu();
         MenuNotifications = new javax.swing.JMenuItem();
@@ -518,13 +514,13 @@ public class IndexPage extends javax.swing.JFrame {
         TabMenuReports.setText("Reports");
         TabMenuReports.setPreferredSize(new java.awt.Dimension(80, 19));
 
-        MenuStockReports.setText("Attachments");
-        MenuStockReports.addActionListener(new java.awt.event.ActionListener() {
+        menuItemJobMonitor.setText("Job monitor");
+        menuItemJobMonitor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuStockReportsActionPerformed(evt);
+                menuItemJobMonitorActionPerformed(evt);
             }
         });
-        TabMenuReports.add(MenuStockReports);
+        TabMenuReports.add(menuItemJobMonitor);
 
         MenuReports.setText("Reports");
         MenuReports.addActionListener(new java.awt.event.ActionListener() {
@@ -1195,18 +1191,17 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_SubMenuGreenLanternActionPerformed
 
-    private void MenuStockReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuStockReportsActionPerformed
-        if (attachments != null) {
-            if (!attachments.isVisible()) {
-                attachments.setVisible(true);
+    private void menuItemJobMonitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemJobMonitorActionPerformed
+        if (jobMoniter != null) {
+            if (!jobMoniter.isVisible()) {
+                jobMoniter.setVisible(true);
             }
         } else {
-            attachments = new Attachements();
-            dskPane_RightPanel.add(attachments);
-            attachments.setVisible(true);
+            jobMoniter = new JobMoniter();
+            dskPane_RightPanel.add(jobMoniter);
+            jobMoniter.setVisible(true);
         }
-
-    }//GEN-LAST:event_MenuStockReportsActionPerformed
+    }//GEN-LAST:event_menuItemJobMonitorActionPerformed
 
     private void MenuAdminSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAdminSettingsActionPerformed
         JOptionPane.showMessageDialog(this, "This form is still under developing.\n We "
@@ -1239,14 +1234,14 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     }//GEN-LAST:event_ButtonClickHereActionPerformed
 
     private void MenuWorkflowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuWorkflowActionPerformed
-        if (department != null) {
-            if (!department.isVisible()) {
-                department.setVisible(true);
+        if (workflow != null) {
+            if (!workflow.isVisible()) {
+                workflow.setVisible(true);
             }
         } else {
-            department = new Workflow();
-            dskPane_RightPanel.add(department);
-            department.setVisible(true);
+            workflow = new Workflow();
+            dskPane_RightPanel.add(workflow);
+            workflow.setVisible(true);
         }
     }//GEN-LAST:event_MenuWorkflowActionPerformed
 
@@ -1470,7 +1465,6 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem MenuNotifications;
     public static javax.swing.JMenu MenuPersonalization;
     public static javax.swing.JMenuItem MenuReports;
-    private javax.swing.JMenuItem MenuStockReports;
     private javax.swing.JMenuItem MenuWorkflow;
     private javax.swing.JPanel PanelCompanyLogo;
     private javax.swing.JMenuItem SubMenuAssassinsCreed;
@@ -1517,6 +1511,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuFixedJobs;
+    private javax.swing.JMenuItem menuItemJobMonitor;
     private javax.swing.JMenuItem menuMeterialRequisitionNote;
     private javax.swing.JMenuItem menuMeterialRequisitionNoteForProItems;
     private javax.swing.JMenuItem menuOtherCost;
