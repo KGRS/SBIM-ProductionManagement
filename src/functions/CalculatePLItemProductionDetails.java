@@ -150,7 +150,7 @@ public class CalculatePLItemProductionDetails {
                         + "Upper quartile of items completed = " + Q3OfITEM_COUNT_COMPLETED + "\n"
                         + "Distance of items completed = " + distance_of_ITEM_COUNT_COMPLETED + "\n"
                         + "Lower tail of items completed = " + lowerTail_of_ITEM_COUNT_COMPLETED + "\n"
-                        + "Upper tail  of items completed= " + upperTail_of_ITEM_COUNT_COMPLETED + "\n";
+                        + "Upper tail  of items completed= " + upperTail_of_ITEM_COUNT_COMPLETED + "\n\n";
                 JobMoniter.textAreaJobMonitor.insert(printingText, 0);
             }
         } catch (Exception ex) {
@@ -244,7 +244,7 @@ public class CalculatePLItemProductionDetails {
                 String printingText = "Avarage Of item count = " + avarageOfITEM_COUNT + "\n"
                         + "Avarage Of item count completed = " + avarageOfITEM_COUNT_COMPLETED + "\n"
                         + "Divided values of avarages = " + avarageDividedValue + "\n"
-                        + "Sub tracted value = " + subTractFrom1 + "\n";
+                        + "Sub tracted value = " + subTractFrom1 + "\n\n";
                 JobMoniter.textAreaJobMonitor.insert(printingText, 0);
             }
         } catch (Exception ex) {

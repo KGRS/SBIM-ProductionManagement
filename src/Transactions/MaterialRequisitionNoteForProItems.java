@@ -52,7 +52,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
     private final String menuName = "Material Requisition Note for Production Items";
     private final String CheckAvailableQuantity = ReadConfig.checkAvailableQuantity;
     String jobID, proItemCode, itemCode;
-    double itemsPurchasePrice, itemQuantity, itemAmount, itemCalQuantity, productLevel1RawItemsQUANTITY, productLevel1RawItemsCount;
+    double itemsPurchasePrice, itemQuantity, itemAmount, itemCalQuantity, productLevel1RawItemsQUANTITY, productLevel1RawItemsCount, suggestItemCalQuantity;
     int itemCount;
     /**
      * Creates new form MaterialRequisitionNoteForProItems
@@ -1727,9 +1727,31 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             proItemCode = searchjobCombo[3];
             itemCount = Integer.parseInt(searchjobCombo[4]);
             double subTractFrom1 = CalculatePLItemProductionDetails.plItemsProductionCount(itemCount, proItemCode);
+            calculateSuggestQuantities(subTractFrom1);
         }
     }//GEN-LAST:event_buttonSuggestQuantitiesActionPerformed
 
+    private void calculateSuggestQuantities(double subTractFrom1){
+        double ItemPriceAmount, suggestItemCalQuantitySubTractFrom1;
+        int secondTableRowCount = tableMRNItem.getRowCount();
+        String PurchaseUnitCode;
+        for (int i = 0; i < secondTableRowCount; i++) {
+            PurchaseUnitCode = tableMRNItem.getValueAt(i, 2).toString();
+            itemsPurchasePrice = Double.parseDouble(tableMRNItem.getValueAt(i, 3).toString());
+            itemCalQuantity = Double.parseDouble(tableMRNItem.getValueAt(i, 4).toString());
+            suggestItemCalQuantitySubTractFrom1 = itemCalQuantity * subTractFrom1;
+            if(PurchaseUnitCode.equals("Numbers")){
+                suggestItemCalQuantity = Math.ceil(suggestItemCalQuantitySubTractFrom1 + itemCalQuantity);
+            }else{
+                suggestItemCalQuantity = roundThreeDecimals(suggestItemCalQuantitySubTractFrom1 + itemCalQuantity);
+            }            
+            ItemPriceAmount = roundTwoDecimals(itemsPurchasePrice * suggestItemCalQuantity);
+            tableMRNItem.setValueAt(suggestItemCalQuantity, i, 4);
+            tableMRNItem.setValueAt(ItemPriceAmount, i, 5);
+        }
+        CalculateAmountWithOutTax();
+    }
+    
     private void RefreshForJobSearch() {
         int x = JOptionPane.showConfirmDialog(this, "Chaning the job will refresh the whole window. Are you sure to change?", "Change", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
