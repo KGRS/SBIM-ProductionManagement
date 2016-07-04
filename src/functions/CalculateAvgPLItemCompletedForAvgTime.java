@@ -5,19 +5,17 @@
  */
 package functions;
 
-import static MainFiles.IndexPage.jobMoniter;
 import db.ConnectSql;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import reports.JobMoniter;
 
 /**
  *
  * @author KGRS
  */
-public class CalculatePLItemProductionDetails {
+public class CalculateAvgPLItemCompletedForAvgTime {
 
     public static double roundThreeDecimals(double d) {
         DecimalFormat noDForm = new DecimalFormat("#.###");
@@ -26,7 +24,6 @@ public class CalculatePLItemProductionDetails {
 
     public static double plItemsProductionCount(String PRODUCT_LEVEL_ITEM_CODE) {
         ResultSet resetSelectAtJobFinishedTable;
-        String printingText;
         double Q1PositionOfITEM_COUNT_CAL, Q3PositionOfITEM_COUNT_CAL, Q1PositionOfITEM_COUNT_COMPLETED_CAL, Q3PositionOfITEM_COUNT_COMPLETED_CAL;
         int JobFinished_ITEM_COUNT, JobFinished_ITEM_COUNT_COMPLETED;
         double distance_of_ITEM_COUNT;
@@ -40,7 +37,7 @@ public class CalculatePLItemProductionDetails {
         double Q3OfITEM_COUNT = 0;
         int Q1PositionOfITEM_COUNT, Q3PositionOfITEM_COUNT;
         double Q1OfITEM_COUNT_COMPLETED = 0, Q3OfITEM_COUNT_COMPLETED = 0;
-        double subTractFrom1 = 0, avarageOfITEM_COUNT_COMPLETED=0;
+        double avarageOfITEM_COUNT_COMPLETED=0;
         int Q1PositionOfITEM_COUNT_COMPLETED, Q3PositionOfITEM_COUNT_COMPLETED;
         try {
             ArrayList<Integer> arrayList_JobFinished_ITEM_COUNT = new ArrayList<Integer>();
@@ -136,38 +133,22 @@ public class CalculatePLItemProductionDetails {
             if (lowerTail_of_ITEM_COUNT_COMPLETED < 0) {
                 lowerTail_of_ITEM_COUNT_COMPLETED = 0;
             }
-            upperTail_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED + (1.5 * distance_of_ITEM_COUNT_COMPLETED);
-            subTractFrom1 = calculateFilteredAverage(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);            
-
-            if (jobMoniter != null) {
-                printingText = "\nStatictical values of the production of " + PRODUCT_LEVEL_ITEM_CODE + ".\nNumber of item count use Calculate is " + JobFinished_ITEM_COUNT_COMPLETED_COUNT + "\n"
-                        + "Lower quartile of items allocated = " + Q1OfITEM_COUNT + "\n"
-                        + "Upper quartile of items allocated  = " + Q3OfITEM_COUNT + "\n"
-                        + "Distance of items allocated  = " + distance_of_ITEM_COUNT + "\n"
-                        + "Lower tail of items allocated  = " + lowerTail_of_ITEM_COUNT + "\n"
-                        + "Upper tail of items allocated  = " + upperTail_of_ITEM_COUNT + "\n\n"
-                        + "Lower quartile of items completed = " + Q1OfITEM_COUNT_COMPLETED + "\n"
-                        + "Upper quartile of items completed = " + Q3OfITEM_COUNT_COMPLETED + "\n"
-                        + "Distance of items completed = " + distance_of_ITEM_COUNT_COMPLETED + "\n"
-                        + "Lower tail of items completed = " + lowerTail_of_ITEM_COUNT_COMPLETED + "\n"
-                        + "Upper tail  of items completed= " + upperTail_of_ITEM_COUNT_COMPLETED + "\n\n";
-                JobMoniter.textAreaJobMonitor.insert(printingText, 0);
-            }
+            upperTail_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED + (1.5 * distance_of_ITEM_COUNT_COMPLETED);            
+            avarageOfITEM_COUNT_COMPLETED = calculateFilteredAverageToReturnAvGOfItemCompleted(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(null, "Please contact for support.");
         }
-        return subTractFrom1;
-    }
+        return avarageOfITEM_COUNT_COMPLETED;
+    }    
 
-    private static double calculateFilteredAverage(String PRODUCT_LEVEL_ITEM_CODE, double lowerTail_of_ITEM_COUNT, double upperTail_of_ITEM_COUNT, double lowerTail_of_ITEM_COUNT_COMPLETED, double upperTail_of_ITEM_COUNT_COMPLETED) {
+    private static double calculateFilteredAverageToReturnAvGOfItemCompleted(String PRODUCT_LEVEL_ITEM_CODE, double lowerTail_of_ITEM_COUNT, double upperTail_of_ITEM_COUNT, double lowerTail_of_ITEM_COUNT_COMPLETED, double upperTail_of_ITEM_COUNT_COMPLETED) {
         ResultSet resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT, resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT_COMPLETED;
         int JobFinished_ITEM_COUNT, JobFinished_ITEM_COUNT_COMPLETED;
         double JobFinished_ITEM_COUNT_COUNT = 0, JobFinished_ITEM_COUNT_COMPLETED_COUNT = 0;
         double avaragePositionOfITEM_COUNT_CAL, avaragePositionOfITEM_COUNT_COMPLETED_CAL;
         int avaragePositionOfITEM_COUNT, avaragePositionOfITEM_COUNT_COMPLETED;
         double avarageOfITEM_COUNT = 0, avarageOfITEM_COUNT_COMPLETED = 0;
-        double avarageDividedValue = 0, subTractFrom1 = 0;
 
         try {
             ArrayList<Integer> arrayList_JobFinished_ITEM_COUNT_FILTERED = new ArrayList<Integer>();
@@ -236,21 +217,11 @@ public class CalculatePLItemProductionDetails {
                 avarageOfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_1 - 1);
                 avarageOfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_2 - 1);
                 avarageOfITEM_COUNT_COMPLETED = (avarageOfITEM_COUNT_COMPLETED_1 + avarageOfITEM_COUNT_COMPLETED_2) / 2;
-
-                avarageDividedValue = roundThreeDecimals(avarageOfITEM_COUNT_COMPLETED / avarageOfITEM_COUNT);
-                subTractFrom1 = roundThreeDecimals(1 - avarageDividedValue);
-            }
-            if (jobMoniter != null) {
-                String printingText = "Avarage Of item count = " + avarageOfITEM_COUNT + "\n"
-                        + "Avarage Of item count completed = " + avarageOfITEM_COUNT_COMPLETED + "\n"
-                        + "Divided values of avarages = " + avarageDividedValue + "\n"
-                        + "Sub tracted value = " + subTractFrom1 + "\n\n";
-                JobMoniter.textAreaJobMonitor.insert(printingText, 0);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(null, "Please contact for support.");
         }
-        return subTractFrom1;
-    }    
+        return avarageOfITEM_COUNT_COMPLETED;
+    }
 }

@@ -1726,7 +1726,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             String searchjobCombo[] = comboBoxJobsToRequest.getSelectedItem().toString().split(spliter);
             proItemCode = searchjobCombo[3];
             itemCount = Integer.parseInt(searchjobCombo[4]);
-            double subTractFrom1 = CalculatePLItemProductionDetails.plItemsProductionCount(itemCount, proItemCode);
+            double subTractFrom1 = CalculatePLItemProductionDetails.plItemsProductionCount(proItemCode);
             calculateSuggestQuantities(subTractFrom1);
         }
     }//GEN-LAST:event_buttonSuggestQuantitiesActionPerformed

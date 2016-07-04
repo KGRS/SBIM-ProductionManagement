@@ -20,6 +20,8 @@ public class AverageTimeOfPLItems {
     public static void calculateAverageTimeOfPLItems(String productLevelItemCode, String productLevel, String departmentCode) {
         String statusOfJob = "Completed";
         int ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM = 0, ITEM_COUNT_COMPLETED=0;
+        double distance_of_ITEM_COUNT;
+        double lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT;
         ResultSet resetSelectJobsAtFinished, resetSelectPLItemsAtAverageTimeTable;
         try {
             java.sql.Statement stmtSelectJobsAtFinished = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -28,12 +30,13 @@ public class AverageTimeOfPLItems {
             java.sql.Statement stmtUpdateAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND IS_COMPLETE_CANCLE = '" + statusOfJob + "'";
             resetSelectJobsAtFinished = stmtSelectJobsAtFinished.executeQuery(selectJobsAtFinished);
+            double avarageOfITEM_COUNT_COMPLETED = CalculateAvgPLItemCompletedForAvgTime.plItemsProductionCount(productLevelItemCode);
             while (resetSelectJobsAtFinished.next()) {
                 ITEM_COUNT_COMPLETED_SUM = ITEM_COUNT_COMPLETED_SUM + resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
                 TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getInt("TAKEN_TIME");
                 AVERAGE_TAKEN_TIME_TO_ONE_ITEM = TAKEN_TIME_SUM / ITEM_COUNT_COMPLETED_SUM;
                 ITEM_COUNT_COMPLETED = resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
-            }
+            }      
             String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
             resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
             if (resetSelectPLItemsAtAverageTimeTable.next()) {
