@@ -17,10 +17,10 @@ import java.util.logging.Logger;
  */
 public class CalculateSubDepartmentStockAtJobComplete {
 
-    public static void reduceStockOfSubDepartmentAtJobComplete(String productLevel, String productLevelItemCode, float itemCompleted, String DepartmentCode) {
+    public static void reduceStockOfSubDepartmentAtJobComplete(String productLevel, String productLevelItemCode, double itemCompleted, String DepartmentCode) {
         ResultSet resetSelectAtItemsAtDepartmentsTable, resetSelectPLAtItemsAtDepartmentsTable;
         String rowItemCode, rowItemUnitSell;
-        float rowItemQuantity, calculateRowItemQuantity, calculatePLItemQuantity, rowItemSellPrice, rowItemExsistQuantity, PLItemExsistQuantity, sumOfcalculateRowItemQuantityAndRowItemExsistQuantity, minuseOfCalculateRowItemQuantity;
+        double rowItemQuantity, calculateRowItemQuantity, calculatePLItemQuantity, rowItemSellPrice, rowItemExsistQuantity, PLItemExsistQuantity, sumOfcalculateRowItemQuantityAndRowItemExsistQuantity, minuseOfCalculateRowItemQuantity;
         int PriceLevel = 0;
         try {
             java.sql.Statement stmtSelectAtItemsAtDepartmentsTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -44,16 +44,16 @@ public class CalculateSubDepartmentStockAtJobComplete {
                 resetSelectAtProductLevel1 = stmtSelectAtProductLevel1.executeQuery(selectAtProductLevel1);
                 while (resetSelectAtProductLevel1.next()) {
                     rowItemCode = resetSelectAtProductLevel1.getString("ProductLevel1RawItems_ItemCode");
-                    rowItemQuantity = resetSelectAtProductLevel1.getFloat("ProductLevel1RawItems_QUANTITY");
+                    rowItemQuantity = resetSelectAtProductLevel1.getDouble("ProductLevel1RawItems_QUANTITY");
                     calculateRowItemQuantity = rowItemQuantity * itemCompleted;
-                    rowItemSellPrice = resetSelectAtProductLevel1.getFloat("Items_SellPrice");
+                    rowItemSellPrice = resetSelectAtProductLevel1.getDouble("Items_SellPrice");
                     rowItemUnitSell = resetSelectAtProductLevel1.getString("Items_UnitSell");
                     minuseOfCalculateRowItemQuantity = calculateRowItemQuantity * (-1);
 
                     String selectAtItemsAtDepartmentsTable = "SELECT ItemCode, DepartmentCode, Quantity FROM ItemsAtDepartments WHERE ItemCode = '" + rowItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                     resetSelectAtItemsAtDepartmentsTable = stmtSelectAtItemsAtDepartmentsTable.executeQuery(selectAtItemsAtDepartmentsTable);
                     if (resetSelectAtItemsAtDepartmentsTable.next()) {
-                        rowItemExsistQuantity = resetSelectAtItemsAtDepartmentsTable.getFloat("Quantity");
+                        rowItemExsistQuantity = resetSelectAtItemsAtDepartmentsTable.getDouble("Quantity");
                         sumOfcalculateRowItemQuantityAndRowItemExsistQuantity = rowItemExsistQuantity - calculateRowItemQuantity;
                         String updateAtItemsAtDepartments = "UPDATE ItemsAtDepartments SET Quantity = '" + sumOfcalculateRowItemQuantityAndRowItemExsistQuantity + "' WHERE ItemCode = '" + rowItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                         stmtUpdateAtItemsAtDepartments.execute(updateAtItemsAtDepartments);
@@ -68,7 +68,7 @@ public class CalculateSubDepartmentStockAtJobComplete {
                 String selectPL1AtItemsAtDepartmentsTable = "SELECT Quantity FROM ItemsAtDepartments WHERE ItemCode = '" + productLevelItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                 resetSelectPLAtItemsAtDepartmentsTable = stmtSelectAtItemsAtDepartmentsTable.executeQuery(selectPL1AtItemsAtDepartmentsTable);
                 if(resetSelectPLAtItemsAtDepartmentsTable.next()){
-                    PLItemExsistQuantity = resetSelectPLAtItemsAtDepartmentsTable.getFloat("Quantity");
+                    PLItemExsistQuantity = resetSelectPLAtItemsAtDepartmentsTable.getDouble("Quantity");
                     calculatePLItemQuantity = PLItemExsistQuantity + itemCompleted;
                     String updatePL1AtItemsAtDepartments = "UPDATE ItemsAtDepartments SET Quantity = '" + calculatePLItemQuantity + "' WHERE ItemCode = '" + productLevelItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                     stmtUpdateAtItemsAtDepartments.execute(updatePL1AtItemsAtDepartments);
@@ -93,16 +93,16 @@ public class CalculateSubDepartmentStockAtJobComplete {
                 resetSelectAtProductLevel2 = stmtSelectAtProductLevel2.executeQuery(selectAtProductLevel2);
                 while (resetSelectAtProductLevel2.next()) {
                     rowItemCode = resetSelectAtProductLevel2.getString("ProductLevel2RawItems_PL1_ITEM_CODE");
-                    rowItemQuantity = resetSelectAtProductLevel2.getFloat("ProductLevel2RawItems_PL1_ITEM_QUANTITY");
+                    rowItemQuantity = resetSelectAtProductLevel2.getDouble("ProductLevel2RawItems_PL1_ITEM_QUANTITY");
                     calculateRowItemQuantity = rowItemQuantity * itemCompleted;
-                    rowItemSellPrice = resetSelectAtProductLevel2.getFloat("ProductLevel1_SellPrice");
+                    rowItemSellPrice = resetSelectAtProductLevel2.getDouble("ProductLevel1_SellPrice");
                     rowItemUnitSell = resetSelectAtProductLevel2.getString("ProductLevel1_UnitCode");
                     minuseOfCalculateRowItemQuantity = calculateRowItemQuantity * (-1);
 
                     String selectAtItemsAtDepartmentsTable = "SELECT ItemCode, DepartmentCode, Quantity FROM ItemsAtDepartments WHERE ItemCode = '" + rowItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                     resetSelectAtItemsAtDepartmentsTable = stmtSelectAtItemsAtDepartmentsTable.executeQuery(selectAtItemsAtDepartmentsTable);
                     if (resetSelectAtItemsAtDepartmentsTable.next()) {
-                        rowItemExsistQuantity = resetSelectAtItemsAtDepartmentsTable.getFloat("Quantity");
+                        rowItemExsistQuantity = resetSelectAtItemsAtDepartmentsTable.getDouble("Quantity");
                         sumOfcalculateRowItemQuantityAndRowItemExsistQuantity = rowItemExsistQuantity - calculateRowItemQuantity;
                         String updateAtItemsAtDepartments = "UPDATE ItemsAtDepartments SET Quantity = '" + sumOfcalculateRowItemQuantityAndRowItemExsistQuantity + "' WHERE ItemCode = '" + rowItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                         stmtUpdateAtItemsAtDepartments.execute(updateAtItemsAtDepartments);
@@ -117,7 +117,7 @@ public class CalculateSubDepartmentStockAtJobComplete {
                 String selectPL2AtItemsAtDepartmentsTable = "SELECT Quantity FROM ItemsAtDepartments WHERE ItemCode = '" + productLevelItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                 resetSelectPLAtItemsAtDepartmentsTable = stmtSelectAtItemsAtDepartmentsTable.executeQuery(selectPL2AtItemsAtDepartmentsTable);
                 if(resetSelectPLAtItemsAtDepartmentsTable.next()){
-                    PLItemExsistQuantity = resetSelectPLAtItemsAtDepartmentsTable.getFloat("Quantity");
+                    PLItemExsistQuantity = resetSelectPLAtItemsAtDepartmentsTable.getDouble("Quantity");
                     calculatePLItemQuantity = PLItemExsistQuantity + itemCompleted;
                     String updatePL2AtItemsAtDepartments = "UPDATE ItemsAtDepartments SET Quantity = '" + calculatePLItemQuantity + "' WHERE ItemCode = '" + productLevelItemCode + "' AND DepartmentCode = '" + DepartmentCode + "'";
                     stmtUpdateAtItemsAtDepartments.execute(updatePL2AtItemsAtDepartments);

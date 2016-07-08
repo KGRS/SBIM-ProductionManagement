@@ -58,6 +58,7 @@ public class CalculateAvgPLItemCompletedForAvgTime {
             while (resetSelectAtJobFinishedTable.next()) {
                 JobFinished_ITEM_COUNT = resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT");
                 arrayList_JobFinished_ITEM_COUNT.add(JobFinished_ITEM_COUNT); //this adds an element to the list.
+                
                 JobFinished_ITEM_COUNT_COMPLETED = resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT_COMPLETED");
                 arrayList_JobFinished_ITEM_COUNT_COMPLETED.add(JobFinished_ITEM_COUNT_COMPLETED); //this adds an element to the list.
 
