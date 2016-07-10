@@ -5,28 +5,47 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     SUM(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_SUM,
-     SUM(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_SUM,
-     COUNT(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_COUNT,
-     COUNT(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_COUNT,
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE
+     ProductLevel2."PL2_ITEM_NAME" AS ProductLevel2_PL2_ITEM_NAME,
+     ProductLevel2."PL2_ITEM_PRINT_NAME" AS ProductLevel2_PL2_ITEM_PRINT_NAME,
+     ProductLevel2."UnitCode" AS ProductLevel2_UnitCode,
+     ProductLevel2."VISIBILITY" AS ProductLevel2_VISIBILITY,
+     JobFixed."JOB_FIXED_ID" AS JobFixed_JOB_FIXED_ID,
+     JobFixed."JOB_FIXED_NAME" AS JobFixed_JOB_FIXED_NAME,
+     JobFixed."PRODUCT_LEVEL" AS JobFixed_PRODUCT_LEVEL,
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,
+     JobFixed."ITEM_COUNT" AS JobFixed_ITEM_COUNT,
+     JobFixed."ALLOCATED_TIME" AS JobFixed_ALLOCATED_TIME,
+     JobFixed."EMPLOYEE_COUNT" AS JobFixed_EMPLOYEE_COUNT,
+     JobFixed."REMARKS" AS JobFixed_REMARKS,
+     JobFixed."STEP_NUMBER" AS JobFixed_STEP_NUMBER,
+     JobFixed."WORK_FLOW_CODE" AS JobFixed_WORK_FLOW_CODE,
+     Workflow."WORK_FLOW_NAME" AS Workflow_WORK_FLOW_NAME,
+     JobFixed."SUB_DEPARTMENT_CODE" AS JobFixed_SUB_DEPARTMENT_CODE,
+     SubDepartments."SUB_DEPARTMENT_NAME" AS SubDepartments_SUB_DEPARTMENT_NAME
 FROM
-     "dbo"."JobFinished" JobFinished INNER JOIN "dbo"."PLItemDifference" PLItemDifference ON JobFinished."JOB_ID" = PLItemDifference."JOB_ID"
-     INNER JOIN "dbo"."JobFixed" JobFixed ON JobFinished."FIXED_JOB_ID" = JobFixed."JOB_FIXED_ID"
+     "dbo"."ProductLevel2" ProductLevel2 INNER JOIN "dbo"."JobFixed" JobFixed ON ProductLevel2."PL2_ITEM_CODE" = JobFixed."PRODUCT_LEVEL_ITEM_CODE"
+     INNER JOIN "dbo"."Workflow" Workflow ON JobFixed."WORK_FLOW_CODE" = Workflow."WORK_FLOW_CODE"
+     INNER JOIN "dbo"."SubDepartments" SubDepartments ON JobFixed."SUB_DEPARTMENT_CODE" = SubDepartments."SUB_DEPARTMENT_CODE"
 WHERE
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" = '"+PRODUCT_LEVEL_ITEM_CODE+"'
- AND PLItemDifference."IS_WASTAGE" = 'No'
- AND JobFinished."IS_COMPLETE_CANCLE" = 'Completed'
-GROUP BY
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE",
-     JobFinished."ITEM_COUNT",
-     JobFinished."ITEM_COUNT_COMPLETED"]]>
+     JobFixed."JOB_FIXED_ID" = 'FJOB1002']]>
 	</queryString>
-	<field name="JobFinished_ITEM_COUNT_SUM" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COMPLETED_SUM" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COUNT" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COMPLETED_COUNT" class="java.lang.Integer"/>
+	<field name="ProductLevel2_PL2_ITEM_NAME" class="java.lang.String"/>
+	<field name="ProductLevel2_PL2_ITEM_PRINT_NAME" class="java.lang.String"/>
+	<field name="ProductLevel2_UnitCode" class="java.lang.String"/>
+	<field name="ProductLevel2_VISIBILITY" class="java.lang.String"/>
+	<field name="JobFixed_JOB_FIXED_ID" class="java.lang.String"/>
+	<field name="JobFixed_JOB_FIXED_NAME" class="java.lang.String"/>
+	<field name="JobFixed_PRODUCT_LEVEL" class="java.lang.Integer"/>
 	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="JobFixed_ITEM_COUNT" class="java.lang.Integer"/>
+	<field name="JobFixed_ALLOCATED_TIME" class="java.lang.Double"/>
+	<field name="JobFixed_EMPLOYEE_COUNT" class="java.lang.Integer"/>
+	<field name="JobFixed_REMARKS" class="java.lang.String"/>
+	<field name="JobFixed_STEP_NUMBER" class="java.lang.Integer"/>
+	<field name="JobFixed_WORK_FLOW_CODE" class="java.lang.String"/>
+	<field name="Workflow_WORK_FLOW_NAME" class="java.lang.String"/>
+	<field name="JobFixed_SUB_DEPARTMENT_CODE" class="java.lang.String"/>
+	<field name="SubDepartments_SUB_DEPARTMENT_NAME" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

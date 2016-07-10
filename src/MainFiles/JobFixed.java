@@ -31,8 +31,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private final String spliter = "--";
     private final String menuName = "Fixed Job/ Process";
     private DocNumGenerator AutoID;
-    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment, DepartmentCode;
-    int itemCount = 0, allocateTime = 0, employeeCount = 0;
+    String Code = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", workFlowCode, workFlowName, subDepartment, DepartmentCode, subDepartmentCode, subDepartmentName;
+    int itemCount = 1, allocateTime = 1, employeeCount = 1, stepNumber = 1;
 
     public JobFixed() {
         initComponents();
@@ -44,6 +44,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
         model_categoryTable = (DefaultTableModel) tableViewDetails.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
+        buttonEmailSendTo.setVisible(false);
 
         getItemLevel();
         loadAllJobsToTable();
@@ -211,6 +212,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
         comboSubDepartment = new javax.swing.JComboBox();
         buttonGetSuggestTime = new javax.swing.JButton();
         buttonEmailSendTo = new javax.swing.JButton();
+        lbl_category3 = new javax.swing.JLabel();
+        spinnerStepNumber = new javax.swing.JSpinner();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1000, 533));
@@ -261,7 +264,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                 textFixedJobCodeKeyReleased(evt);
             }
         });
-        panel1.add(textFixedJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 60, 130, 20));
+        panel1.add(textFixedJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 60, 120, 20));
 
         textFixedJobName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -404,8 +407,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
         panel1.add(cmbProductLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 60, -1));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category1.setText("Fixed job/ Process code *");
-        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 150, 20));
+        lbl_category1.setText("Step No *");
+        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 60, 20));
 
         lbl_description1.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description1.setText("Fixed job/ Process name *");
@@ -473,6 +476,13 @@ public class JobFixed extends javax.swing.JInternalFrame {
         buttonEmailSendTo.setText("Email send to");
         panel1.add(buttonEmailSendTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 380, 120, -1));
 
+        lbl_category3.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_category3.setText("Fixed job/ Process code *");
+        panel1.add(lbl_category3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 150, 20));
+
+        spinnerStepNumber.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        panel1.add(spinnerStepNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(879, 60, 60, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -527,6 +537,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
 
     private void CheckBeforeSave() {
         Code = textFixedJobCode.getText();
+        stepNumber = Integer.parseInt(spinnerStepNumber.getValue().toString());
         Name = textFixedJobName.getText();
         productLevel = cmbProductLevel.getSelectedItem().toString();
         productLevelItemCode = cmbProductLevelItem.getSelectedItem().toString();
@@ -559,6 +570,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
                                 + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
                                 //                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
                                 + "      ,[REMARKS] = '" + remarks + "'\n"
+                                + "      ,[STEP_NUMBER] = '" + stepNumber + "'\n"
                                 + " WHERE JOB_FIXED_ID = '" + Code + "'";
                         stmt.execute(UpdateQuery);
                         JOptionPane.showMessageDialog(this, "'" + menuName + "' details are updated.");
@@ -569,7 +581,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
 
                 } else if (!rset.next()) {
                     AutoID = new DocNumGenerator();
-                    AutoID.methodNumGen(workFlowCodeInArray[1]+spliter+"FJOB");
+                    AutoID.methodNumGen(workFlowCodeInArray[1] + spliter + "FJOB");
                     Code = AutoID.getDocChar() + AutoID.getDocNumber();
                     textFixedJobCode.setText(Code);
                     Code = textFixedJobCode.getText();
@@ -583,7 +595,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
                             + "           ,[ALLOCATED_TIME]\n"
                             + "           ,[EMPLOYEE_COUNT]\n"
                             + "           ,[SUB_DEPARTMENT_CODE]\n"
-                            + "           ,[REMARKS])\n"
+                            + "           ,[REMARKS]\n"
+                            + "           ,[STEP_NUMBER])\n"
                             + "     VALUES\n"
                             + "           ('" + Code + "'\n"
                             + "           ,'" + Name + "'\n"
@@ -594,7 +607,8 @@ public class JobFixed extends javax.swing.JInternalFrame {
                             + "           ,'" + allocateTime + "'\n"
                             + "           ,'" + employeeCount + "'\n"
                             + "           ,'" + subDepartmentCodeInArray[1] + "'\n"
-                            + "           ,'" + remarks + "')";
+                            + "           ,'" + remarks + "'\n"
+                            + "           ,'" + stepNumber + "')";
                     stmt.execute(InsertQuery);
                     ResultSet resetAtItemsAtDepartments;
                     java.sql.Statement stmtAtDepartmentsTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -626,66 +640,6 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 //        CheckBeforeDelete();
     }//GEN-LAST:event_btnDeleteActionPerformed
-
-//    private void CheckBeforeDelete() {
-//        String CategoryCode = textFixedJobCode.getText();
-//        if (!CategoryCode.isEmpty()) {
-//            try {
-//                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//                String query = "select DEPARTMENT_CODE From staff_members where DEPARTMENT_CODE = '" + CategoryCode + "'";
-//                ResultSet rset = stmt.executeQuery(query);
-//
-//                if (rset.next()) {
-//                    JOptionPane.showMessageDialog(this, "This department is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
-//                } else if (!rset.next()) {
-//                    DeleteDepartment();
-//                }
-//
-//            } catch (SQLException ex) {
-//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//                JOptionPane.showMessageDialog(this, "Please contact for support.");
-//            } catch (HeadlessException ex) {
-//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//                JOptionPane.showMessageDialog(this, "Please contact for support.");
-//            }
-//        } else if (CategoryCode.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Please insert a valid department code before delete.", "Empty department code", JOptionPane.OK_OPTION);
-//            textFixedJobCode.requestFocus();
-//        }
-//    }
-//    private void DeleteDepartment() {
-//        String Code = textFixedJobCode.getText();
-//        int x = JOptionPane.showConfirmDialog(this, "Are you sure To delete this?", "Delete department?", JOptionPane.YES_NO_OPTION);
-//        if (x == JOptionPane.YES_OPTION) {
-//            try {
-//                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//                java.sql.Statement Checkstmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//
-//                String Checkquery = "select DEPARTMENT_CODE From departments where DEPARTMENT_CODE = '" + Code + "'";
-//                ResultSet Checkrset = Checkstmt.executeQuery(Checkquery);
-//
-//                if (Checkrset.next()) {
-//                    String query = "delete From departments where DEPARTMENT_CODE = '" + Code + "'";
-//                    stmt.execute(query);
-//                    JOptionPane.showMessageDialog(this, "Department is deleted.");
-//                    Refresh();
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "Invalid department code. Please insert a valid department code.", "Invalid department code", JOptionPane.OK_OPTION);
-//                    textFixedJobCode.requestFocus();
-//                }
-//
-//            } catch (SQLException ex) {
-//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//                JOptionPane.showMessageDialog(this, "Please contact for support.");
-//            } catch (HeadlessException ex) {
-//                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//                JOptionPane.showMessageDialog(this, "Please contact for support.");
-//            }
-//
-//        } else if (x == JOptionPane.NO_OPTION) {
-//            textFixedJobCode.requestFocus();
-//        }
-//    }
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         exit();
@@ -744,15 +698,19 @@ public class JobFixed extends javax.swing.JInternalFrame {
                         + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
                         + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
                         + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS,\n"
+                        + "     JobFixed.\"STEP_NUMBER\" AS JobFixed_STEP_NUMBER,\n"
                         + "     ProductLevel1.\"PL1_ITEM_NAME\" AS ProductLevel1_PL1_ITEM_NAME,\n"
                         + "     ProductLevel1.\"PL1_ITEM_PRINT_NAME\" AS ProductLevel1_PL1_ITEM_PRINT_NAME,\n"
                         + "     ProductLevel1.\"UnitCode\" AS ProductLevel1_UnitCode,\n"
                         + "     ProductLevel1.\"VISIBILITY\" AS ProductLevel1_VISIBILITY,\n"
                         + "     JobFixed.\"WORK_FLOW_CODE\" AS JobFixed_WORK_FLOW_CODE,\n"
-                        + "     Workflow.\"WORK_FLOW_NAME\" AS Workflow_WORK_FLOW_NAME\n"
+                        + "     Workflow.\"WORK_FLOW_NAME\" AS Workflow_WORK_FLOW_NAME,\n"
+                        + "     JobFixed.\"SUB_DEPARTMENT_CODE\" AS JobFixed_SUB_DEPARTMENT_CODE,\n"
+                        + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME\n"
                         + "FROM\n"
                         + "     \"dbo\".\"ProductLevel1\" ProductLevel1 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel1.\"PL1_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
                         + "     INNER JOIN \"dbo\".\"Workflow\" Workflow ON JobFixed.\"WORK_FLOW_CODE\" = Workflow.\"WORK_FLOW_CODE\"\n"
+                        + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
                         + "WHERE\n"
                         + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
 
@@ -767,6 +725,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     remarks = reset.getString("JobFixed_REMARKS");
                     workFlowCode = reset.getString("JobFixed_WORK_FLOW_CODE");
                     workFlowName = reset.getString("Workflow_WORK_FLOW_NAME");
+                    stepNumber = reset.getInt("JobFixed_STEP_NUMBER");
+                    subDepartmentCode = reset.getString("JobFixed_SUB_DEPARTMENT_CODE");
+                    subDepartmentName = reset.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                     getItemLevel();
 
                     cmbWorkflow.setSelectedItem(workFlowName + spliter + workFlowCode);
@@ -774,7 +735,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     spinnerItemCount.setValue(itemCount);
                     formatedTextAllocatedTime.setText(String.valueOf(allocateTime));
                     spinnerEmpCount.setValue(employeeCount);
+                    spinnerStepNumber.setValue(stepNumber);
                     textAreaRemarks.setText(remarks);
+                    comboSubDepartment.setSelectedItem(subDepartmentName + spliter + subDepartmentCode);
                 }
                 reset.close();
             } catch (SQLException ex) {
@@ -800,13 +763,17 @@ public class JobFixed extends javax.swing.JInternalFrame {
                         + "     JobFixed.\"ALLOCATED_TIME\" AS JobFixed_ALLOCATED_TIME,\n"
                         + "     JobFixed.\"EMPLOYEE_COUNT\" AS JobFixed_EMPLOYEE_COUNT,\n"
                         + "     JobFixed.\"REMARKS\" AS JobFixed_REMARKS,\n"
+                        + "     JobFixed.\"STEP_NUMBER\" AS JobFixed_STEP_NUMBER,\n"
                         + "     JobFixed.\"WORK_FLOW_CODE\" AS JobFixed_WORK_FLOW_CODE,\n"
-                        + "     Workflow.\"WORK_FLOW_NAME\" AS Workflow_WORK_FLOW_NAME\n"
+                        + "     Workflow.\"WORK_FLOW_NAME\" AS Workflow_WORK_FLOW_NAME,\n"
+                        + "     JobFixed.\"SUB_DEPARTMENT_CODE\" AS JobFixed_SUB_DEPARTMENT_CODE,\n"
+                        + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME\n"
                         + "FROM\n"
                         + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel2.\"PL2_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
                         + "     INNER JOIN \"dbo\".\"Workflow\" Workflow ON JobFixed.\"WORK_FLOW_CODE\" = Workflow.\"WORK_FLOW_CODE\"\n"
+                        + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
                         + "WHERE\n"
-                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + Code + "'";
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '"+Code+"'";
 
                 stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 reset = stmt.executeQuery(query);
@@ -819,6 +786,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     remarks = reset.getString("JobFixed_REMARKS");
                     workFlowCode = reset.getString("JobFixed_WORK_FLOW_CODE");
                     workFlowName = reset.getString("Workflow_WORK_FLOW_NAME");
+                    stepNumber = reset.getInt("JobFixed_STEP_NUMBER");
+                    subDepartmentCode = reset.getString("JobFixed_SUB_DEPARTMENT_CODE");
+                    subDepartmentName = reset.getString("SubDepartments_SUB_DEPARTMENT_NAME");
                     getItemLevel();
 
                     cmbWorkflow.setSelectedItem(workFlowName + spliter + workFlowCode);
@@ -826,7 +796,9 @@ public class JobFixed extends javax.swing.JInternalFrame {
                     spinnerItemCount.setValue(itemCount);
                     formatedTextAllocatedTime.setText(String.valueOf(allocateTime));
                     spinnerEmpCount.setValue(employeeCount);
+                    spinnerStepNumber.setValue(stepNumber);
                     textAreaRemarks.setText(remarks);
+                    comboSubDepartment.setSelectedItem(subDepartmentName + spliter + subDepartmentCode);
                 }
                 reset.close();
             } catch (SQLException ex) {
@@ -861,7 +833,6 @@ public class JobFixed extends javax.swing.JInternalFrame {
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
                 tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
                 tableViewDetails.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
@@ -893,7 +864,6 @@ public class JobFixed extends javax.swing.JInternalFrame {
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
-
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
                 tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 0);
                 tableViewDetails.setValueAt(reset.getString("JOB_FIXED_NAME"), rowCount, 1);
@@ -996,6 +966,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lbl_category;
     private javax.swing.JLabel lbl_category1;
     private javax.swing.JLabel lbl_category2;
+    private javax.swing.JLabel lbl_category3;
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_description1;
     private javax.swing.JLabel lbl_description2;
@@ -1009,6 +980,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton rBtnName;
     private javax.swing.JSpinner spinnerEmpCount;
     private javax.swing.JSpinner spinnerItemCount;
+    private javax.swing.JSpinner spinnerStepNumber;
     private javax.swing.JTable tableViewDetails;
     private javax.swing.JTextArea textAreaRemarks;
     private javax.swing.JTextField textFixedJobCode;
