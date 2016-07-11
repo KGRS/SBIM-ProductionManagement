@@ -60,7 +60,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
             int rowCount = 0;
             RefreshTable();
 
-            query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed ORDER BY JOB_FIXED_ID";
+            query = "SELECT JOB_FIXED_ID, JOB_FIXED_NAME, PRODUCT_LEVEL, PRODUCT_LEVEL_ITEM_CODE FROM JobFixed ORDER BY WORK_FLOW_CODE, STEP_NUMBER";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 

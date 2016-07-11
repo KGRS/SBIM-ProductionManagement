@@ -7,6 +7,8 @@ package reports;
 
 import static MainFiles.IndexPage.jobDetailedScreen;
 import db.ConnectSql;
+import functions.ColoursOfTableOfJobDetailedScreen1;
+import functions.ColoursOfTableOfJobDetailedScreen2;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author DigitalForce™
+ * @author KGRS
  */
 public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
@@ -54,7 +56,6 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         tableDesignationRank = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableWorkFlow = new javax.swing.JTable();
-        textSecondTableItemCount = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableFixedJobProcess = new javax.swing.JTable();
 
@@ -116,14 +117,14 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Rank code", "Rank level", "Designation code", "Designation name", "Department", "Sub department"
+                "PL1 item code", "PL1 item name", "Q1", "Avg", "Q3", "Lower tail", "Upper tail", "Distance"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -142,10 +143,10 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tableDesignationRank);
         if (tableDesignationRank.getColumnModel().getColumnCount() > 0) {
-            tableDesignationRank.getColumnModel().getColumn(1).setPreferredWidth(20);
+            tableDesignationRank.getColumnModel().getColumn(1).setPreferredWidth(150);
         }
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 840, 220));
+        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 840, 110));
 
         tableWorkFlow.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -178,11 +179,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tableWorkFlow);
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 400, 310));
-
-        textSecondTableItemCount.setEditable(false);
-        textSecondTableItemCount.setText("0");
-        panel1.add(textSecondTableItemCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, 70, -1));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 400, 410));
 
         tableFixedJobProcess.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -209,7 +206,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(tableFixedJobProcess);
 
-        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 410, 310));
+        panel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 410, 410));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -246,6 +243,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
                 tableWorkFlow.setValueAt(reset.getString("WORK_FLOW_NAME"), rowCount, 1);
                 tableWorkFlow.setValueAt(reset.getString("PL2_ITEM_CODE"), rowCount, 2);
                 rowCount++;
+                tableWorkFlow.setDefaultRenderer(Object.class, new ColoursOfTableOfJobDetailedScreen1());
             }
             reset.close();
         } catch (SQLException ex) {
@@ -276,6 +274,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
                 tableFixedJobProcess.setValueAt(reset.getString("PRODUCT_LEVEL_ITEM_CODE"), rowCount, 2);
                 tableFixedJobProcess.setValueAt(reset.getString("STEP_NUMBER"), rowCount, 3);
                 rowCount++;
+                tableFixedJobProcess.setDefaultRenderer(Object.class, new ColoursOfTableOfJobDetailedScreen2());
             }
             reset.close();
         } catch (SQLException ex) {
@@ -328,10 +327,6 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tableWorkFlowMouseClicked
 
-    private void countItemsInSecondTable() {
-        textSecondTableItemCount.setText(model_tableFixedJobProcess.getRowCount() + "");
-    }
-
     protected Object[] CheckItemAlreadyAdded(String ItemFromFirstTable) {
         int rowCount = model_tableFixedJobProcess.getRowCount();
         Object[] data = new Object[2];
@@ -351,7 +346,6 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     private void Refresh() {
         RefreshTableAndLoadAgain();
         LoadWorkFlow();
-        countItemsInSecondTable();
     }
 
     private void RefreshTableAndLoadAgain() {
@@ -372,8 +366,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel panel1;
     private javax.swing.JTable tableDesignationRank;
-    private javax.swing.JTable tableFixedJobProcess;
-    private javax.swing.JTable tableWorkFlow;
-    private javax.swing.JTextField textSecondTableItemCount;
+    public static javax.swing.JTable tableFixedJobProcess;
+    public static javax.swing.JTable tableWorkFlow;
     // End of variables declaration//GEN-END:variables
 }

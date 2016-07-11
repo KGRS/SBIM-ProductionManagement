@@ -5,47 +5,19 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     ProductLevel2."PL2_ITEM_NAME" AS ProductLevel2_PL2_ITEM_NAME,
-     ProductLevel2."PL2_ITEM_PRINT_NAME" AS ProductLevel2_PL2_ITEM_PRINT_NAME,
-     ProductLevel2."UnitCode" AS ProductLevel2_UnitCode,
-     ProductLevel2."VISIBILITY" AS ProductLevel2_VISIBILITY,
-     JobFixed."JOB_FIXED_ID" AS JobFixed_JOB_FIXED_ID,
-     JobFixed."JOB_FIXED_NAME" AS JobFixed_JOB_FIXED_NAME,
-     JobFixed."PRODUCT_LEVEL" AS JobFixed_PRODUCT_LEVEL,
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE,
-     JobFixed."ITEM_COUNT" AS JobFixed_ITEM_COUNT,
-     JobFixed."ALLOCATED_TIME" AS JobFixed_ALLOCATED_TIME,
-     JobFixed."EMPLOYEE_COUNT" AS JobFixed_EMPLOYEE_COUNT,
-     JobFixed."REMARKS" AS JobFixed_REMARKS,
-     JobFixed."STEP_NUMBER" AS JobFixed_STEP_NUMBER,
-     JobFixed."WORK_FLOW_CODE" AS JobFixed_WORK_FLOW_CODE,
-     Workflow."WORK_FLOW_NAME" AS Workflow_WORK_FLOW_NAME,
-     JobFixed."SUB_DEPARTMENT_CODE" AS JobFixed_SUB_DEPARTMENT_CODE,
-     SubDepartments."SUB_DEPARTMENT_NAME" AS SubDepartments_SUB_DEPARTMENT_NAME
+     JobRunning."FIXED_JOB_ID" AS JobRunning_FIXED_JOB_ID,
+     JobRunning."IS_LATE" AS JobRunning_IS_LATE,
+     JobRunning."IS_NEW_ONGOING" AS JobRunning_IS_NEW_ONGOING
 FROM
-     "dbo"."ProductLevel2" ProductLevel2 INNER JOIN "dbo"."JobFixed" JobFixed ON ProductLevel2."PL2_ITEM_CODE" = JobFixed."PRODUCT_LEVEL_ITEM_CODE"
-     INNER JOIN "dbo"."Workflow" Workflow ON JobFixed."WORK_FLOW_CODE" = Workflow."WORK_FLOW_CODE"
-     INNER JOIN "dbo"."SubDepartments" SubDepartments ON JobFixed."SUB_DEPARTMENT_CODE" = SubDepartments."SUB_DEPARTMENT_CODE"
+     "dbo"."JobRunning" JobRunning
 WHERE
-     JobFixed."JOB_FIXED_ID" = 'FJOB1002']]>
+     JobRunning."IS_LATE" = 'Yes'
+ AND JobRunning."FIXED_JOB_ID" = ''
+ AND JobRunning."IS_NEW_ONGOING" = 'Ongoing']]>
 	</queryString>
-	<field name="ProductLevel2_PL2_ITEM_NAME" class="java.lang.String"/>
-	<field name="ProductLevel2_PL2_ITEM_PRINT_NAME" class="java.lang.String"/>
-	<field name="ProductLevel2_UnitCode" class="java.lang.String"/>
-	<field name="ProductLevel2_VISIBILITY" class="java.lang.String"/>
-	<field name="JobFixed_JOB_FIXED_ID" class="java.lang.String"/>
-	<field name="JobFixed_JOB_FIXED_NAME" class="java.lang.String"/>
-	<field name="JobFixed_PRODUCT_LEVEL" class="java.lang.Integer"/>
-	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
-	<field name="JobFixed_ITEM_COUNT" class="java.lang.Integer"/>
-	<field name="JobFixed_ALLOCATED_TIME" class="java.lang.Double"/>
-	<field name="JobFixed_EMPLOYEE_COUNT" class="java.lang.Integer"/>
-	<field name="JobFixed_REMARKS" class="java.lang.String"/>
-	<field name="JobFixed_STEP_NUMBER" class="java.lang.Integer"/>
-	<field name="JobFixed_WORK_FLOW_CODE" class="java.lang.String"/>
-	<field name="Workflow_WORK_FLOW_NAME" class="java.lang.String"/>
-	<field name="JobFixed_SUB_DEPARTMENT_CODE" class="java.lang.String"/>
-	<field name="SubDepartments_SUB_DEPARTMENT_NAME" class="java.lang.String"/>
+	<field name="JobRunning_FIXED_JOB_ID" class="java.lang.String"/>
+	<field name="JobRunning_IS_LATE" class="java.lang.String"/>
+	<field name="JobRunning_IS_NEW_ONGOING" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
