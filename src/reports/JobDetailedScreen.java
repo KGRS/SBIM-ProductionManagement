@@ -306,7 +306,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     }
 
     private void tableDesignationRankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDesignationRankMouseClicked
-
+        
     }//GEN-LAST:event_tableDesignationRankMouseClicked
 
     private void panel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel1MouseClicked
