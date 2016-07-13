@@ -7,6 +7,7 @@ package reports;
 
 import static MainFiles.IndexPage.jobDetailedScreen;
 import db.ConnectSql;
+import functions.CalculateAvgPLItemCompletedForAvgTime;
 import functions.ColoursOfTableOfJobDetailedScreen1;
 import functions.ColoursOfTableOfJobDetailedScreen2;
 import java.awt.event.KeyEvent;
@@ -27,7 +28,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     private final DefaultTableModel model_tableFixedJobProcess, model_tableWorkFlow;
     private final String spliter = "--";
     private final String menuName = "Job detailed screen";
-    String departmentCode, subDepartmentCode, rankForGenerate, designationCode, designationName, workFlowCode;
+    String departmentCode, subDepartmentCode, pl1ItemCode, designationCode, designationName, workFlowCode;
     int rank, rowCountWorkFlow, rowCountFixJobs, selectedRowOfWorkFlow, selectedRowCountOfWorkFlow;
 
     public JobDetailedScreen() {
@@ -53,7 +54,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         btnRefresh = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableDesignationRank = new javax.swing.JTable();
+        tableStaticsOfItemCountCompleted = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableWorkFlow = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -112,7 +113,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         });
         panel1.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 590, 80, -1));
 
-        tableDesignationRank.setModel(new javax.swing.table.DefaultTableModel(
+        tableStaticsOfItemCountCompleted.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -135,15 +136,15 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tableDesignationRank.getTableHeader().setReorderingAllowed(false);
-        tableDesignationRank.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableStaticsOfItemCountCompleted.getTableHeader().setReorderingAllowed(false);
+        tableStaticsOfItemCountCompleted.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableDesignationRankMouseClicked(evt);
+                tableStaticsOfItemCountCompletedMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableDesignationRank);
-        if (tableDesignationRank.getColumnModel().getColumnCount() > 0) {
-            tableDesignationRank.getColumnModel().getColumn(1).setPreferredWidth(150);
+        jScrollPane1.setViewportView(tableStaticsOfItemCountCompleted);
+        if (tableStaticsOfItemCountCompleted.getColumnModel().getColumnCount() > 0) {
+            tableStaticsOfItemCountCompleted.getColumnModel().getColumn(1).setPreferredWidth(150);
         }
 
         panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 840, 110));
@@ -202,6 +203,11 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tableFixedJobProcess.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableFixedJobProcessMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(tableFixedJobProcess);
@@ -304,9 +310,9 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         this.dispose();
     }
 
-    private void tableDesignationRankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDesignationRankMouseClicked
+    private void tableStaticsOfItemCountCompletedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableStaticsOfItemCountCompletedMouseClicked
         
-    }//GEN-LAST:event_tableDesignationRankMouseClicked
+    }//GEN-LAST:event_tableStaticsOfItemCountCompletedMouseClicked
 
     private void panel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel1MouseClicked
         if (SwingUtilities.isRightMouseButton(evt) || evt.isControlDown()) {
@@ -326,6 +332,13 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
             LoadJobFixed(workFlowCode);
         }
     }//GEN-LAST:event_tableWorkFlowMouseClicked
+
+    private void tableFixedJobProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobProcessMouseClicked
+        int selectedRowOfTableFixedJobProcess = tableFixedJobProcess.getSelectedRow();
+        pl1ItemCode = tableFixedJobProcess.getValueAt(selectedRowOfTableFixedJobProcess, 2).toString();
+        CalculateAvgPLItemCompletedForAvgTime ca = new CalculateAvgPLItemCompletedForAvgTime();
+        ca.plItemsProductionCount(pl1ItemCode);
+    }//GEN-LAST:event_tableFixedJobProcessMouseClicked
 
     protected Object[] CheckItemAlreadyAdded(String ItemFromFirstTable) {
         int rowCount = model_tableFixedJobProcess.getRowCount();
@@ -365,8 +378,8 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel panel1;
-    private javax.swing.JTable tableDesignationRank;
     public static javax.swing.JTable tableFixedJobProcess;
+    public static javax.swing.JTable tableStaticsOfItemCountCompleted;
     public static javax.swing.JTable tableWorkFlow;
     // End of variables declaration//GEN-END:variables
 }

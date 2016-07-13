@@ -5,11 +5,13 @@
  */
 package functions;
 
+import static MainFiles.IndexPage.jobDetailedScreen;
 import db.ConnectSql;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import reports.JobDetailedScreen;
 
 /**
  *
@@ -135,7 +137,17 @@ public class CalculateAvgPLItemCompletedForAvgTime {
                 lowerTail_of_ITEM_COUNT_COMPLETED = 0;
             }
             upperTail_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED + (1.5 * distance_of_ITEM_COUNT_COMPLETED);            
-            avarageOfITEM_COUNT_COMPLETED = calculateFilteredAverageToReturnAvGOfItemCompleted(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);            
+            avarageOfITEM_COUNT_COMPLETED = calculateFilteredAverageToReturnAvGOfItemCompleted(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);
+            
+            if (jobDetailedScreen != null) {
+                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(PRODUCT_LEVEL_ITEM_CODE, 0, 0);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(Q1OfITEM_COUNT_COMPLETED, 1, 2);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(avarageOfITEM_COUNT_COMPLETED, 1, 3);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(Q3OfITEM_COUNT_COMPLETED, 1, 4);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(lowerTail_of_ITEM_COUNT_COMPLETED, 1, 5);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(upperTail_of_ITEM_COUNT_COMPLETED, 1, 6);
+//                JobDetailedScreen.tableStaticsOfItemCountCompleted.setValueAt(distance_of_ITEM_COUNT_COMPLETED, 1, 7);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(null, "Please contact for support.");

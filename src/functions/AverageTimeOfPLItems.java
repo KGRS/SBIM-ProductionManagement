@@ -36,7 +36,7 @@ public class AverageTimeOfPLItems {
             java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtInsertAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtUpdateAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND IS_COMPLETE_CANCLE = '" + statusOfJob + "'";
+            String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND IS_COMPLETE_CANCLE = '" + statusOfJob + "' ORDER BY TAKEN_TIME";
             resetSelectJobsAtFinished = stmtSelectJobsAtFinished.executeQuery(selectJobsAtFinished);
             double avarageOfITEM_COUNT_COMPLETED = CalculateAvgPLItemCompletedForAvgTime.plItemsProductionCount(productLevelItemCode);
             while (resetSelectJobsAtFinished.next()) {
@@ -139,7 +139,7 @@ public class AverageTimeOfPLItems {
             java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectPLItemsAtAverageTimeTable = "SELECT TAKEN_TIME FROM JobFinished "
                     + "WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND "
-                    + "IS_COMPLETE_CANCLE = '" + statusOfJob + "' AND (TAKEN_TIME > "+lowerTail_of_TAKEN_TIME+" AND TAKEN_TIME < "+upperTail_of_TAKEN_TIME+")";
+                    + "IS_COMPLETE_CANCLE = '" + statusOfJob + "' AND (TAKEN_TIME > "+lowerTail_of_TAKEN_TIME+" AND TAKEN_TIME < "+upperTail_of_TAKEN_TIME+") ORDER BY TAKEN_TIME";
             resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
             while (resetSelectPLItemsAtAverageTimeTable.next()) {
                 AVERAGE_TIME = resetSelectPLItemsAtAverageTimeTable.getInt("TAKEN_TIME");
