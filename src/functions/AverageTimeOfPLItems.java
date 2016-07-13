@@ -47,6 +47,7 @@ public class AverageTimeOfPLItems {
                 TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getDouble("TAKEN_TIME");
                 ITEM_COUNT_COMPLETED = resetSelectJobsAtFinished.getDouble("ITEM_COUNT_COMPLETED");
             }
+            if(TAKEN_TIME_COUNT >=2){
                 Q1PositionOf_TAKEN_TIME_CAL = (TAKEN_TIME_COUNT + 1) / 4;
                 if (Q1PositionOf_TAKEN_TIME_CAL == Math.round(Q1PositionOf_TAKEN_TIME_CAL)) {
                     Q1PositionOf_TAKEN_TIME = (int) Q1PositionOf_TAKEN_TIME_CAL;
@@ -102,6 +103,7 @@ public class AverageTimeOfPLItems {
             stmtUpdateAverageTime.close();
             resetSelectJobsAtFinished.close();
             resetSelectPLItemsAtAverageTimeTable.close();
+            }
             CalculateSubDepartmentStockAtJobComplete.reduceStockOfSubDepartmentAtJobComplete(productLevel, productLevelItemCode, ITEM_COUNT_COMPLETED, departmentCode);
         } catch (SQLException ex) {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
