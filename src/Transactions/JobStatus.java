@@ -55,7 +55,6 @@ public class JobStatus extends javax.swing.JInternalFrame {
         panel1.setToolTipText("Press right mouse click to refresh.");
         model_TableJobs = (DefaultTableModel) tableJobs.getModel();
         this.setTitle(menuName);
-        txtSearch.setVisible(false);
 
         CalendarStartDate.setText(logDate);
         CalendarEndDate.setText(logDate);
@@ -83,7 +82,6 @@ public class JobStatus extends javax.swing.JInternalFrame {
         btnExit = new javax.swing.JButton();
         lbl_accountType = new javax.swing.JLabel();
         ButtonRefresh = new javax.swing.JButton();
-        txtSearch = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         CalendarStartDate = new org.sourceforge.jcalendarbutton.JCalendarButton();
         CalendarEndDate = new org.sourceforge.jcalendarbutton.JCalendarButton();
@@ -101,6 +99,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
         lbl_category1 = new javax.swing.JLabel();
         formattedTextItemCompleted = new javax.swing.JFormattedTextField();
         formattedTextTakenTime = new javax.swing.JFormattedTextField();
+        lbl_category2 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setIconifiable(true);
@@ -171,13 +170,6 @@ public class JobStatus extends javax.swing.JInternalFrame {
             }
         });
         panel1.add(ButtonRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 540, 80, -1));
-
-        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtSearchKeyReleased(evt);
-            }
-        });
-        panel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 280, -1));
         panel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 142, 1040, 10));
 
         CalendarStartDate.addActionListener(new java.awt.event.ActionListener() {
@@ -307,8 +299,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
         panel1.add(checkBoxGetJobSavingTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 60, 110, 20));
 
         lbl_category1.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_category1.setText("Order selected jobs by");
-        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 130, 20));
+        lbl_category1.setText("Sub department");
+        panel1.add(lbl_category1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 120, 20));
 
         formattedTextItemCompleted.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         formattedTextItemCompleted.setText("0");
@@ -321,6 +313,10 @@ public class JobStatus extends javax.swing.JInternalFrame {
 
         formattedTextTakenTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         panel1.add(formattedTextTakenTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 50, -1));
+
+        lbl_category2.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_category2.setText("Order selected jobs by");
+        panel1.add(lbl_category2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 130, 20));
 
         javax.swing.GroupLayout pnl_BaseLayout = new javax.swing.GroupLayout(pnl_Base);
         pnl_Base.setLayout(pnl_BaseLayout);
@@ -367,10 +363,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
 
     private void Refresh() {
         model_TableJobs.setRowCount(0);
-        txtSearch.setText("");
         CalendarStartDate.setText(logDate);
         CalendarEndDate.setText(logDate);
-        txtSearch.requestFocus();
         textNumberTransactions.setText("");
         comboBoxFilter.setSelectedIndex(0);
         textFinishedTime.setEditable(true);
@@ -397,21 +391,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Refresh();
         }
     }//GEN-LAST:event_panel1MouseClicked
-
-    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-//        String comboSelected = comboBoxFilter.getSelectedItem().toString(); //Ongoing, New, Completed, Ignored, All
-//        if (comboSelected.equals("Ongoing")) {
-//            SearchMainCategoryByCode(txtSearch.getText());
-//        } else if (comboSelected.equals("New")) {
-//            SearchMainCategoryByName(txtSearch.getText());
-//        } else if (comboSelected.equals("Completed")) {
-//            SearchSubCategoryByCode(txtSearch.getText());
-//        } else if (comboSelected.equals("Ignored")) {
-//            SearchSubCategoryByName(txtSearch.getText());
-//        } else if (comboSelected.equals("All")) {
-//            SearchSubCategoryByName(txtSearch.getText());
-//        }
-    }//GEN-LAST:event_txtSearchKeyReleased
 
     private void SearchOngoing(String comboOrder, String startDate, String endDate) { //Ongoing, New, Completed, Ignored, All
         try {
@@ -1140,6 +1119,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JLabel lbl_accountType;
     private javax.swing.JLabel lbl_category;
     private javax.swing.JLabel lbl_category1;
+    private javax.swing.JLabel lbl_category2;
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_subAccount;
     private javax.swing.JPanel panel1;
@@ -1147,7 +1127,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     public static javax.swing.JTable tableJobs;
     private javax.swing.JTextField textFinishedTime;
     private javax.swing.JTextField textNumberTransactions;
-    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
     private void exit() {

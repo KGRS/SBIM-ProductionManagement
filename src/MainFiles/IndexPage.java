@@ -42,6 +42,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import reports.JobDetailedScreen;
 import reports.JobMoniter;
 
 /**
@@ -77,6 +78,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static ItemTransferDepartmentWise ITDW = null;
     
     public static JobMoniter jobMoniter = null;
+    public static JobDetailedScreen jobDetailedScreen = null;
 
     public IndexPage() {
 
@@ -187,7 +189,8 @@ public class IndexPage extends javax.swing.JFrame {
         menuTransferDepartment = new javax.swing.JMenuItem();
         TabMenuReports = new javax.swing.JMenu();
         menuItemJobMonitor = new javax.swing.JMenuItem();
-        MenuReports = new javax.swing.JMenuItem();
+        MenuReports = new javax.swing.JMenu();
+        menuItemJDS = new javax.swing.JMenuItem();
         TabMenuTools = new javax.swing.JMenu();
         MenuNotifications = new javax.swing.JMenuItem();
         MenuPersonalization = new javax.swing.JMenu();
@@ -527,11 +530,15 @@ public class IndexPage extends javax.swing.JFrame {
         TabMenuReports.add(menuItemJobMonitor);
 
         MenuReports.setText("Reports");
-        MenuReports.addActionListener(new java.awt.event.ActionListener() {
+
+        menuItemJDS.setText("Job detailed screen");
+        menuItemJDS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuReportsActionPerformed(evt);
+                menuItemJDSActionPerformed(evt);
             }
         });
+        MenuReports.add(menuItemJDS);
+
         TabMenuReports.add(MenuReports);
 
         mnBar_menuBar.add(TabMenuReports);
@@ -937,10 +944,17 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
 
     }//GEN-LAST:event_SubMenuWinActionPerformed
 
-    private void MenuReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuReportsActionPerformed
-        JOptionPane.showMessageDialog(this, "This form is still under developing.\n We "
-                + "promise to you to provide this feature as soon as possiable.");
-    }//GEN-LAST:event_MenuReportsActionPerformed
+    private void menuItemJDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemJDSActionPerformed
+        if (jobDetailedScreen != null) {
+            if (!jobDetailedScreen.isVisible()) {
+                jobDetailedScreen.setVisible(true);
+            }
+        } else {
+            jobDetailedScreen = new JobDetailedScreen();
+            dskPane_RightPanel.add(jobDetailedScreen);
+            jobDetailedScreen.setVisible(true);
+        }
+    }//GEN-LAST:event_menuItemJDSActionPerformed
 
     private void menuProductLevel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProductLevel2ActionPerformed
         if (productLevel2 != null) {
@@ -1468,7 +1482,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenu MenuNatureTouch;
     private javax.swing.JMenuItem MenuNotifications;
     public static javax.swing.JMenu MenuPersonalization;
-    public static javax.swing.JMenuItem MenuReports;
+    private javax.swing.JMenu MenuReports;
     private javax.swing.JMenuItem MenuWorkflow;
     private javax.swing.JPanel PanelCompanyLogo;
     private javax.swing.JMenuItem SubMenuAssassinsCreed;
@@ -1515,6 +1529,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuFixedJobs;
+    public static javax.swing.JMenuItem menuItemJDS;
     private javax.swing.JMenuItem menuItemJobMonitor;
     private javax.swing.JMenuItem menuMeterialRequisitionNote;
     private javax.swing.JMenuItem menuMeterialRequisitionNoteForProItems;

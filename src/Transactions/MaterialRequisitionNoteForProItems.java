@@ -917,6 +917,11 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             textNumbersInAvailable.setText("0");
             textNumbersInTransaction.setText("0");
             comboBoxJobsToRequest.setSelectedIndex(0);
+            
+            rBtnCode.setEnabled(true);
+            rBtnCode.setEnabled(true);
+            cmbTakeFromDepartment.setEnabled(true);
+            txtSearch.setEnabled(true);
         }
     }
 
