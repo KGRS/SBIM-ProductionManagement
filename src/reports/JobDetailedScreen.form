@@ -113,13 +113,13 @@
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="8" rowCount="0">
                     <Column editable="false" title="PL1 item code" type="java.lang.String"/>
-                    <Column editable="false" title="PL1 item name" type="java.lang.String"/>
                     <Column editable="false" title="Q1" type="java.lang.String"/>
-                    <Column editable="false" title="Avg" type="java.lang.String"/>
+                    <Column editable="false" title="Q2 (Avg)" type="java.lang.String"/>
                     <Column editable="false" title="Q3" type="java.lang.String"/>
                     <Column editable="false" title="Lower tail" type="java.lang.String"/>
                     <Column editable="false" title="Upper tail" type="java.lang.String"/>
                     <Column editable="false" title="Distance" type="java.lang.String"/>
+                    <Column editable="false" title="Records" type="java.lang.String"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -129,7 +129,7 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
                       <Renderer/>

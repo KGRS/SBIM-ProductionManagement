@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
     private final String select = "--Select--";
-    private final DefaultTableModel model_tableFixedJobProcess, model_tableWorkFlow;
+    private final DefaultTableModel model_tableFixedJobProcess, model_tableWorkFlow, model_tableStaticsOfItemCountCompleted;
     private final String spliter = "--";
     private final String menuName = "Job detailed screen";
     String departmentCode, subDepartmentCode, pl1ItemCode, designationCode, designationName, workFlowCode;
@@ -35,6 +35,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
         initComponents();
         model_tableFixedJobProcess = (DefaultTableModel) tableFixedJobProcess.getModel();
         model_tableWorkFlow = (DefaultTableModel) tableWorkFlow.getModel();
+        model_tableStaticsOfItemCountCompleted = (DefaultTableModel) tableStaticsOfItemCountCompleted.getModel(); 
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
         LoadWorkFlow();
@@ -118,7 +119,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "PL1 item code", "PL1 item name", "Q1", "Avg", "Q3", "Lower tail", "Upper tail", "Distance"
+                "PL1 item code", "Q1", "Q2 (Avg)", "Q3", "Lower tail", "Upper tail", "Distance", "Records"
             }
         ) {
             Class[] types = new Class [] {
@@ -143,9 +144,6 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tableStaticsOfItemCountCompleted);
-        if (tableStaticsOfItemCountCompleted.getColumnModel().getColumnCount() > 0) {
-            tableStaticsOfItemCountCompleted.getColumnModel().getColumn(1).setPreferredWidth(150);
-        }
 
         panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 840, 110));
 
@@ -335,6 +333,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
 
     private void tableFixedJobProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobProcessMouseClicked
         int selectedRowOfTableFixedJobProcess = tableFixedJobProcess.getSelectedRow();
+        model_tableStaticsOfItemCountCompleted.setRowCount(0);
         pl1ItemCode = tableFixedJobProcess.getValueAt(selectedRowOfTableFixedJobProcess, 2).toString();
         CalculateAvgPLItemCompletedForAvgTime ca = new CalculateAvgPLItemCompletedForAvgTime();
         ca.plItemsProductionCount(pl1ItemCode);
@@ -359,6 +358,7 @@ public class JobDetailedScreen extends javax.swing.JInternalFrame {
     private void Refresh() {
         RefreshTableAndLoadAgain();
         LoadWorkFlow();
+        model_tableStaticsOfItemCountCompleted.setRowCount(0);
     }
 
     private void RefreshTableAndLoadAgain() {
