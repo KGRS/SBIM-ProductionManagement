@@ -9,6 +9,7 @@ import Transactions.JobAllocation;
 import Transactions.JobStatus;
 import Transactions.MaterialRequisitionNote;
 import Transactions.MaterialRequisitionNoteForProItems;
+import UserPerformance.calcUserPerformance;
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
 import db.ConnectSql;
@@ -131,6 +132,9 @@ public class IndexPage extends javax.swing.JFrame {
 
         java.util.Timer timerCheckLateJobs = new java.util.Timer();
         timerCheckLateJobs.schedule(new TimerMethods(), 2000, 2000); //show time in milli seconds
+        
+        calcUserPerformance cu = new calcUserPerformance();
+        cu.mainRunCalc();
     }
 
     /**
