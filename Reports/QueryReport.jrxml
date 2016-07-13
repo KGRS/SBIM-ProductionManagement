@@ -5,28 +5,19 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     SUM(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_SUM,
-     SUM(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_SUM,
-     COUNT(JobFinished."ITEM_COUNT") AS JobFinished_ITEM_COUNT_COUNT,
-     COUNT(JobFinished."ITEM_COUNT_COMPLETED") AS JobFinished_ITEM_COUNT_COMPLETED_COUNT,
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE
+     JobRunning."FIXED_JOB_ID" AS JobRunning_FIXED_JOB_ID,
+     JobRunning."IS_LATE" AS JobRunning_IS_LATE,
+     JobRunning."IS_NEW_ONGOING" AS JobRunning_IS_NEW_ONGOING
 FROM
-     "dbo"."JobFinished" JobFinished INNER JOIN "dbo"."PLItemDifference" PLItemDifference ON JobFinished."JOB_ID" = PLItemDifference."JOB_ID"
-     INNER JOIN "dbo"."JobFixed" JobFixed ON JobFinished."FIXED_JOB_ID" = JobFixed."JOB_FIXED_ID"
+     "dbo"."JobRunning" JobRunning
 WHERE
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" = '"+PRODUCT_LEVEL_ITEM_CODE+"'
- AND PLItemDifference."IS_WASTAGE" = 'No'
- AND JobFinished."IS_COMPLETE_CANCLE" = 'Completed'
-GROUP BY
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE",
-     JobFinished."ITEM_COUNT",
-     JobFinished."ITEM_COUNT_COMPLETED"]]>
+     JobRunning."IS_LATE" = 'Yes'
+ AND JobRunning."FIXED_JOB_ID" = ''
+ AND JobRunning."IS_NEW_ONGOING" = 'Ongoing']]>
 	</queryString>
-	<field name="JobFinished_ITEM_COUNT_SUM" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COMPLETED_SUM" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COUNT" class="java.lang.Integer"/>
-	<field name="JobFinished_ITEM_COUNT_COMPLETED_COUNT" class="java.lang.Integer"/>
-	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="JobRunning_FIXED_JOB_ID" class="java.lang.String"/>
+	<field name="JobRunning_IS_LATE" class="java.lang.String"/>
+	<field name="JobRunning_IS_NEW_ONGOING" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
