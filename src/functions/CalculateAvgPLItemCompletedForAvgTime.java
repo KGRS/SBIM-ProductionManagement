@@ -25,7 +25,7 @@ public class CalculateAvgPLItemCompletedForAvgTime {
     }
 
     public static double plItemsProductionCount(String PRODUCT_LEVEL_ITEM_CODE) {
-        ResultSet resetSelectAtJobFinishedTable;
+        ResultSet resetSelectAtJobFinishedTable, resetSelectAtJobFinishedTableCompleted;
         double Q1PositionOfITEM_COUNT_CAL, Q3PositionOfITEM_COUNT_CAL, Q1PositionOfITEM_COUNT_COMPLETED_CAL, Q3PositionOfITEM_COUNT_COMPLETED_CAL;
         int JobFinished_ITEM_COUNT, JobFinished_ITEM_COUNT_COMPLETED;
         double distance_of_ITEM_COUNT;
@@ -44,9 +44,21 @@ public class CalculateAvgPLItemCompletedForAvgTime {
         try {
             ArrayList<Integer> arrayList_JobFinished_ITEM_COUNT = new ArrayList<Integer>();
             ArrayList<Integer> arrayList_JobFinished_ITEM_COUNT_COMPLETED = new ArrayList<Integer>();
-            java.sql.Statement stmtSelectAtJobFinishedTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String SelectAtJobFinishedTable = "SELECT\n"
+            java.sql.Statement stmtSelectAtJobFinishedTableItemCount = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtSelectAtJobFinishedTableItemCountCompleted = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String SelectAtJobFinishedTableItemCount = "SELECT\n"
                     + "     JobFinished.\"ITEM_COUNT\" AS JobFinished_ITEM_COUNT,\n"
+                    + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"JobFinished\" JobFinished INNER JOIN \"dbo\".\"PLItemDifference\" PLItemDifference ON JobFinished.\"JOB_ID\" = PLItemDifference.\"JOB_ID\"\n"
+                    + "     INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON JobFinished.\"FIXED_JOB_ID\" = JobFixed.\"JOB_FIXED_ID\"\n"
+                    + "WHERE\n"
+                    + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" = '" + PRODUCT_LEVEL_ITEM_CODE + "'\n"
+                    + " AND PLItemDifference.\"IS_WASTAGE\" = 'No'\n"
+                    + " AND JobFinished.\"IS_COMPLETE_CANCLE\" = 'Completed' ORDER BY JobFinished.\"ITEM_COUNT\" ASC";
+            resetSelectAtJobFinishedTable = stmtSelectAtJobFinishedTableItemCount.executeQuery(SelectAtJobFinishedTableItemCount);
+            
+            String SelectAtJobFinishedTableItemCountCompleted = "SELECT\n"
                     + "     JobFinished.\"ITEM_COUNT_COMPLETED\" AS JobFinished_ITEM_COUNT_COMPLETED,\n"
                     + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE\n"
                     + "FROM\n"
@@ -55,19 +67,19 @@ public class CalculateAvgPLItemCompletedForAvgTime {
                     + "WHERE\n"
                     + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" = '" + PRODUCT_LEVEL_ITEM_CODE + "'\n"
                     + " AND PLItemDifference.\"IS_WASTAGE\" = 'No'\n"
-                    + " AND JobFinished.\"IS_COMPLETE_CANCLE\" = 'Completed' ORDER BY JobFinished.\"ITEM_COUNT\", JobFinished.\"ITEM_COUNT_COMPLETED\" ASC";
-            resetSelectAtJobFinishedTable = stmtSelectAtJobFinishedTable.executeQuery(SelectAtJobFinishedTable);
-            while (resetSelectAtJobFinishedTable.next()) {
+                    + " AND JobFinished.\"IS_COMPLETE_CANCLE\" = 'Completed' ORDER BY JobFinished.\"ITEM_COUNT_COMPLETED\" ASC";
+            resetSelectAtJobFinishedTableCompleted = stmtSelectAtJobFinishedTableItemCountCompleted.executeQuery(SelectAtJobFinishedTableItemCountCompleted);
+            while (resetSelectAtJobFinishedTable.next() && resetSelectAtJobFinishedTableCompleted.next()) {
                 JobFinished_ITEM_COUNT = resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT");
                 arrayList_JobFinished_ITEM_COUNT.add(JobFinished_ITEM_COUNT); //this adds an element to the list.
                 
-                JobFinished_ITEM_COUNT_COMPLETED = resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT_COMPLETED");
+                JobFinished_ITEM_COUNT_COMPLETED = resetSelectAtJobFinishedTableCompleted.getInt("JobFinished_ITEM_COUNT_COMPLETED");
                 arrayList_JobFinished_ITEM_COUNT_COMPLETED.add(JobFinished_ITEM_COUNT_COMPLETED); //this adds an element to the list.
 
                 JobFinished_ITEM_COUNT_COUNT = JobFinished_ITEM_COUNT_COUNT + 1;
                 JobFinished_ITEM_COUNT_COMPLETED_COUNT = JobFinished_ITEM_COUNT_COMPLETED_COUNT + 1;
                 JobFinished_ITEM_COUNT_SUM = JobFinished_ITEM_COUNT_SUM + resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT");
-                JobFinished_ITEM_COUNT_COMPLETED_SUM = JobFinished_ITEM_COUNT_COMPLETED_SUM + resetSelectAtJobFinishedTable.getInt("JobFinished_ITEM_COUNT_COMPLETED");
+                JobFinished_ITEM_COUNT_COMPLETED_SUM = JobFinished_ITEM_COUNT_COMPLETED_SUM + resetSelectAtJobFinishedTableCompleted.getInt("JobFinished_ITEM_COUNT_COMPLETED");
             }
             Q1PositionOfITEM_COUNT_CAL = (JobFinished_ITEM_COUNT_COUNT + 1) / 4;
             if (Q1PositionOfITEM_COUNT_CAL == Math.round(Q1PositionOfITEM_COUNT_CAL)) {

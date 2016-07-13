@@ -5,19 +5,20 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     JobRunning."FIXED_JOB_ID" AS JobRunning_FIXED_JOB_ID,
-     JobRunning."IS_LATE" AS JobRunning_IS_LATE,
-     JobRunning."IS_NEW_ONGOING" AS JobRunning_IS_NEW_ONGOING
+     JobFinished."ITEM_COUNT_COMPLETED" AS JobFinished_ITEM_COUNT_COMPLETED,
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE
 FROM
-     "dbo"."JobRunning" JobRunning
+     "dbo"."JobFinished" JobFinished INNER JOIN "dbo"."PLItemDifference" PLItemDifference ON JobFinished."JOB_ID" = PLItemDifference."JOB_ID"
+     INNER JOIN "dbo"."JobFixed" JobFixed ON JobFinished."FIXED_JOB_ID" = JobFixed."JOB_FIXED_ID"
 WHERE
-     JobRunning."IS_LATE" = 'Yes'
- AND JobRunning."FIXED_JOB_ID" = ''
- AND JobRunning."IS_NEW_ONGOING" = 'Ongoing']]>
+     JobFixed."PRODUCT_LEVEL_ITEM_CODE" = 'SCON'
+ AND PLItemDifference."IS_WASTAGE" = 'No'
+ AND JobFinished."IS_COMPLETE_CANCLE" = 'Completed'
+ORDER BY
+     JobFinished."ITEM_COUNT_COMPLETED" ASC]]>
 	</queryString>
-	<field name="JobRunning_FIXED_JOB_ID" class="java.lang.String"/>
-	<field name="JobRunning_IS_LATE" class="java.lang.String"/>
-	<field name="JobRunning_IS_NEW_ONGOING" class="java.lang.String"/>
+	<field name="JobFinished_ITEM_COUNT_COMPLETED" class="java.lang.Integer"/>
+	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
