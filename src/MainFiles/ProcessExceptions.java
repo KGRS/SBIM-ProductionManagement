@@ -42,29 +42,53 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
-        LoadDepartments();
+        LoadProcess();
+        loadFixJobToCombo();
     }
 
-    private void LoadDepartments() {
+    private void LoadProcess() {
         try {
             ResultSet reset;
             Statement stmt;
             String query;
             int rowCount = 0;
-            query = "SELECT * FROM departments ORDER BY DEPARTMENT_NAME";
+            query = "SELECT * FROM JobFixedExceptions ORDER BY JOB_FIXED_EXCEPTION_NAME";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+    }
+
+    private void loadFixJobToCombo() {
+        try {
+            java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "select * From JobFixed order by JOB_FIXED_NAME";
+            ResultSet rset = stmt.executeQuery(query);
+
+            cmbProductLevel1Item.removeAllItems();
+            cmbProductLevel1Item.insertItemAt("--Select--", 0);
+            int position = 1;
+            if (rset.next()) {
+                do {
+                    cmbProductLevel1Item.insertItemAt(rset.getString("JOB_FIXED_NAME") + "--" + rset.getString("JOB_FIXED_ID"), position); // 
+                    position++;
+                } while (rset.next());
+            }
+            cmbProductLevel1Item.setSelectedIndex(0);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
         }
     }
 
@@ -139,9 +163,6 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             }
         });
         txtCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCodeKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCodeKeyReleased(evt);
             }
@@ -307,34 +328,6 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
         txtCode.selectAll();
     }//GEN-LAST:event_txtCodeFocusGained
 
-    private void txtCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodeKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String text = txtCode.getText();
-            if (!text.isEmpty()) {
-                textExceptionName.requestFocus();
-                LoadAtCodes();
-            }
-        }
-    }//GEN-LAST:event_txtCodeKeyPressed
-
-    private void LoadAtCodes() {
-        String CategoryCode = txtCode.getText();
-        try {
-            ResultSet reset;
-            Statement stmt;
-            String query;
-            query = "SELECT * FROM departments where DEPARTMENT_CODE = '" + CategoryCode + "'";
-            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            reset = stmt.executeQuery(query);
-
-            if (reset.next()) {
-                textExceptionName.setText(reset.getString("DEPARTMENT_NAME"));
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
-    }
 
     private void txtCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodeKeyReleased
         ValidateFields.CheckForCodes(txtCode);
@@ -364,27 +357,30 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
     private void CheckBeforeSave() {
         String CategoryCode = txtCode.getText().toUpperCase();
         String CategoryName = textExceptionName.getText();
+        String textArea = textAreaRemarks.getText();
+        String ProductionlevelItem[] = cmbProductLevel1Item.getSelectedItem().toString().split("--");
         if (!CategoryCode.isEmpty() && !CategoryName.isEmpty()) {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select DEPARTMENT_CODE From departments where DEPARTMENT_CODE = '" + CategoryCode + "'";
+                String query = "select JOB_FIXED_EXCEPTION_CODE From JobFixedExceptions where JOB_FIXED_EXCEPTION_CODE = '" + CategoryCode + "'";
                 ResultSet rset = stmt.executeQuery(query);
 
                 if (rset.next()) {
-                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + CategoryCode + "' department details?", "Update department?", JOptionPane.YES_NO_OPTION);
+                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + CategoryCode + "' process details?", "Update process?", JOptionPane.YES_NO_OPTION);
                     if (x == JOptionPane.YES_OPTION) {
-                        String UpdateQuery = "update departments set DEPARTMENT_NAME = '" + CategoryName + "' where DEPARTMENT_CODE = '" + CategoryCode + "'";
+                        String UpdateQuery = "update JobFixedExceptions set JOB_FIXED_EXCEPTION_NAME = '" + CategoryName + "', REMARKS = '" + textArea + "', JOB_FIXED_ID = '" + ProductionlevelItem[1] + "' where JOB_FIXED_EXCEPTION_CODE = '" + CategoryCode + "'";
                         stmt.execute(UpdateQuery);
-                        JOptionPane.showMessageDialog(this, "Department details are updated.");
+                        JOptionPane.showMessageDialog(this, "Process details are updated.");
                         Refresh();
                     } else if (x == JOptionPane.NO_OPTION) {
                         txtCode.requestFocus();
                     }
 
                 } else if (!rset.next()) {
-                    String UpdateQuery = "insert into departments (DEPARTMENT_CODE, DEPARTMENT_NAME) values ( '" + CategoryCode + "','" + CategoryName + "') ";
+                    String UpdateQuery = "insert into JobFixedExceptions (JOB_FIXED_EXCEPTION_CODE, JOB_FIXED_EXCEPTION_NAME"
+                            + ", REMARKS, JOB_FIXED_ID) values ( '" + CategoryCode + "','" + CategoryName + "', '" + textArea + "', '" + ProductionlevelItem[1] + "') ";
                     stmt.execute(UpdateQuery);
-                    JOptionPane.showMessageDialog(this, "New department is saved.");
+                    JOptionPane.showMessageDialog(this, "New process is saved.");
                     Refresh();
                 }
                 rset.close();
@@ -410,11 +406,11 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
         if (!CategoryCode.isEmpty()) {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select DEPARTMENT_CODE From staff_members where DEPARTMENT_CODE = '" + CategoryCode + "'";
-                ResultSet rset = stmt.executeQuery(query);               
+                String query = "select JOB_FIXED_EXCEPTION_CODE From JobFixedExceptions where JOB_FIXED_EXCEPTION_CODE = '" + CategoryCode + "'";
+                ResultSet rset = stmt.executeQuery(query);
 
                 if (rset.next()) {
-                    JOptionPane.showMessageDialog(this, "This department is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "This Process is already used. Can't delete.", "Can't delete", JOptionPane.ERROR_MESSAGE);
                 } else if (!rset.next()) {
                     DeleteDepartment();
                 }
@@ -427,7 +423,7 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Please contact for support.");
             }
         } else if (CategoryCode.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please insert a valid department code before delete.", "Empty department code", JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(this, "Please insert a valid process code before delete.", "Empty process code", JOptionPane.OK_OPTION);
             txtCode.requestFocus();
         }
     }
@@ -501,13 +497,41 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rBtnNameKeyPressed
 
     private void tableViewDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableViewDetailsMouseClicked
-        String Code, Name;
+        String Code, Name, Process, Remark = "", fixjob = "";
 
         Code = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 0).toString();
-        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();        
+        Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();
+        Process = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 2).toString();
+
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+            query = "SELECT\n"
+                    + "     JobFixedExceptions.\"JOB_FIXED_EXCEPTION_CODE\" AS JobFixedExceptions_JOB_FIXED_EXCEPTION_CODE,\n"
+                    + "     JobFixedExceptions.\"JOB_FIXED_EXCEPTION_NAME\" AS JobFixedExceptions_JOB_FIXED_EXCEPTION_NAME,\n"
+                    + "     JobFixedExceptions.\"JOB_FIXED_ID\" AS JobFixedExceptions_JOB_FIXED_ID,\n"
+                    + "     JobFixedExceptions.\"REMARKS\" AS JobFixedExceptions_REMARKS,\n"
+                    + "     JobFixed.\"JOB_FIXED_NAME\" AS JobFixed_JOB_FIXED_NAME\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobFixedExceptions\" JobFixedExceptions ON JobFixed.\"JOB_FIXED_ID\" = JobFixedExceptions.\"JOB_FIXED_ID\"\n"
+                    + "WHERE JobFixedExceptions.\"JOB_FIXED_EXCEPTION_CODE\" = '"+Code+"'";
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            if (reset.next()) {
+                fixjob = reset.getString("JobFixed_JOB_FIXED_NAME");
+                Remark = reset.getString("JobFixedExceptions_REMARKS");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
 
         txtCode.setText(Code);
         textExceptionName.setText(Name);
+        cmbProductLevel1Item.setSelectedItem(fixjob + "--" + Process);
+        textAreaRemarks.setText(Remark);
     }//GEN-LAST:event_tableViewDetailsMouseClicked
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -527,9 +551,9 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryCode.equals("")) {
-                query = "SELECT * FROM departments WHERE DEPARTMENT_CODE LIKE '" + CategoryCode + "%'";
+                query = "SELECT * FROM JobFixedExceptions WHERE JOB_FIXED_EXCEPTION_CODE LIKE '" + CategoryCode + "%'";
             } else {
-                query = "SELECT * FROM departments  WHERE DEPARTMENT_CODE LIKE '" + CategoryCode + "%'";
+                query = "SELECT * FROM JobFixedExceptions  WHERE JOB_FIXED_EXCEPTION_CODE LIKE '" + CategoryCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -537,8 +561,9 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -557,9 +582,9 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryName.equals("")) {
-                query = "SELECT * FROM departments WHERE DEPARTMENT_NAME LIKE '%" + CategoryName + "%'";
+                query = "SELECT * FROM JobFixedExceptions WHERE JOB_FIXED_EXCEPTION_NAME LIKE '%" + CategoryName + "%'";
             } else {
-                query = "SELECT * FROM departments  WHERE DEPARTMENT_NAME LIKE '%" + CategoryName + "%'";
+                query = "SELECT * FROM JobFixedExceptions  WHERE JOB_FIXED_EXCEPTION_NAME LIKE '%" + CategoryName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -567,8 +592,9 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_CODE"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DEPARTMENT_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_EXCEPTION_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("JOB_FIXED_ID"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -613,7 +639,7 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
             for (int j = 0; j < row; j++) {
                 model_categoryTable.removeRow(0);
             }
-            LoadDepartments();
+            LoadProcess();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -645,7 +671,7 @@ public class ProcessExceptions extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void exit() {
-         if (processExceptions != null) {
+        if (processExceptions != null) {
             processExceptions = null;
         }
         this.dispose();

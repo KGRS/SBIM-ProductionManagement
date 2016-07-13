@@ -39,7 +39,8 @@ public class Workflow extends javax.swing.JInternalFrame {
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
 
-//        LoadCategories();
+        loadProductionlvl2ItemToCombo();
+        LoadCategories();
 //        loadBranchesToCombo();
 //        loadTypes();
     }
@@ -50,16 +51,15 @@ public class Workflow extends javax.swing.JInternalFrame {
             Statement stmt;
             String query;
             int rowCount = 0;
-            query = "SELECT * FROM Departments ORDER BY DepartmentName";
+            query = "SELECT * FROM Workflow ORDER BY WORK_FLOW_NAME";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DepartmentCode"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DepartmentName"), rowCount, 1);
-                tableViewDetails.setValueAt(reset.getString("Type"), rowCount, 2);
-                tableViewDetails.setValueAt(reset.getString("BranchCode"), rowCount, 3);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PL2_ITEM_CODE"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -69,10 +69,10 @@ public class Workflow extends javax.swing.JInternalFrame {
         }
     }
 
-    private void loadBranchesToCombo() {
+    private void loadProductionlvl2ItemToCombo() {
         try {
             java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select * From Branches order by BranchName";
+            String query = "select * From ProductLevel2 order by PL2_ITEM_NAME";
             ResultSet rset = stmt.executeQuery(query);
 
             cmbProductLevel2Item.removeAllItems();
@@ -80,7 +80,7 @@ public class Workflow extends javax.swing.JInternalFrame {
             int position = 1;
             if (rset.next()) {
                 do {
-                    cmbProductLevel2Item.insertItemAt(rset.getString("BranchName") + "--" + rset.getString("BranchCode"), position); // 
+                    cmbProductLevel2Item.insertItemAt(rset.getString("PL2_ITEM_NAME") + "--" + rset.getString("PL2_ITEM_CODE"), position); // 
                     position++;
                 } while (rset.next());
             }
@@ -90,7 +90,7 @@ public class Workflow extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", ERROR);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,9 +178,6 @@ public class Workflow extends javax.swing.JInternalFrame {
             }
         });
         textWorkflowfCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                textWorkflowfCodeKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 textWorkflowfCodeKeyReleased(evt);
             }
@@ -360,35 +357,7 @@ public class Workflow extends javax.swing.JInternalFrame {
         textWorkflowfCode.selectAll();
     }//GEN-LAST:event_textWorkflowfCodeFocusGained
 
-    private void textWorkflowfCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textWorkflowfCodeKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String text = textWorkflowfCode.getText();
-            if (!text.isEmpty()) {
-                textWorkflowName.requestFocus();
-                LoadAtCodes();
-            }
-        }
-    }//GEN-LAST:event_textWorkflowfCodeKeyPressed
 
-    private void LoadAtCodes() {
-        String CategoryCode = textWorkflowfCode.getText();
-        try {
-            ResultSet reset;
-            Statement stmt;
-            String query;
-            query = "SELECT * FROM Departments where DepartmentCode = '" + CategoryCode + "'";
-            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            reset = stmt.executeQuery(query);
-
-            if (reset.next()) {
-                textWorkflowName.setText(reset.getString("DepartmentName"));
-                textAreaRemarks.setText(reset.getString("Type"));
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
-    }
 
     private void textWorkflowfCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textWorkflowfCodeKeyReleased
         ValidateFields.CheckForCodes(textWorkflowfCode);
@@ -416,33 +385,33 @@ public class Workflow extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void CheckBeforeSave() {
-        String CategoryCode = textWorkflowfCode.getText();
-        String CategoryName = textWorkflowName.getText();
-        String Type = textAreaRemarks.getText();
-        String BranchCode[] = cmbProductLevel2Item.getSelectedItem().toString().split("--");
-        if (!CategoryCode.isEmpty() && !CategoryName.isEmpty() && !Type.equals(select) && !BranchCode[1].equals(select)) {
+        String workFlowCode = textWorkflowfCode.getText();
+        String workFlowName = textWorkflowName.getText();
+        String textArea = textAreaRemarks.getText();
+        String ProductionlevelItem[] = cmbProductLevel2Item.getSelectedItem().toString().split("--");
+        if (!workFlowCode.isEmpty() && !workFlowName.isEmpty() && !textArea.equals(select) && !ProductionlevelItem[1].equals(select)) {
             try {
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String query = "select DepartmentCode From Departments where DepartmentCode = '" + CategoryCode + "'";
+                String query = "select WORK_FLOW_CODE From Workflow where WORK_FLOW_CODE = '" + workFlowCode + "'";
                 ResultSet rset = stmt.executeQuery(query);
 
                 if (rset.next()) {
-                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + CategoryCode + "' department details?", "Update department?", JOptionPane.YES_NO_OPTION);
+                    int x = JOptionPane.showConfirmDialog(this, "Are you sure to change the '" + workFlowCode + "' Workflow details?", "Update Workflow?", JOptionPane.YES_NO_OPTION);
                     if (x == JOptionPane.YES_OPTION) {
-                        String UpdateQuery = "update Departments set DepartmentName = '" + CategoryName + "'"
-                                + ", Type = '" + Type + "', BranchCode = '" + BranchCode[1] + "' where DepartmentCode = '" + CategoryCode + "'";
+                        String UpdateQuery = "update Workflow set WORK_FLOW_NAME = '" + workFlowName + "'"
+                                + ", REMARKS = '" + textArea + "', PL2_ITEM_CODE = '" + ProductionlevelItem[1] + "' where WORK_FLOW_CODE = '" + workFlowCode + "'";
                         stmt.execute(UpdateQuery);
-                        JOptionPane.showMessageDialog(this, "Department details are updated.");
+                        JOptionPane.showMessageDialog(this, "Workflow details are updated.");
                         Refresh();
                     } else if (x == JOptionPane.NO_OPTION) {
                         textWorkflowfCode.requestFocus();
                     }
 
                 } else if (!rset.next()) {
-                    String UpdateQuery = "insert into Departments (DepartmentCode, DepartmentName"
-                            + ", Type, BranchCode) values ( '" + CategoryCode + "','" + CategoryName + "', '" + Type + "', '" + BranchCode[1] + "') ";
+                    String UpdateQuery = "insert into Workflow (WORK_FLOW_CODE, WORK_FLOW_NAME"
+                            + ", REMARKS, PL2_ITEM_CODE) values ( '" + workFlowCode + "','" + workFlowName + "', '" + textArea + "', '" + ProductionlevelItem[1] + "') ";
                     stmt.execute(UpdateQuery);
-                    JOptionPane.showMessageDialog(this, "New department is saved.");
+                    JOptionPane.showMessageDialog(this, "New workflow is saved.");
                     Refresh();
                 }
                 rset.close();
@@ -453,7 +422,7 @@ public class Workflow extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(this, "Please contact for support.");
             }
-        } else if (CategoryCode.isEmpty() || CategoryName.isEmpty() || Type.equals(select)) {
+        } else if (workFlowCode.isEmpty() || workFlowName.isEmpty() || textArea.equals(select)) {
             JOptionPane.showMessageDialog(this, "Please fill all fields before save.", "Empty fields", JOptionPane.OK_OPTION);
             textWorkflowfCode.requestFocus();
         }
@@ -559,33 +528,42 @@ public class Workflow extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rBtnNameKeyPressed
 
     private void tableViewDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableViewDetailsMouseClicked
-        String Code, Name, Type, BranchCode, BranchName = "";
+        String Code, Name, Remark = "", ProdlvlItem, WorkFlowName = "", PL2_ITEM_NAME="";
 
         Code = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 0).toString();
         Name = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 1).toString();
-        Type = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 2).toString();
-        BranchCode = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 3).toString();
+        //Remark = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 2).toString();
+        ProdlvlItem = tableViewDetails.getValueAt(tableViewDetails.getSelectedRow(), 2).toString();
 
         try {
             ResultSet reset;
             Statement stmt;
             String query;
-            query = "SELECT * FROM Branches where BranchCode = '" + BranchCode + "'";
+            query = "SELECT\n"
+                    + "     Workflow.\"WORK_FLOW_CODE\" AS Workflow_WORK_FLOW_CODE,\n"
+                    + "     Workflow.\"WORK_FLOW_NAME\" AS Workflow_WORK_FLOW_NAME,\n"
+                    + "     Workflow.\"PL2_ITEM_CODE\" AS Workflow_PL2_ITEM_CODE,\n"
+                    + "     Workflow.\"REMARKS\" AS Workflow_REMARKS,\n"
+                    + "     ProductLevel2.\"PL2_ITEM_NAME\" AS ProductLevel2_PL2_ITEM_NAME\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"Workflow\" Workflow ON ProductLevel2.\"PL2_ITEM_CODE\" = Workflow.\"PL2_ITEM_CODE\"\n"
+                    + "WHERE Workflow.\"WORK_FLOW_CODE\" = '"+Code+"'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             if (reset.next()) {
-                BranchName = reset.getString("BranchName");
+                PL2_ITEM_NAME = reset.getString("ProductLevel2_PL2_ITEM_NAME");
+                Remark = reset.getString("Workflow_REMARKS");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
-        
+
         textWorkflowfCode.setText(Code);
         textWorkflowName.setText(Name);
-        cmbProductLevel2Item.setSelectedItem(BranchName + "--" + BranchCode);
-        textAreaRemarks.setText(Type);
+        cmbProductLevel2Item.setSelectedItem(PL2_ITEM_NAME + "--" + ProdlvlItem);
+        textAreaRemarks.setText(Remark);
     }//GEN-LAST:event_tableViewDetailsMouseClicked
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -605,9 +583,9 @@ public class Workflow extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryCode.equals("")) {
-                query = "SELECT * FROM Departments WHERE DepartmentCode LIKE '" + CategoryCode + "%'";
+                query = "SELECT * FROM Workflow WHERE WORK_FLOW_CODE LIKE '" + CategoryCode + "%'";
             } else {
-                query = "SELECT * FROM Departments  WHERE DepartmentCode LIKE '" + CategoryCode + "%'";
+                query = "SELECT * FROM Workflow  WHERE WORK_FLOW_CODE LIKE '" + CategoryCode + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -615,10 +593,9 @@ public class Workflow extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DepartmentCode"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DepartmentName"), rowCount, 1);
-                tableViewDetails.setValueAt(reset.getString("Type"), rowCount, 2);
-                tableViewDetails.setValueAt(reset.getString("BranchCode"), rowCount, 3);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PL2_ITEM_CODE"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -637,9 +614,9 @@ public class Workflow extends javax.swing.JInternalFrame {
             RefreshTable();
 
             if (!CategoryName.equals("")) {
-                query = "SELECT * FROM Departments WHERE DepartmentName LIKE '%" + CategoryName + "%'";
+                query = "SELECT * FROM Workflow WHERE WORK_FLOW_NAME LIKE '%" + CategoryName + "%'";
             } else {
-                query = "SELECT * FROM Departments  WHERE DepartmentName LIKE '%" + CategoryName + "%'";
+                query = "SELECT * FROM Workflow  WHERE WORK_FLOW_NAME LIKE '%" + CategoryName + "%'";
             }
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -647,10 +624,9 @@ public class Workflow extends javax.swing.JInternalFrame {
             while (reset.next()) {
 
                 model_categoryTable.addRow(new Object[model_categoryTable.getColumnCount()]);
-                tableViewDetails.setValueAt(reset.getString("DepartmentCode"), rowCount, 0);
-                tableViewDetails.setValueAt(reset.getString("DepartmentName"), rowCount, 1);
-                tableViewDetails.setValueAt(reset.getString("Type"), rowCount, 2);
-                tableViewDetails.setValueAt(reset.getString("BranchCode"), rowCount, 3);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_CODE"), rowCount, 0);
+                tableViewDetails.setValueAt(reset.getString("WORK_FLOW_NAME"), rowCount, 1);
+                tableViewDetails.setValueAt(reset.getString("PL2_ITEM_CODE"), rowCount, 2);
                 rowCount++;
             }
             reset.close();
@@ -709,6 +685,7 @@ public class Workflow extends javax.swing.JInternalFrame {
         textWorkflowName.setText("");
         textAreaRemarks.setText("");
         txtSearch.setText("");
+        cmbProductLevel2Item.setSelectedIndex(0);
     }
 
     private void RefreshTableAndLoadAgain() {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe2e307e-deaf-4651-8689-47dd0bc2e5b9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     JobFixedExceptions."JOB_FIXED_EXCEPTION_CODE" AS JobFixedExceptions_JOB_FIXED_EXCEPTION_CODE,
+     JobFixedExceptions."JOB_FIXED_EXCEPTION_NAME" AS JobFixedExceptions_JOB_FIXED_EXCEPTION_NAME,
+     JobFixedExceptions."JOB_FIXED_ID" AS JobFixedExceptions_JOB_FIXED_ID,
+     JobFixedExceptions."REMARKS" AS JobFixedExceptions_REMARKS,
+     JobFixed."JOB_FIXED_NAME" AS JobFixed_JOB_FIXED_NAME
+FROM
+     "dbo"."JobFixed" JobFixed INNER JOIN "dbo"."JobFixedExceptions" JobFixedExceptions ON JobFixed."JOB_FIXED_ID" = JobFixedExceptions."JOB_FIXED_ID"
+WHERE JobFixedExceptions."JOB_FIXED_EXCEPTION_CODE" = '' ]]>
+	</queryString>
+	<field name="JobFixedExceptions_JOB_FIXED_EXCEPTION_CODE" class="java.lang.String"/>
+	<field name="JobFixedExceptions_JOB_FIXED_EXCEPTION_NAME" class="java.lang.String"/>
+	<field name="JobFixedExceptions_JOB_FIXED_ID" class="java.lang.String"/>
+	<field name="JobFixedExceptions_REMARKS" class="java.lang.String"/>
+	<field name="JobFixed_JOB_FIXED_NAME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
