@@ -54,6 +54,7 @@ public class create_dropUserPerTable {
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);
+            System.out.println("run deleteUserViseItemComplete");
         } catch (SQLException ex) {
             Logger.getLogger(calcUserPerformance.class.getName()).log(Level.SEVERE, null, ex);
         }
