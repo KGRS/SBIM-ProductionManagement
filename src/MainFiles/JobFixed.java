@@ -564,11 +564,11 @@ public class JobFixed extends javax.swing.JInternalFrame {
                                 + "   SET [JOB_FIXED_NAME] = '" + Name + "'\n"
                                 //                                + "      ,[WORK_FLOW_CODE] = '" + workFlowCodeInArray[1] + "'\n"
                                 //                                + "      ,[PRODUCT_LEVEL] = '" + productLevel + "'\n"
-                                //                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
+                                                                + "      ,[PRODUCT_LEVEL_ITEM_CODE] = '" + productLevelItemCodeInArray[1] + "'\n"
                                 + "      ,[ITEM_COUNT] = '" + itemCount + "'\n"
                                 + "      ,[ALLOCATED_TIME] = '" + allocateTime + "'\n"
                                 + "      ,[EMPLOYEE_COUNT] = '" + employeeCount + "'\n"
-                                //                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
+                                                                + "      ,[SUB_DEPARTMENT_CODE] = '" + subDepartmentCodeInArray[1] + "'\n"
                                 + "      ,[REMARKS] = '" + remarks + "'\n"
                                 + "      ,[STEP_NUMBER] = '" + stepNumber + "'\n"
                                 + " WHERE JOB_FIXED_ID = '" + Code + "'";
@@ -934,6 +934,7 @@ public class JobFixed extends javax.swing.JInternalFrame {
         comboSubDepartment.setSelectedIndex(0);
         getItemLevel();
         loadAllJobsToTable();
+        loadWorkFlowsToCombo();
     }
 
     private void RefreshTableAndLoadAgain() {

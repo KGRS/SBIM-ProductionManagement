@@ -803,7 +803,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split(spliter);
             String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
             loadFixedJobsToTable(subDepartmentCode[1]);
-            loadAllEmployeesToTable(departmentCode[1]);
+            loadAllEmployeesToTable(subDepartmentCode[1]);
             loadSuperviseByToCombo(subDepartmentCode[1]);
         } else if (subDepartment.equals(select)) {
             JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
@@ -811,7 +811,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_buttonViewActionPerformed
 
-    private void loadAllEmployeesToTable(String departmentCode) {
+    private void loadAllEmployeesToTable(String subDepartmentCode) {
         try {
             ResultSet reset;
             Statement stmt;
@@ -833,7 +833,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "      ,[CONTACT_MOBILE]\n"
                     + "      ,[EMAIL]\n"
                     + "      ,[ACTIVE]\n"
-                    + "  FROM [Employees] WHERE DepartmentCode = '" + departmentCode + "' ORDER BY FIRST_NAME";
+                    + "  FROM [Employees] WHERE SUB_DEPARTMENT_CODE = '" + subDepartmentCode + "' ORDER BY FIRST_NAME";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
