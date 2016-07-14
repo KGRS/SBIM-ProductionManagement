@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-/*
+ /*
  * MainCategory.java
  *
  * Created on Apr 5, 2013, 2:45:44 PM
@@ -11,6 +11,7 @@
 package Transactions;
 
 import MainFiles.IndexPage;
+import static MainFiles.IndexPage.dskPane_RightPanel;
 import static MainFiles.IndexPage.jobStatus;
 import db.ConnectSql;
 import functions.AverageTimeOfPLItems;
@@ -39,6 +40,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     /**
      * First value of the any Combo Box. Represent the Value "--Select--"
      */
+    public static EmployeeSuggestionForBottleNeck employeeSuggestionForBottleNeck = null;
     private final String select = "--Select--";
     private final String spliter = "--";
     private final DefaultTableModel model_TableJobs;
@@ -100,6 +102,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
         formattedTextItemCompleted = new javax.swing.JFormattedTextField();
         formattedTextTakenTime = new javax.swing.JFormattedTextField();
         lbl_category2 = new javax.swing.JLabel();
+        buttonEmployeeSuggestions = new javax.swing.JButton();
+        labelFlobID = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setIconifiable(true);
@@ -317,6 +321,18 @@ public class JobStatus extends javax.swing.JInternalFrame {
         lbl_category2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_category2.setText("Order selected jobs by");
         panel1.add(lbl_category2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 130, 20));
+
+        buttonEmployeeSuggestions.setText("Employee suggestions");
+        buttonEmployeeSuggestions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEmployeeSuggestionsActionPerformed(evt);
+            }
+        });
+        panel1.add(buttonEmployeeSuggestions, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 540, 170, -1));
+
+        labelFlobID.setForeground(new java.awt.Color(255, 255, 255));
+        labelFlobID.setText("jLabel1");
+        panel1.add(labelFlobID, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 544, 90, 20));
 
         javax.swing.GroupLayout pnl_BaseLayout = new javax.swing.GroupLayout(pnl_Base);
         pnl_Base.setLayout(pnl_BaseLayout);
@@ -888,6 +904,22 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         formattedTextItemCompleted.selectAll();
     }//GEN-LAST:event_formattedTextItemCompletedFocusGained
 
+    private void buttonEmployeeSuggestionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEmployeeSuggestionsActionPerformed
+        selectedRowOfTableJobs = tableJobs.getSelectedRow();
+        fixedJobID = tableJobs.getValueAt(selectedRowOfTableJobs, 1).toString();
+        labelFlobID.setText(fixedJobID);
+
+        if (employeeSuggestionForBottleNeck != null) {
+            if (!employeeSuggestionForBottleNeck.isVisible()) {
+                employeeSuggestionForBottleNeck.setVisible(true);
+            }
+        } else {
+            employeeSuggestionForBottleNeck = new EmployeeSuggestionForBottleNeck();
+            dskPane_RightPanel.add(employeeSuggestionForBottleNeck);
+            employeeSuggestionForBottleNeck.setVisible(true);
+        }
+    }//GEN-LAST:event_buttonEmployeeSuggestionsActionPerformed
+
     private void loadDateTime() {
         String query = "SELECT GETDATE() AS CurrentDateTime";
         String logTime;
@@ -1030,7 +1062,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 IS_WASTAGE = "No";
                             }
                             CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
-                        }else if (itemCount == itemCompleted) {
+                        } else if (itemCount == itemCompleted) {
                             plItemDifference = 0;
                             IS_WASTAGE = "No";
                             CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
@@ -1106,6 +1138,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JButton btnExit;
     private javax.swing.ButtonGroup btnGrup_yesNo;
     private javax.swing.JButton buttonAddDetails;
+    private javax.swing.JButton buttonEmployeeSuggestions;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonSave;
     private javax.swing.JCheckBox checkBoxGetJobSavingTime;
@@ -1115,6 +1148,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JFormattedTextField formattedTextTakenTime;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    public static javax.swing.JLabel labelFlobID;
     private javax.swing.JLabel lableNoOfJobs;
     private javax.swing.JLabel lbl_accountType;
     private javax.swing.JLabel lbl_category;
