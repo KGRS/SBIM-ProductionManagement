@@ -29,10 +29,10 @@ public class CalculatePLItemProductionDetails {
         String printingText;
         double Q1PositionOfITEM_COUNT_CAL, Q3PositionOfITEM_COUNT_CAL, Q1PositionOfITEM_COUNT_COMPLETED_CAL, Q3PositionOfITEM_COUNT_COMPLETED_CAL;
         int JobFinished_ITEM_COUNT, JobFinished_ITEM_COUNT_COMPLETED;
-        double distance_of_ITEM_COUNT;
-        double lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT;
-        double distance_of_ITEM_COUNT_COMPLETED;
-        double lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED;
+        double distance_of_ITEM_COUNT=0;
+        double lowerTail_of_ITEM_COUNT=0, upperTail_of_ITEM_COUNT=0;
+        double distance_of_ITEM_COUNT_COMPLETED=0;
+        double lowerTail_of_ITEM_COUNT_COMPLETED=0, upperTail_of_ITEM_COUNT_COMPLETED=0;
         double JobFinished_ITEM_COUNT_COUNT = 0;
         double JobFinished_ITEM_COUNT_COMPLETED_COUNT = 0;
         int JobFinished_ITEM_COUNT_SUM = 0, JobFinished_ITEM_COUNT_COMPLETED_SUM = 0;
@@ -83,75 +83,77 @@ public class CalculatePLItemProductionDetails {
             }
             if (JobFinished_ITEM_COUNT_COUNT >= 2 && JobFinished_ITEM_COUNT_COMPLETED_COUNT >= 2) {
                 Q1PositionOfITEM_COUNT_CAL = (JobFinished_ITEM_COUNT_COUNT + 1) / 4;
-                if (Q1PositionOfITEM_COUNT_CAL == Math.round(Q1PositionOfITEM_COUNT_CAL)) {
-                    Q1PositionOfITEM_COUNT = (int) (Q1PositionOfITEM_COUNT_CAL);
-                    Q1OfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT);
-                } else if (Q1PositionOfITEM_COUNT_CAL != Math.round(Q1PositionOfITEM_COUNT_CAL)) {
-                    int Q1PositionOfITEM_COUNT1, Q1PositionOfITEM_COUNT2;
-                    double Q1OfITEM_COUNT1, Q1OfITEM_COUNT2;
-                    Q1PositionOfITEM_COUNT1 = (int) (Q1PositionOfITEM_COUNT_CAL);
-                    Q1PositionOfITEM_COUNT2 = Q1PositionOfITEM_COUNT1 + 1;
-                    Q1OfITEM_COUNT1 = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT1 - 1);
-                    Q1OfITEM_COUNT2 = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT2 - 1);
-                    Q1OfITEM_COUNT = (Q1OfITEM_COUNT1 + Q1OfITEM_COUNT2) / 2;
-                }
-                Q3PositionOfITEM_COUNT_CAL = (JobFinished_ITEM_COUNT_COUNT + 1) * 3 / 4;
-                if (Q3PositionOfITEM_COUNT_CAL == Math.round(Q3PositionOfITEM_COUNT_CAL)) {
-                    Q3PositionOfITEM_COUNT = (int) Q3PositionOfITEM_COUNT_CAL;
-                    Q3OfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT);
-                } else if (Q3PositionOfITEM_COUNT_CAL != Math.round(Q3PositionOfITEM_COUNT_CAL)) {
-                    int Q3PositionOfITEM_COUNT1, Q3PositionOfITEM_COUNT2;
-                    double Q3OfITEM_COUNT1, Q3OfITEM_COUNT2;
-                    Q3PositionOfITEM_COUNT1 = (int) (Q3PositionOfITEM_COUNT_CAL);
-                    Q3PositionOfITEM_COUNT2 = Q3PositionOfITEM_COUNT1 + 1;
-                    Q3OfITEM_COUNT1 = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT1 - 1);
-                    Q3OfITEM_COUNT2 = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT2 - 1);
-                    Q3OfITEM_COUNT = (Q3OfITEM_COUNT1 + Q3OfITEM_COUNT2) / 2;
-                }
+                if (Q1PositionOfITEM_COUNT_CAL >= 2) {
+                    if (Q1PositionOfITEM_COUNT_CAL == Math.round(Q1PositionOfITEM_COUNT_CAL)) {
+                        Q1PositionOfITEM_COUNT = (int) (Q1PositionOfITEM_COUNT_CAL);
+                        Q1OfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT);
+                    } else if (Q1PositionOfITEM_COUNT_CAL != Math.round(Q1PositionOfITEM_COUNT_CAL)) {
+                        int Q1PositionOfITEM_COUNT1, Q1PositionOfITEM_COUNT2;
+                        double Q1OfITEM_COUNT1, Q1OfITEM_COUNT2;
+                        Q1PositionOfITEM_COUNT1 = (int) (Q1PositionOfITEM_COUNT_CAL);
+                        Q1PositionOfITEM_COUNT2 = Q1PositionOfITEM_COUNT1 + 1;
+                        Q1OfITEM_COUNT1 = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT1 - 1);
+                        Q1OfITEM_COUNT2 = arrayList_JobFinished_ITEM_COUNT.get(Q1PositionOfITEM_COUNT2 - 1);
+                        Q1OfITEM_COUNT = (Q1OfITEM_COUNT1 + Q1OfITEM_COUNT2) / 2;
+                    }
+                    Q3PositionOfITEM_COUNT_CAL = (JobFinished_ITEM_COUNT_COUNT + 1) * 3 / 4;
+                    if (Q3PositionOfITEM_COUNT_CAL == Math.round(Q3PositionOfITEM_COUNT_CAL)) {
+                        Q3PositionOfITEM_COUNT = (int) Q3PositionOfITEM_COUNT_CAL;
+                        Q3OfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT);
+                    } else if (Q3PositionOfITEM_COUNT_CAL != Math.round(Q3PositionOfITEM_COUNT_CAL)) {
+                        int Q3PositionOfITEM_COUNT1, Q3PositionOfITEM_COUNT2;
+                        double Q3OfITEM_COUNT1, Q3OfITEM_COUNT2;
+                        Q3PositionOfITEM_COUNT1 = (int) (Q3PositionOfITEM_COUNT_CAL);
+                        Q3PositionOfITEM_COUNT2 = Q3PositionOfITEM_COUNT1 + 1;
+                        Q3OfITEM_COUNT1 = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT1 - 1);
+                        Q3OfITEM_COUNT2 = arrayList_JobFinished_ITEM_COUNT.get(Q3PositionOfITEM_COUNT2 - 1);
+                        Q3OfITEM_COUNT = (Q3OfITEM_COUNT1 + Q3OfITEM_COUNT2) / 2;
+                    }
 
-                distance_of_ITEM_COUNT = Q3OfITEM_COUNT - Q1OfITEM_COUNT;
-                lowerTail_of_ITEM_COUNT = Q1OfITEM_COUNT - (1.5 * distance_of_ITEM_COUNT);
-                if (lowerTail_of_ITEM_COUNT < 0) {
-                    lowerTail_of_ITEM_COUNT = 0;
+                    distance_of_ITEM_COUNT = Q3OfITEM_COUNT - Q1OfITEM_COUNT;
+                    lowerTail_of_ITEM_COUNT = Q1OfITEM_COUNT - (1.5 * distance_of_ITEM_COUNT);
+                    if (lowerTail_of_ITEM_COUNT < 0) {
+                        lowerTail_of_ITEM_COUNT = 0;
+                    }
+                    upperTail_of_ITEM_COUNT = Q3OfITEM_COUNT + (1.5 * distance_of_ITEM_COUNT);
                 }
-                upperTail_of_ITEM_COUNT = Q3OfITEM_COUNT + (1.5 * distance_of_ITEM_COUNT);
-
 /////////////////////////////////////////////////////////////////////////////            
                 Q1PositionOfITEM_COUNT_COMPLETED_CAL = (JobFinished_ITEM_COUNT_COMPLETED_COUNT + 1) / 4;
-                if (Q1PositionOfITEM_COUNT_COMPLETED_CAL == Math.round(Q1PositionOfITEM_COUNT_COMPLETED_CAL)) {
-                    Q1PositionOfITEM_COUNT_COMPLETED = (int) (Q1PositionOfITEM_COUNT_COMPLETED_CAL);
-                    Q1OfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED - 1);
-                } else if (Q1PositionOfITEM_COUNT_COMPLETED_CAL != Math.round(Q1PositionOfITEM_COUNT_COMPLETED_CAL)) {
-                    int Q1PositionOfITEM_COUNT_COMPLETED_1, Q1PositionOfITEM_COUNT_COMPLETED_2;
-                    double Q1OfITEM_COUNT_COMPLETED_1, Q1OfITEM_COUNT_COMPLETED_2;
-                    Q1PositionOfITEM_COUNT_COMPLETED_1 = (int) (Q1PositionOfITEM_COUNT_COMPLETED_CAL);
-                    Q1PositionOfITEM_COUNT_COMPLETED_2 = Q1PositionOfITEM_COUNT_COMPLETED_1 + 1;
-                    Q1OfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED_1 - 1);
-                    Q1OfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED_2 - 1);
-                    Q1OfITEM_COUNT_COMPLETED = (Q1OfITEM_COUNT_COMPLETED_1 + Q1OfITEM_COUNT_COMPLETED_2) / 2;
-                }
+                if (Q1PositionOfITEM_COUNT_COMPLETED_CAL >= 2) {
+                    if (Q1PositionOfITEM_COUNT_COMPLETED_CAL == Math.round(Q1PositionOfITEM_COUNT_COMPLETED_CAL)) {
+                        Q1PositionOfITEM_COUNT_COMPLETED = (int) (Q1PositionOfITEM_COUNT_COMPLETED_CAL);
+                        Q1OfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED - 1);
+                    } else if (Q1PositionOfITEM_COUNT_COMPLETED_CAL != Math.round(Q1PositionOfITEM_COUNT_COMPLETED_CAL)) {
+                        int Q1PositionOfITEM_COUNT_COMPLETED_1, Q1PositionOfITEM_COUNT_COMPLETED_2;
+                        double Q1OfITEM_COUNT_COMPLETED_1, Q1OfITEM_COUNT_COMPLETED_2;
+                        Q1PositionOfITEM_COUNT_COMPLETED_1 = (int) (Q1PositionOfITEM_COUNT_COMPLETED_CAL);
+                        Q1PositionOfITEM_COUNT_COMPLETED_2 = Q1PositionOfITEM_COUNT_COMPLETED_1 + 1;
+                        Q1OfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED_1 - 1);
+                        Q1OfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q1PositionOfITEM_COUNT_COMPLETED_2 - 1);
+                        Q1OfITEM_COUNT_COMPLETED = (Q1OfITEM_COUNT_COMPLETED_1 + Q1OfITEM_COUNT_COMPLETED_2) / 2;
+                    }
 
-                Q3PositionOfITEM_COUNT_COMPLETED_CAL = (JobFinished_ITEM_COUNT_COMPLETED_COUNT + 1) * 3 / 4;
-                if (Q3PositionOfITEM_COUNT_COMPLETED_CAL == Math.round(Q3PositionOfITEM_COUNT_COMPLETED_CAL)) {
-                    Q3PositionOfITEM_COUNT_COMPLETED = (int) (Q3PositionOfITEM_COUNT_COMPLETED_CAL);
-                    Q3OfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED - 1);
-                } else if (Q3PositionOfITEM_COUNT_COMPLETED_CAL != Math.round(Q3PositionOfITEM_COUNT_COMPLETED_CAL)) {
-                    int Q3PositionOfITEM_COUNT_COMPLETED_1, Q3PositionOfITEM_COUNT_COMPLETED_2;
-                    double Q3OfITEM_COUNT_COMPLETED_1, Q3OfITEM_COUNT_COMPLETED_2;
-                    Q3PositionOfITEM_COUNT_COMPLETED_1 = (int) (Q3PositionOfITEM_COUNT_COMPLETED_CAL);
-                    Q3PositionOfITEM_COUNT_COMPLETED_2 = Q3PositionOfITEM_COUNT_COMPLETED_1 + 1;
-                    Q3OfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED_1 - 1);
-                    Q3OfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED_2 - 1);
-                    Q3OfITEM_COUNT_COMPLETED = (Q3OfITEM_COUNT_COMPLETED_1 + Q3OfITEM_COUNT_COMPLETED_2) / 2;
+                    Q3PositionOfITEM_COUNT_COMPLETED_CAL = (JobFinished_ITEM_COUNT_COMPLETED_COUNT + 1) * 3 / 4;
+                    if (Q3PositionOfITEM_COUNT_COMPLETED_CAL == Math.round(Q3PositionOfITEM_COUNT_COMPLETED_CAL)) {
+                        Q3PositionOfITEM_COUNT_COMPLETED = (int) (Q3PositionOfITEM_COUNT_COMPLETED_CAL);
+                        Q3OfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED - 1);
+                    } else if (Q3PositionOfITEM_COUNT_COMPLETED_CAL != Math.round(Q3PositionOfITEM_COUNT_COMPLETED_CAL)) {
+                        int Q3PositionOfITEM_COUNT_COMPLETED_1, Q3PositionOfITEM_COUNT_COMPLETED_2;
+                        double Q3OfITEM_COUNT_COMPLETED_1, Q3OfITEM_COUNT_COMPLETED_2;
+                        Q3PositionOfITEM_COUNT_COMPLETED_1 = (int) (Q3PositionOfITEM_COUNT_COMPLETED_CAL);
+                        Q3PositionOfITEM_COUNT_COMPLETED_2 = Q3PositionOfITEM_COUNT_COMPLETED_1 + 1;
+                        Q3OfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED_1 - 1);
+                        Q3OfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED.get(Q3PositionOfITEM_COUNT_COMPLETED_2 - 1);
+                        Q3OfITEM_COUNT_COMPLETED = (Q3OfITEM_COUNT_COMPLETED_1 + Q3OfITEM_COUNT_COMPLETED_2) / 2;
+                    }
+                    distance_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED - Q1OfITEM_COUNT_COMPLETED;
+                    lowerTail_of_ITEM_COUNT_COMPLETED = Q1OfITEM_COUNT_COMPLETED - (1.5 * distance_of_ITEM_COUNT_COMPLETED);
+                    if (lowerTail_of_ITEM_COUNT_COMPLETED < 0) {
+                        lowerTail_of_ITEM_COUNT_COMPLETED = 0;
+                    }
+                    upperTail_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED + (1.5 * distance_of_ITEM_COUNT_COMPLETED);
+                    subTractFrom1 = calculateFilteredAverage(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);
                 }
-                distance_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED - Q1OfITEM_COUNT_COMPLETED;
-                lowerTail_of_ITEM_COUNT_COMPLETED = Q1OfITEM_COUNT_COMPLETED - (1.5 * distance_of_ITEM_COUNT_COMPLETED);
-                if (lowerTail_of_ITEM_COUNT_COMPLETED < 0) {
-                    lowerTail_of_ITEM_COUNT_COMPLETED = 0;
-                }
-                upperTail_of_ITEM_COUNT_COMPLETED = Q3OfITEM_COUNT_COMPLETED + (1.5 * distance_of_ITEM_COUNT_COMPLETED);
-                subTractFrom1 = calculateFilteredAverage(PRODUCT_LEVEL_ITEM_CODE, lowerTail_of_ITEM_COUNT, upperTail_of_ITEM_COUNT, lowerTail_of_ITEM_COUNT_COMPLETED, upperTail_of_ITEM_COUNT_COMPLETED);
-
                 if (jobMoniter != null) {
                     printingText = "\nStatictical values of the production of " + PRODUCT_LEVEL_ITEM_CODE + ".\nNumber of item count use Calculate is " + JobFinished_ITEM_COUNT_COMPLETED_COUNT + "\n"
                             + "Lower quartile of items allocated = " + Q1OfITEM_COUNT + "\n"
@@ -225,34 +227,37 @@ public class CalculatePLItemProductionDetails {
                 JobFinished_ITEM_COUNT_COMPLETED_COUNT = JobFinished_ITEM_COUNT_COMPLETED_COUNT + 1;
             }
             avaragePositionOfITEM_COUNT_CAL = JobFinished_ITEM_COUNT_COUNT / 2;
-            if (avaragePositionOfITEM_COUNT_CAL == Math.round(avaragePositionOfITEM_COUNT_CAL)) {
-                avaragePositionOfITEM_COUNT = (int) (avaragePositionOfITEM_COUNT_CAL);
-                avarageOfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avaragePositionOfITEM_COUNT - 1);
-            } else if (avaragePositionOfITEM_COUNT_CAL != Math.round(avaragePositionOfITEM_COUNT_CAL)) {
-                int avarage_Position_OfITEM_COUNT_1, avarage_Position_OfITEM_COUNT_2;
-                double avarageOfITEM_COUNT_1, avarageOfITEM_COUNT_2;
-                avarage_Position_OfITEM_COUNT_1 = (int) (avaragePositionOfITEM_COUNT_CAL);
-                avarage_Position_OfITEM_COUNT_2 = avarage_Position_OfITEM_COUNT_1 + 1;
-                avarageOfITEM_COUNT_1 = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avarage_Position_OfITEM_COUNT_1 - 1);
-                avarageOfITEM_COUNT_2 = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avarage_Position_OfITEM_COUNT_2 - 1);
-                avarageOfITEM_COUNT = (avarageOfITEM_COUNT_1 + avarageOfITEM_COUNT_2) / 2;
+            if (avaragePositionOfITEM_COUNT_CAL >= 2) {
+                if (avaragePositionOfITEM_COUNT_CAL == Math.round(avaragePositionOfITEM_COUNT_CAL)) {
+                    avaragePositionOfITEM_COUNT = (int) (avaragePositionOfITEM_COUNT_CAL);
+                    avarageOfITEM_COUNT = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avaragePositionOfITEM_COUNT - 1);
+                } else if (avaragePositionOfITEM_COUNT_CAL != Math.round(avaragePositionOfITEM_COUNT_CAL)) {
+                    int avarage_Position_OfITEM_COUNT_1, avarage_Position_OfITEM_COUNT_2;
+                    double avarageOfITEM_COUNT_1, avarageOfITEM_COUNT_2;
+                    avarage_Position_OfITEM_COUNT_1 = (int) (avaragePositionOfITEM_COUNT_CAL);
+                    avarage_Position_OfITEM_COUNT_2 = avarage_Position_OfITEM_COUNT_1 + 1;
+                    avarageOfITEM_COUNT_1 = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avarage_Position_OfITEM_COUNT_1 - 1);
+                    avarageOfITEM_COUNT_2 = arrayList_JobFinished_ITEM_COUNT_FILTERED.get(avarage_Position_OfITEM_COUNT_2 - 1);
+                    avarageOfITEM_COUNT = (avarageOfITEM_COUNT_1 + avarageOfITEM_COUNT_2) / 2;
+                }
             }
-
             avaragePositionOfITEM_COUNT_COMPLETED_CAL = JobFinished_ITEM_COUNT_COMPLETED_COUNT / 2;
-            if (avaragePositionOfITEM_COUNT_COMPLETED_CAL == Math.round(avaragePositionOfITEM_COUNT_COMPLETED_CAL)) {
-                avaragePositionOfITEM_COUNT_COMPLETED = (int) (avaragePositionOfITEM_COUNT_COMPLETED_CAL);
-                avarageOfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avaragePositionOfITEM_COUNT_COMPLETED - 1);
-            } else if (avaragePositionOfITEM_COUNT_COMPLETED_CAL != Math.round(avaragePositionOfITEM_COUNT_COMPLETED_CAL)) {
-                int avarage_Position_OfITEM_COUNT_COMPLETED_1, avarage_Position_OfITEM_COUNT_COMPLETED_2;
-                double avarageOfITEM_COUNT_COMPLETED_1, avarageOfITEM_COUNT_COMPLETED_2;
-                avarage_Position_OfITEM_COUNT_COMPLETED_1 = (int) (avaragePositionOfITEM_COUNT_CAL);
-                avarage_Position_OfITEM_COUNT_COMPLETED_2 = avarage_Position_OfITEM_COUNT_COMPLETED_1 + 1;
-                avarageOfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_1 - 1);
-                avarageOfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_2 - 1);
-                avarageOfITEM_COUNT_COMPLETED = (avarageOfITEM_COUNT_COMPLETED_1 + avarageOfITEM_COUNT_COMPLETED_2) / 2;
+            if (avaragePositionOfITEM_COUNT_COMPLETED_CAL >= 2) {
+                if (avaragePositionOfITEM_COUNT_COMPLETED_CAL == Math.round(avaragePositionOfITEM_COUNT_COMPLETED_CAL)) {
+                    avaragePositionOfITEM_COUNT_COMPLETED = (int) (avaragePositionOfITEM_COUNT_COMPLETED_CAL);
+                    avarageOfITEM_COUNT_COMPLETED = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avaragePositionOfITEM_COUNT_COMPLETED - 1);
+                } else if (avaragePositionOfITEM_COUNT_COMPLETED_CAL != Math.round(avaragePositionOfITEM_COUNT_COMPLETED_CAL)) {
+                    int avarage_Position_OfITEM_COUNT_COMPLETED_1, avarage_Position_OfITEM_COUNT_COMPLETED_2;
+                    double avarageOfITEM_COUNT_COMPLETED_1, avarageOfITEM_COUNT_COMPLETED_2;
+                    avarage_Position_OfITEM_COUNT_COMPLETED_1 = (int) (avaragePositionOfITEM_COUNT_CAL);
+                    avarage_Position_OfITEM_COUNT_COMPLETED_2 = avarage_Position_OfITEM_COUNT_COMPLETED_1 + 1;
+                    avarageOfITEM_COUNT_COMPLETED_1 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_1 - 1);
+                    avarageOfITEM_COUNT_COMPLETED_2 = arrayList_JobFinished_ITEM_COUNT_COMPLETED_FILTERED.get(avarage_Position_OfITEM_COUNT_COMPLETED_2 - 1);
+                    avarageOfITEM_COUNT_COMPLETED = (avarageOfITEM_COUNT_COMPLETED_1 + avarageOfITEM_COUNT_COMPLETED_2) / 2;
 
-                avarageDividedValue = roundThreeDecimals(avarageOfITEM_COUNT_COMPLETED / avarageOfITEM_COUNT);
-                subTractFrom1 = roundThreeDecimals(1 - avarageDividedValue);
+                    avarageDividedValue = roundThreeDecimals(avarageOfITEM_COUNT_COMPLETED / avarageOfITEM_COUNT);
+                    subTractFrom1 = roundThreeDecimals(1 - avarageDividedValue);
+                }
             }
             if (jobMoniter != null) {
                 String printingText = "Avarage Of item count = " + avarageOfITEM_COUNT + "\n"
