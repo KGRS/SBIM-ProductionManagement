@@ -5,7 +5,9 @@
 package Transactions;
 
 import MainFiles.IndexPage;
+import static MainFiles.IndexPage.dskPane_RightPanel;
 import static MainFiles.IndexPage.jobAllocation;
+import static MainFiles.IndexPage.materialRequisitionNoteForProItems;
 import db.ConnectSql;
 import functions.AverageTimeOfPLItems;
 import functions.DocNumGenerator;
@@ -115,6 +117,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         rBtnProductLevel1 = new javax.swing.JRadioButton();
         rBtnProductLevel2 = new javax.swing.JRadioButton();
         textFieldJobCode = new javax.swing.JTextField();
+        buttonPrepareMRN = new javax.swing.JButton();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1070, 675));
@@ -472,12 +475,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lbl_description6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(25, 25, 25))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lbl_description4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                    .addComponent(lbl_description6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_description4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(textStartTime, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(spinnerEmpCount, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -554,6 +554,14 @@ public class JobAllocation extends javax.swing.JInternalFrame {
 
         textFieldJobCode.setEditable(false);
         panel1.add(textFieldJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 610, 110, -1));
+
+        buttonPrepareMRN.setText("Prepare MRN");
+        buttonPrepareMRN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPrepareMRNActionPerformed(evt);
+            }
+        });
+        panel1.add(buttonPrepareMRN, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 610, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1017,6 +1025,18 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_buttonGetSuggestTimeActionPerformed
 
+    private void buttonPrepareMRNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPrepareMRNActionPerformed
+        if (materialRequisitionNoteForProItems != null) {
+            if (!materialRequisitionNoteForProItems.isVisible()) {
+                materialRequisitionNoteForProItems.setVisible(true);
+            }
+        } else {
+            materialRequisitionNoteForProItems = new MaterialRequisitionNoteForProItems();
+            dskPane_RightPanel.add(materialRequisitionNoteForProItems);
+            materialRequisitionNoteForProItems.setVisible(true);
+        }
+    }//GEN-LAST:event_buttonPrepareMRNActionPerformed
+
     protected Object[] CheckIfStudentAlreadyAdded(String studntFromBtch) {
         int rowCount = model_TableAllocatedEmployees.getRowCount();
         Object[] data = new Object[2];
@@ -1236,6 +1256,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
     private javax.swing.JButton buttonGetSuggestTime;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JButton buttonPrepareMRN;
     private javax.swing.JButton buttonView;
     private net.sourceforge.jcalendarbutton.JCalendarButton calendarButtonEndDate;
     private net.sourceforge.jcalendarbutton.JCalendarButton calendarButtonStartDate;
