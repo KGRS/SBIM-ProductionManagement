@@ -20,7 +20,7 @@ public class AverageTimeOfPLItems {
 
     public static void calculateAverageTimeOfPLItems(String productLevelItemCode, String productLevel, String departmentCode) {
         String statusOfJob = "Completed";
-        double ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM, TAKEN_TIME;
+        double ITEM_COUNT_COMPLETED_SUM = 0, TAKEN_TIME_SUM = 0, AVERAGE_TAKEN_TIME_TO_ONE_ITEM=0, TAKEN_TIME;
         double ITEM_COUNT_COMPLETED = 0;
         double Q1PositionOf_TAKEN_TIME_CAL, Q3PositionOf_TAKEN_TIME_CAL;
         int Q1PositionOf_TAKEN_TIME, Q3PositionOf_TAKEN_TIME;
@@ -84,11 +84,7 @@ public class AverageTimeOfPLItems {
                 upperTail_of_TAKEN_TIME = Q3Of_TAKEN_TIME + (1.5 * distance_of_TAKEN_TIME);
                 double avarage_Of_TAKEN_TIME = calculateFilteredAverageTimeForPLItems(productLevelItemCode, lowerTail_of_TAKEN_TIME, upperTail_of_TAKEN_TIME);
                 AVERAGE_TAKEN_TIME_TO_ONE_ITEM = avarage_Of_TAKEN_TIME / avarageOfITEM_COUNT_COMPLETED;
-
-//                ITEM_COUNT_COMPLETED_SUM = ITEM_COUNT_COMPLETED_SUM + resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
-//                TAKEN_TIME_SUM = TAKEN_TIME_SUM + resetSelectJobsAtFinished.getInt("TAKEN_TIME");
-//                AVERAGE_TAKEN_TIME_TO_ONE_ITEM = TAKEN_TIME_SUM / ITEM_COUNT_COMPLETED_SUM;
-//                ITEM_COUNT_COMPLETED = resetSelectJobsAtFinished.getInt("ITEM_COUNT_COMPLETED");
+            }
                 String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
                 resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
                 if (resetSelectPLItemsAtAverageTimeTable.next()) {
@@ -104,7 +100,7 @@ public class AverageTimeOfPLItems {
                 stmtUpdateAverageTime.close();
                 resetSelectJobsAtFinished.close();
                 resetSelectPLItemsAtAverageTimeTable.close();
-            }
+
             CalculateSubDepartmentStockAtJobComplete.reduceStockOfSubDepartmentAtJobComplete(productLevel, productLevelItemCode, ITEM_COUNT_COMPLETED, departmentCode);
         } catch (SQLException ex) {
             Logger.getLogger(AverageTimeOfPLItems.class.getName()).log(Level.SEVERE, null, ex);
