@@ -64,7 +64,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         LoadSystemDate();
         LoadTaxesToLables();
         LoadRequestFromToCombo();
-        LoadJobsToCombo();
+        
         model_MRNItemTable = (DefaultTableModel) tableMRNItem.getModel();
         model_IngredientItemTable = (DefaultTableModel) tableIngredientRawItems.getModel();
         model_productLevel1Items = (DefaultTableModel) tableProductLevel1.getModel();
@@ -1699,6 +1699,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
 
     private void cmbTakeFromDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cmbTakeFromDepartmentPopupMenuWillBecomeInvisible
         if (cmbTakeFromDepartment.getSelectedIndex() != 0) {
+            LoadJobsToCombo();
             textRequestedBy.requestFocus();
         }
     }//GEN-LAST:event_cmbTakeFromDepartmentPopupMenuWillBecomeInvisible
