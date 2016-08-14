@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
- /*
+/*
  * MainCategory.java
  *
  * Created on Apr 5, 2013, 2:45:44 PM
@@ -797,35 +797,58 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }//GEN-LAST:event_buttonSaveActionPerformed
 
     private void buttonAddDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddDetailsActionPerformed
+//        statusOfJob = comboBoxFilter.getSelectedItem().toString();
+//        if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
+//            int selectedRowOfTable = tableJobs.getSelectedRow();
+//            int selectedRowCountOfTable = tableJobs.getSelectedRowCount();
+//            if (selectedRowCountOfTable == 1) {
+//                try {
+//                    fixedJobID = tableJobs.getValueAt(selectedRowOfTable, 1).toString();
+//                    String query = "SELECT JOB_FIXED_EXCEPTION_CODE FROM JobFixedExceptions WHERE JOB_FIXED_ID = '" + fixedJobID + "'";
+//                    Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//                    ResultSet resultset = statement.executeQuery(query);
+//                    if (resultset.next()) {
+//                        String finishedTime = textFinishedTime.getText();
+//                        allocatedtime = formattedTextTakenTime.getText();
+//                        itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
+//                        if (!finishedTime.equals("") && itemCompleted >= 0 && !allocatedtime.isEmpty()) {
+//                            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 8);
+//                            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 10);
+//                            tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 6);
+//                        } else if (finishedTime.equals("") || itemCompleted < 0 || allocatedtime.isEmpty()) {
+//                            JOptionPane.showMessageDialog(this, "Row should be selected and the fields cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
+//                        }
+//                    } else if (!resultset.next()) {
+//                        JOptionPane.showMessageDialog(this, "Exception is not exsist to this job process.", "Not exsist", JOptionPane.OK_OPTION);
+//                    }
+//                    statement.close();
+//                    resultset.close();
+//                } catch (SQLException ex) {
+//                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                    JOptionPane.showMessageDialog(this, "please contact for support.");
+//                }
+//            } else if (selectedRowCountOfTable != 1) {
+//                JOptionPane.showMessageDialog(this, "Please select a single row of the table.", "Invalid selection", JOptionPane.OK_OPTION);
+//            }
+//        } else if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
+//            JOptionPane.showMessageDialog(this, "You cannot change the details of the completed or ignored jobs.", "Cannot change", JOptionPane.OK_OPTION);
+//        }
+
         statusOfJob = comboBoxFilter.getSelectedItem().toString();
         if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
             int selectedRowOfTable = tableJobs.getSelectedRow();
             int selectedRowCountOfTable = tableJobs.getSelectedRowCount();
             if (selectedRowCountOfTable == 1) {
-                try {
-                    fixedJobID = tableJobs.getValueAt(selectedRowOfTable, 1).toString();
-                    String query = "SELECT JOB_FIXED_EXCEPTION_CODE FROM JobFixedExceptions WHERE JOB_FIXED_ID = '" + fixedJobID + "'";
-                    Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                    ResultSet resultset = statement.executeQuery(query);
-                    if (resultset.next()) {
-                        String finishedTime = textFinishedTime.getText();
-                        allocatedtime = formattedTextTakenTime.getText();
-                        itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
-                        if (!finishedTime.equals("") && itemCompleted >= 0 && !allocatedtime.isEmpty()) {
-                            tableJobs.setValueAt(finishedTime, selectedRowOfTable, 8);
-                            tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 10);
-                            tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 6);
-                        } else if (finishedTime.equals("") || itemCompleted < 0 || allocatedtime.isEmpty()) {
-                            JOptionPane.showMessageDialog(this, "Row should be selected and the fields cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
-                        }
-                    } else if (!resultset.next()) {
-                        JOptionPane.showMessageDialog(this, "Exception is not exsist to this job process.", "Not exsist", JOptionPane.OK_OPTION);
-                    }
-                    statement.close();
-                    resultset.close();
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    JOptionPane.showMessageDialog(this, "please contact for support.");
+                fixedJobID = tableJobs.getValueAt(selectedRowOfTable, 1).toString();
+                String finishedTime = textFinishedTime.getText();
+                allocatedtime = formattedTextTakenTime.getText();
+                itemCompleted = Integer.parseInt(formattedTextItemCompleted.getText());
+                if (!finishedTime.equals("") && itemCompleted >= 0 && !allocatedtime.isEmpty()) {
+                    tableJobs.setValueAt(finishedTime, selectedRowOfTable, 8);
+                    tableJobs.setValueAt(itemCompleted, selectedRowOfTable, 10);
+                    tableJobs.setValueAt(allocatedtime, selectedRowOfTable, 6);
+                } else if (finishedTime.equals("") || itemCompleted < 0 || allocatedtime.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Row should be selected and the fields cannot be empty.", "Invalid attempt", JOptionPane.OK_OPTION);
                 }
             } else if (selectedRowCountOfTable != 1) {
                 JOptionPane.showMessageDialog(this, "Please select a single row of the table.", "Invalid selection", JOptionPane.OK_OPTION);
