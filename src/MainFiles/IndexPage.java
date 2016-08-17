@@ -76,9 +76,10 @@ public class IndexPage extends javax.swing.JFrame {
     public static MaterialRequisitionNote materialRequisitionNote = null;
     public static MaterialRequisitionNoteForProItems materialRequisitionNoteForProItems = null;
     public static ItemTransferDepartmentWise ITDW = null;
-    
+
     public static JobMoniter jobMoniter = null;
     public static JobDetailedScreen jobDetailedScreen = null;
+    private final String timerRunOrNot = ReadConfig.isTimerRun;
 
     public IndexPage() {
 
@@ -132,11 +133,13 @@ public class IndexPage extends javax.swing.JFrame {
         dskPane_RightPanel.setBackground(new Color(255, 255, 255));
         LabelUser.requestFocus();
 
-        java.util.Timer timerCheckLateJobs = new java.util.Timer();
-        timerCheckLateJobs.schedule(new TimerMethods(), 2000, 2000); //show time in milli seconds
-        
-        calcUserPerformance cu = new calcUserPerformance();
-        cu.mainRunCalc();
+        if (timerRunOrNot.equals("Yes")) {
+            java.util.Timer timerCheckLateJobs = new java.util.Timer();
+            timerCheckLateJobs.schedule(new TimerMethods(), 10000, 10000); //show time in milli seconds
+        }
+
+//        calcUserPerformance cu = new calcUserPerformance();
+//        cu.mainRunCalc();
     }
 
     /**

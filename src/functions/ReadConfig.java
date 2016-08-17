@@ -24,6 +24,7 @@ public class ReadConfig {
     public static String Date;
     public static String checkAvailableQuantity;
     public static String timerRunsAccordingTo;
+    public static String isTimerRun;
 
     static {
         try {
@@ -58,6 +59,7 @@ public class ReadConfig {
             Date = prop.getProperty("DateType");
             checkAvailableQuantity =prop.getProperty("CheckAvailableQuantity");
             timerRunsAccordingTo =prop.getProperty("TimerRunsAccordingTo");
+            isTimerRun = prop.getProperty("IsTimerRun");
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Can't read cofig files");

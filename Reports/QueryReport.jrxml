@@ -5,20 +5,17 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     JobFinished."ITEM_COUNT_COMPLETED" AS JobFinished_ITEM_COUNT_COMPLETED,
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" AS JobFixed_PRODUCT_LEVEL_ITEM_CODE
+     MRNmain."MRNID" AS MRNmain_MRNID,
+     MRNItems."IsPending" AS MRNItems_IsPending,
+     MRNmain."IsPending" AS MRNmain_IsPending
 FROM
-     "dbo"."JobFinished" JobFinished INNER JOIN "dbo"."PLItemDifference" PLItemDifference ON JobFinished."JOB_ID" = PLItemDifference."JOB_ID"
-     INNER JOIN "dbo"."JobFixed" JobFixed ON JobFinished."FIXED_JOB_ID" = JobFixed."JOB_FIXED_ID"
+     "dbo"."MRNItems" MRNItems INNER JOIN "dbo"."MRNmain" MRNmain ON MRNItems."MRNID" = MRNmain."MRNID"
 WHERE
-     JobFixed."PRODUCT_LEVEL_ITEM_CODE" = 'SCON'
- AND PLItemDifference."IS_WASTAGE" = 'No'
- AND JobFinished."IS_COMPLETE_CANCLE" = 'Completed'
-ORDER BY
-     JobFinished."ITEM_COUNT_COMPLETED" ASC]]>
+     (MRNItems."IsPending" = 'Yes')]]>
 	</queryString>
-	<field name="JobFinished_ITEM_COUNT_COMPLETED" class="java.lang.Integer"/>
-	<field name="JobFixed_PRODUCT_LEVEL_ITEM_CODE" class="java.lang.String"/>
+	<field name="MRNmain_MRNID" class="java.lang.String"/>
+	<field name="MRNItems_IsPending" class="java.lang.String"/>
+	<field name="MRNmain_IsPending" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
