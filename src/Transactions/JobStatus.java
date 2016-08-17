@@ -48,8 +48,8 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String menuName = "Job status";
     private final String logUser = IndexPage.LabelUser.getText();
     private final String logDate = IndexPage.LabelDate.getText();
-    private final String departmentCode[] = IndexPage.labelDepartmentCode.getText().split(spliter);
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate, IS_WASTAGE;
+//    private final String departmentCode[] = IndexPage.labelDepartmentCode.getText().split(spliter);
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate, IS_WASTAGE, jobDepartmentCode;
     int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted, plItemDifference;
 
     public JobStatus() {
@@ -998,6 +998,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             + "     JobRunning.\"JOB_ID\" = '" + jobID + "'";
                     resetCheckIfIssue = stmtCheckIfIssue.executeQuery(CheckIfIssue);
                     if (resetCheckIfIssue.next()) {
+                        jobDepartmentCode = resetCheckIfIssue.getString("MRNmain_DepartmentCode");
                         String querySelectJob = "SELECT\n"
                                 + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
                                 + "     JobRunning.\"FIXED_JOB_ID\" AS JobRunning_FIXED_JOB_ID,\n"
@@ -1084,12 +1085,12 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                     + "           ,'" + IS_LATE + "'\n"
                                     + "           ,'" + MRNID + "')";
                             stmtMain.execute(MainInsertQuery);
-                            AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, departmentCode[1]);
+                            AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, jobDepartmentCode);
 
                             if (itemCount != itemCompleted) {
                                 plItemDifference = itemCount - itemCompleted;
                                 if (plItemDifference > 0) {
-                                    int x = JOptionPane.showConfirmDialog(this, "Set this as wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
+                                    int x = JOptionPane.showConfirmDialog(this, "Do you want to save the '" + jobID + "' which occured wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
                                     if (x == JOptionPane.YES_OPTION) {
                                         IS_WASTAGE = "Yes";
                                     } else if (x == JOptionPane.NO_OPTION) {
