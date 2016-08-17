@@ -970,11 +970,185 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             java.sql.Statement stmtDeleteRunningJob = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtDeleteEmpInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtUpdateDetailsInRunningJobs = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet resetSelectJob, resetSelectEmployeesAtJob;
+            java.sql.Statement stmtCheckIfIssue = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet resetSelectJob, resetSelectEmployeesAtJob, resetCheckIfIssue;
             for (int i = 0; i < RowCount; i++) {
                 statusOfJob = tableJobs.getValueAt(i, 11).toString();
                 jobID = tableJobs.getValueAt(i, 0).toString();
-                if (statusOfJob.equals("Completed") || statusOfJob.equals("Ignored")) {
+                if (statusOfJob.equals("Completed")) {
+                    fixedJobID = tableJobs.getValueAt(i, 1).toString();
+                    jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();
+                    jobAllocatedtime = tableJobs.getValueAt(i, 4).toString();
+                    allocatedtime = tableJobs.getValueAt(i, 5).toString();
+                    takenTime = tableJobs.getValueAt(i, 6).toString();
+                    jobFinishedDate = tableJobs.getValueAt(i, 7).toString();
+                    jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
+                    itemCount = Integer.parseInt(tableJobs.getValueAt(i, 9).toString());
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
+
+                    String CheckIfIssue = "SELECT\n"
+                            + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
+                            + "     JobRunning.\"MRNID\" AS JobRunning_MRNID,\n"
+                            + "     IssueMain.\"IssueID\" AS IssueMain_IssueID,\n"
+                            + "     MRNmain.\"DepartmentCode\" AS MRNmain_DepartmentCode\n"
+                            + "FROM\n"
+                            + "     \"dbo\".\"MRNmain\" MRNmain INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON MRNmain.\"MRNID\" = JobRunning.\"MRNID\"\n"
+                            + "     INNER JOIN \"dbo\".\"IssueMain\" IssueMain ON MRNmain.\"MRNID\" = IssueMain.\"MRNID\"\n"
+                            + "WHERE\n"
+                            + "     JobRunning.\"JOB_ID\" = '" + jobID + "'";
+                    resetCheckIfIssue = stmtCheckIfIssue.executeQuery(CheckIfIssue);
+                    if (resetCheckIfIssue.next()) {
+                        String querySelectJob = "SELECT\n"
+                                + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
+                                + "     JobRunning.\"FIXED_JOB_ID\" AS JobRunning_FIXED_JOB_ID,\n"
+                                + "     JobRunning.\"ASSIGNED_BY\" AS JobRunning_ASSIGNED_BY,\n"
+                                + "     JobRunning.\"SUPERVISE_BY\" AS JobRunning_SUPERVISE_BY,\n"
+                                + "     JobRunning.\"PRODUCT_LEVEL\" AS JobRunning_PRODUCT_LEVEL,\n"
+                                + "     JobRunning.\"PRODUCT_LEVEL_ITEM_CODE\" AS JobRunning_PRODUCT_LEVEL_ITEM_CODE,\n"
+                                + "     JobRunning.\"REMARKS\" AS JobRunning_REMARKS,\n"
+                                + "     JobRunning.\"USER_ID\" AS JobRunning_USER_ID,\n"
+                                + "     JobRunning.\"LOG_INSERT_DATE\" AS JobRunning_LOG_INSERT_DATE,\n"
+                                + "     JobRunning.\"LOG_INSERT_TIME\" AS JobRunning_LOG_INSERT_TIME,\n"
+                                + "     JobRunning.\"SHOULD_FINISHED_DATE\" AS JobRunning_SHOULD_FINISHED_DATE,\n"
+                                + "     JobRunning.\"SHOULD_FINISHED_AT\" AS JobRunning_SHOULD_FINISHED_AT,\n"
+                                + "     JobRunning.\"IS_LATE\" AS JobRunning_IS_LATE,\n"
+                                + "     JobRunning.\"MRNID\" AS JobRunning_MRNID\n"
+                                + "FROM\n"
+                                + "     \"dbo\".\"JobRunning\" JobRunning\n"
+                                + "WHERE\n"
+                                + "     JobRunning.\"JOB_ID\" = '" + jobID + "'";
+                        resetSelectJob = stmtSelectJob.executeQuery(querySelectJob);
+
+                        if (resetSelectJob.next()) {
+                            productLevel = resetSelectJob.getString("JobRunning_PRODUCT_LEVEL");
+                            productLevelItemCode = resetSelectJob.getString("JobRunning_PRODUCT_LEVEL_ITEM_CODE");
+                            JobRunning_LOG_INSERT_DATE = resetSelectJob.getString("JobRunning_LOG_INSERT_DATE");
+                            JobRunning_LOG_INSERT_TIME = resetSelectJob.getString("JobRunning_LOG_INSERT_TIME");
+                            JobRunning_ASSIGNED_BY = resetSelectJob.getString("JobRunning_ASSIGNED_BY");
+                            JobRunning_SUPERVISE_BY = resetSelectJob.getString("JobRunning_SUPERVISE_BY");
+                            SHOULD_FINISHED_DATE = resetSelectJob.getString("JobRunning_SHOULD_FINISHED_DATE");
+                            SHOULD_FINISHED_AT = resetSelectJob.getString("JobRunning_SHOULD_FINISHED_AT");
+                            IS_LATE = resetSelectJob.getString("JobRunning_IS_LATE");
+                            MRNID = resetSelectJob.getString("JobRunning_MRNID");
+
+                            String MainInsertQuery = "INSERT INTO [JobFinished]\n"
+                                    + "           ([JOB_ID]\n"
+                                    + "           ,[FIXED_JOB_ID]\n"
+                                    + "           ,[JOB_ALLOCATED_DATE]\n"
+                                    + "           ,[JOB_ALLOCATED_TIME]\n"
+                                    + "           ,[ALLOCATED_TIME]\n"
+                                    + "           ,[TAKEN_TIME]\n"
+                                    + "           ,[JOB_FINISHED_DATE]\n"
+                                    + "           ,[JOB_FINISHED_TIME]\n"
+                                    + "           ,[ASSIGNED_BY]\n"
+                                    + "           ,[SUPERVISE_BY]\n"
+                                    + "           ,[PRODUCT_LEVEL]\n"
+                                    + "           ,[PRODUCT_LEVEL_ITEM_CODE]\n"
+                                    + "           ,[ITEM_COUNT]\n"
+                                    + "           ,[ITEM_COUNT_COMPLETED]\n"
+                                    + "           ,[IS_COMPLETE_CANCLE]\n"
+                                    + "           ,[REMARKS]\n"
+                                    + "           ,[USER_ID]\n"
+                                    + "           ,[LOG_INSERT_DATE_FROM_JOB_RUN]\n"
+                                    + "           ,[LOG_INSERT_TIME_FROM_JOB_RUN]\n"
+                                    + "           ,[LOG_INSERT_DATE]\n"
+                                    + "           ,[LOG_INSERT_TIME]\n"
+                                    + "           ,[SHOULD_FINISHED_DATE]\n"
+                                    + "           ,[SHOULD_FINISHED_AT]\n"
+                                    + "           ,[IS_LATE]\n"
+                                    + "           ,[MRNID])\n"
+                                    + "     VALUES\n"
+                                    + "           ('" + jobID + "'\n"
+                                    + "           ,'" + fixedJobID + "'\n"
+                                    + "           ,'" + jobAllocatedDate + "'\n"
+                                    + "           ,'" + jobAllocatedtime + "'\n"
+                                    + "           ,'" + allocatedtime + "'\n"
+                                    + "           ,'" + takenTime + "'\n"
+                                    + "           ,'" + jobFinishedDate + "'\n"
+                                    + "           ,'" + jobFinishedTime + "'\n"
+                                    + "           ,'" + JobRunning_ASSIGNED_BY + "'\n"
+                                    + "           ,'" + JobRunning_SUPERVISE_BY + "'\n"
+                                    + "           ,'" + productLevel + "'\n"
+                                    + "           ,'" + productLevelItemCode + "'\n"
+                                    + "           ,'" + itemCount + "'\n"
+                                    + "           ,'" + itemCompleted + "'\n"
+                                    + "           ,'" + statusOfJob + "'\n"
+                                    + "           ,'" + remarks + "'\n"
+                                    + "           ,'" + logUser + "'\n"
+                                    + "           ,'" + JobRunning_LOG_INSERT_DATE + "'\n"
+                                    + "           ,'" + JobRunning_LOG_INSERT_TIME + "'\n"
+                                    + "           ,'" + logDate + "'\n"
+                                    + "           ,'" + logTime + "'\n"
+                                    + "           ,'" + SHOULD_FINISHED_DATE + "'\n"
+                                    + "           ,'" + SHOULD_FINISHED_AT + "'\n"
+                                    + "           ,'" + IS_LATE + "'\n"
+                                    + "           ,'" + MRNID + "')";
+                            stmtMain.execute(MainInsertQuery);
+                            AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, departmentCode[1]);
+
+                            if (itemCount != itemCompleted) {
+                                plItemDifference = itemCount - itemCompleted;
+                                if (plItemDifference > 0) {
+                                    int x = JOptionPane.showConfirmDialog(this, "Set this as wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
+                                    if (x == JOptionPane.YES_OPTION) {
+                                        IS_WASTAGE = "Yes";
+                                    } else if (x == JOptionPane.NO_OPTION) {
+                                        IS_WASTAGE = "No";
+                                    }
+                                } else if (plItemDifference < 0) {
+                                    IS_WASTAGE = "No";
+                                }
+                                CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
+                            } else if (itemCount == itemCompleted) {
+                                plItemDifference = 0;
+                                IS_WASTAGE = "No";
+                                CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
+                            }
+                        }
+                        String querySelectEmployeesAtJob = "SELECT\n"
+                                + "     EmployeesAtRunningJob.\"JOB_ID\" AS EmployeesAtRunningJob_JOB_ID,\n"
+                                + "     EmployeesAtRunningJob.\"EMPLOYEE_CODE\" AS EmployeesAtRunningJob_EMPLOYEE_CODE,\n"
+                                + "     EmployeesAtRunningJob.\"TO_EMPLOYEE_REMARKS\" AS EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS,\n"
+                                + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID\n"
+                                + "FROM\n"
+                                + "     \"dbo\".\"EmployeesAtRunningJob\" EmployeesAtRunningJob INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON EmployeesAtRunningJob.\"JOB_ID\" = JobRunning.\"JOB_ID\"\n"
+                                + "WHERE\n"
+                                + "     JobRunning.\"JOB_ID\" = '" + jobID + "'";
+                        resetSelectEmployeesAtJob = stmtSelectEmployeesAtJob.executeQuery(querySelectEmployeesAtJob);
+
+                        while (resetSelectEmployeesAtJob.next()) {
+                            employeeID = resetSelectEmployeesAtJob.getString("EmployeesAtRunningJob_EMPLOYEE_CODE");
+                            emptyFields = resetSelectEmployeesAtJob.getString("EmployeesAtRunningJob_TO_EMPLOYEE_REMARKS");
+                            String empInsertQuery = "INSERT INTO [EmployeesAtFinishedJob]\n"
+                                    + "           ([JOB_ID]\n"
+                                    + "           ,[EMPLOYEE_CODE]\n"
+                                    + "           ,[TO_EMPLOYEE_REMARKS])\n"
+                                    + "     VALUES\n"
+                                    + "           ('" + jobID + "'\n"
+                                    + "           ,'" + employeeID + "'\n"
+                                    + "           ,'" + emptyFields + "')";
+                            stmtEmp.execute(empInsertQuery);
+                        }
+                        String queryDeleteJobs = "DELETE FROM [JobRunning]\n"
+                                + "      WHERE JOB_ID = '" + jobID + "'";
+                        stmtDeleteRunningJob.execute(queryDeleteJobs);
+
+                        String queryDeleteEmployeesAtJobs = "DELETE FROM [EmployeesAtRunningJob]\n"
+                                + "      WHERE JOB_ID = '" + jobID + "'";
+                        stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
+                    }else if (!resetCheckIfIssue.next()) {
+                        JOptionPane.showMessageDialog(this, "Row items are not issued to complete.", "Not issued", JOptionPane.OK_OPTION);
+                    }
+
+                } else if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
+                    takenTime = tableJobs.getValueAt(i, 6).toString();
+                    jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
+                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
+
+                    String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET TAKEN_TIME = '" + takenTime + "'"
+                            + ", SHOULD_FINISHED_AT = '" + jobFinishedTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "', IS_NEW_ONGOING  = '" + statusOfJob + "' WHERE JOB_ID = '" + jobID + "'";
+                    stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
+                } else if (statusOfJob.equals("Ignored")) {
                     fixedJobID = tableJobs.getValueAt(i, 1).toString();
                     jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();
                     jobAllocatedtime = tableJobs.getValueAt(i, 4).toString();
@@ -1070,26 +1244,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 + "           ,'" + IS_LATE + "'\n"
                                 + "           ,'" + MRNID + "')";
                         stmtMain.execute(MainInsertQuery);
-                        AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, departmentCode[1]);
-
-                        if (itemCount != itemCompleted) {
-                            plItemDifference = itemCount - itemCompleted;
-                            if (plItemDifference > 0) {
-                                int x = JOptionPane.showConfirmDialog(this, "Set this as wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
-                                if (x == JOptionPane.YES_OPTION) {
-                                    IS_WASTAGE = "Yes";
-                                } else if (x == JOptionPane.NO_OPTION) {
-                                    IS_WASTAGE = "No";
-                                }
-                            } else if (plItemDifference < 0) {
-                                IS_WASTAGE = "No";
-                            }
-                            CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
-                        } else if (itemCount == itemCompleted) {
-                            plItemDifference = 0;
-                            IS_WASTAGE = "No";
-                            CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
-                        }
                     }
                     String querySelectEmployeesAtJob = "SELECT\n"
                             + "     EmployeesAtRunningJob.\"JOB_ID\" AS EmployeesAtRunningJob_JOB_ID,\n"
@@ -1122,14 +1276,6 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     String queryDeleteEmployeesAtJobs = "DELETE FROM [EmployeesAtRunningJob]\n"
                             + "      WHERE JOB_ID = '" + jobID + "'";
                     stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
-                } else if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
-                    takenTime = tableJobs.getValueAt(i, 6).toString();
-                    jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
-                    itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
-
-                    String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET TAKEN_TIME = '" + takenTime + "'"
-                            + ", SHOULD_FINISHED_AT = '" + jobFinishTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "' WHERE JOB_ID = '" + jobID + "'";
-                    stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
                 }
             }
 

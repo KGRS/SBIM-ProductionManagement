@@ -1233,8 +1233,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             model_TableFixedJobs.setRowCount(0);
             model_TableEmployee.setRowCount(0);
             model_TableAllocatedEmployees.setRowCount(0);
-            calendarButtonStartDate.setText(logDate);
-            calendarButtonEndDate.setText(logDate);
+//            calendarButtonStartDate.setText(logDate);
+//            calendarButtonEndDate.setText(logDate);
             formatedTextAllocatedTime.setText("30");
             comboSuperviousBy.setSelectedIndex(0);
         }
