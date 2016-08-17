@@ -54,6 +54,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
     String jobID, proItemCode, itemCode;
     double itemsPurchasePrice, itemQuantity, itemAmount, itemCalQuantity, productLevel1RawItemsQUANTITY, productLevel1RawItemsCount, suggestItemCalQuantity;
     int itemCount;
+
     /**
      * Creates new form MaterialRequisitionNoteForProItems
      */
@@ -64,7 +65,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         LoadSystemDate();
         LoadTaxesToLables();
         LoadRequestFromToCombo();
-        
+
         model_MRNItemTable = (DefaultTableModel) tableMRNItem.getModel();
         model_IngredientItemTable = (DefaultTableModel) tableIngredientRawItems.getModel();
         model_productLevel1Items = (DefaultTableModel) tableProductLevel1.getModel();
@@ -621,8 +622,28 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
 
     private void LoadJobsToCombo() {
         try {
+            String departmentCode[] = cmbTakeFromDepartment.getSelectedItem().toString().split("--");
             java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select JOB_ID, JOB_ALLOCATED_DATE, PRODUCT_LEVEL_ITEM_CODE, JOB_ALLOCATED_TIME, ITEM_COUNT From JobRunning where (MRNID = 'No' AND PRODUCT_LEVEL = '1') order by JOB_ID DESC";
+            String query = "SELECT\n"
+                    + "     JobRunning.\"JOB_ID\",\n"
+                    + "     JobRunning.\"JOB_ALLOCATED_DATE\",\n"
+                    + "     JobRunning.\"PRODUCT_LEVEL_ITEM_CODE\",\n"
+                    + "     JobRunning.\"JOB_ALLOCATED_TIME\",\n"
+                    + "     JobRunning.\"ITEM_COUNT\",\n"
+                    + "     JobRunning.\"FIXED_JOB_ID\" AS JobRunning_FIXED_JOB_ID,\n"
+                    + "     JobFixed.\"SUB_DEPARTMENT_CODE\" AS JobFixed_SUB_DEPARTMENT_CODE,\n"
+                    + "     SubDepartments.\"DepartmentCode\" AS SubDepartments_DepartmentCode,\n"
+                    + "     JobRunning.\"PRODUCT_LEVEL\" AS JobRunning_PRODUCT_LEVEL,\n"
+                    + "     JobRunning.\"MRNID\" AS JobRunning_MRNID\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
+                    + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
+                    + "WHERE\n"
+                    + "     (JobRunning.\"MRNID\" = 'No'\n"
+                    + " AND JobRunning.\"PRODUCT_LEVEL\" = '1'\n"
+                    + " AND SubDepartments.\"DepartmentCode\" = '"+departmentCode[1]+"')\n"
+                    + "ORDER BY\n"
+                    + "     JobRunning.\"JOB_ID\" DESC";
             ResultSet rset = stmt.executeQuery(query);
 
             comboBoxJobsToRequest.removeAllItems();
@@ -857,7 +878,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
                 //////////////////////////////////////////////////////////////
             }
             stmtItems.close();
-            String UpdateQuery = "update JobRunning set MRNID = '"+ID+"' where JOB_ID = '" + jobID + "'";
+            String UpdateQuery = "update JobRunning set MRNID = '" + ID + "' where JOB_ID = '" + jobID + "'";
             stmtJobRunning.execute(UpdateQuery);
 
             JOptionPane.showMessageDialog(this, "'" + menuName + "' is successfully saved.");
@@ -917,7 +938,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             textNumbersInAvailable.setText("0");
             textNumbersInTransaction.setText("0");
             comboBoxJobsToRequest.setSelectedIndex(0);
-            
+
             rBtnCode.setEnabled(true);
             rBtnCode.setEnabled(true);
             cmbTakeFromDepartment.setEnabled(true);
@@ -1728,7 +1749,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
 
     private void buttonSuggestQuantitiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSuggestQuantitiesActionPerformed
         int x = JOptionPane.showConfirmDialog(this, "Are you sure to load suggested row items quantities which calculated from past data?", "Load suggest?", JOptionPane.YES_NO_OPTION);
-        if(x == JOptionPane.YES_OPTION){
+        if (x == JOptionPane.YES_OPTION) {
             String searchjobCombo[] = comboBoxJobsToRequest.getSelectedItem().toString().split(spliter);
             proItemCode = searchjobCombo[3];
             itemCount = Integer.parseInt(searchjobCombo[4]);
@@ -1737,7 +1758,7 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
         }
     }//GEN-LAST:event_buttonSuggestQuantitiesActionPerformed
 
-    private void calculateSuggestQuantities(double subTractFrom1){
+    private void calculateSuggestQuantities(double subTractFrom1) {
         double ItemPriceAmount, suggestItemCalQuantitySubTractFrom1;
         int secondTableRowCount = tableMRNItem.getRowCount();
         String PurchaseUnitCode;
@@ -1746,18 +1767,18 @@ public class MaterialRequisitionNoteForProItems extends javax.swing.JInternalFra
             itemsPurchasePrice = Double.parseDouble(tableMRNItem.getValueAt(i, 3).toString());
             itemCalQuantity = Double.parseDouble(tableMRNItem.getValueAt(i, 4).toString());
             suggestItemCalQuantitySubTractFrom1 = itemCalQuantity * subTractFrom1;
-            if(PurchaseUnitCode.equals("Numbers")){
+            if (PurchaseUnitCode.equals("Numbers")) {
                 suggestItemCalQuantity = Math.ceil(suggestItemCalQuantitySubTractFrom1 + itemCalQuantity);
-            }else{
+            } else {
                 suggestItemCalQuantity = roundThreeDecimals(suggestItemCalQuantitySubTractFrom1 + itemCalQuantity);
-            }            
+            }
             ItemPriceAmount = roundTwoDecimals(itemsPurchasePrice * suggestItemCalQuantity);
             tableMRNItem.setValueAt(suggestItemCalQuantity, i, 4);
             tableMRNItem.setValueAt(ItemPriceAmount, i, 5);
         }
         CalculateAmountWithOutTax();
     }
-    
+
     private void RefreshForJobSearch() {
         int x = JOptionPane.showConfirmDialog(this, "Chaning the job will refresh the whole window. Are you sure to change?", "Change", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
