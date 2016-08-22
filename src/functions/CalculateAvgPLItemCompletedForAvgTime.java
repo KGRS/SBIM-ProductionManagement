@@ -190,7 +190,7 @@ public class CalculateAvgPLItemCompletedForAvgTime {
                     + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" = '" + PRODUCT_LEVEL_ITEM_CODE + "'\n"
                     + " AND PLItemDifference.\"IS_WASTAGE\" = 'No'\n"
                     + " AND JobFinished.\"IS_COMPLETE_CANCLE\" = 'Completed'"
-                    + " AND (JobFinished.\"ITEM_COUNT\" > " + lowerTail_of_ITEM_COUNT + " AND JobFinished.\"ITEM_COUNT\" < " + upperTail_of_ITEM_COUNT + ")"
+                    + " AND (JobFinished.\"ITEM_COUNT\" >= " + lowerTail_of_ITEM_COUNT + " AND JobFinished.\"ITEM_COUNT\" <= " + upperTail_of_ITEM_COUNT + ")"
                     + " ORDER BY JobFinished.\"ITEM_COUNT\" ASC";
             resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT = stmtSelectAtJobFinishedTableFILTERED_ITEM_COUNT.executeQuery(SelectAtJobFinishedTableFILTERED_ITEM_COUNT);
 
@@ -204,7 +204,7 @@ public class CalculateAvgPLItemCompletedForAvgTime {
                     + "     JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\" = '" + PRODUCT_LEVEL_ITEM_CODE + "'\n"
                     + " AND PLItemDifference.\"IS_WASTAGE\" = 'No'\n"
                     + " AND JobFinished.\"IS_COMPLETE_CANCLE\" = 'Completed'"
-                    + " AND (JobFinished.\"ITEM_COUNT_COMPLETED\" > " + lowerTail_of_ITEM_COUNT_COMPLETED + " AND JobFinished.\"ITEM_COUNT_COMPLETED\" < " + upperTail_of_ITEM_COUNT_COMPLETED + ")"
+                    + " AND (JobFinished.\"ITEM_COUNT_COMPLETED\" >= " + lowerTail_of_ITEM_COUNT_COMPLETED + " AND JobFinished.\"ITEM_COUNT_COMPLETED\" <= " + upperTail_of_ITEM_COUNT_COMPLETED + ")"
                     + " ORDER BY JobFinished.\"ITEM_COUNT_COMPLETED\" ASC";
             resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT_COMPLETED = stmtSelectAtJobFinishedTableFILTERED_ITEM_COUNT_COMPLETED_FILTERED.executeQuery(SelectAtJobFinishedTableFILTERED_ITEM_COUNT_COMPLETED_FILTERED);
             while (resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT.next() && resetSelectAtJobFinishedTableFILTERED_ITEM_COUNT_COMPLETED.next()) {

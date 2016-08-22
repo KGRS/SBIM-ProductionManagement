@@ -85,6 +85,7 @@ public class AverageTimeOfPLItems {
                 double avarage_Of_TAKEN_TIME = calculateFilteredAverageTimeForPLItems(productLevelItemCode, lowerTail_of_TAKEN_TIME, upperTail_of_TAKEN_TIME);
                 if (avarage_Of_TAKEN_TIME > 0 && avarageOfITEM_COUNT_COMPLETED > 0) {
                     AVERAGE_TAKEN_TIME_TO_ONE_ITEM = avarage_Of_TAKEN_TIME / avarageOfITEM_COUNT_COMPLETED;
+                    AVERAGE_TAKEN_TIME_TO_ONE_ITEM = Math.ceil(AVERAGE_TAKEN_TIME_TO_ONE_ITEM);
                 }
             }
             String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
@@ -140,7 +141,7 @@ public class AverageTimeOfPLItems {
             java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectPLItemsAtAverageTimeTable = "SELECT TAKEN_TIME FROM JobFinished "
                     + "WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND "
-                    + "IS_COMPLETE_CANCLE = '" + statusOfJob + "' AND (TAKEN_TIME > " + lowerTail_of_TAKEN_TIME + " AND TAKEN_TIME < " + upperTail_of_TAKEN_TIME + ") ORDER BY TAKEN_TIME";
+                    + "IS_COMPLETE_CANCLE = '" + statusOfJob + "' AND (TAKEN_TIME >= " + lowerTail_of_TAKEN_TIME + " AND TAKEN_TIME <= " + upperTail_of_TAKEN_TIME + ") ORDER BY TAKEN_TIME";
             resetSelectPLItemsAtAverageTimeTable = stmtSelectPLItemsAtAverageTimeTable.executeQuery(selectPLItemsAtAverageTimeTable);
             while (resetSelectPLItemsAtAverageTimeTable.next()) {
                 AVERAGE_TIME = resetSelectPLItemsAtAverageTimeTable.getInt("TAKEN_TIME");
