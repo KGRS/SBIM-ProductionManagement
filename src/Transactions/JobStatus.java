@@ -1088,15 +1088,15 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             AverageTimeOfPLItems.calculateAverageTimeOfPLItems(productLevelItemCode, productLevel, jobDepartmentCode);
 
                             if (itemCount != itemCompleted) {
-                                plItemDifference = itemCount - itemCompleted;
-                                if (plItemDifference > 0) {
+                                plItemDifference = itemCompleted - itemCount;
+                                if (plItemDifference < 0) {
                                     int x = JOptionPane.showConfirmDialog(this, "Do you want to save the '" + jobID + "' which occured wastage row items?", "Wastage?", JOptionPane.YES_NO_OPTION);
                                     if (x == JOptionPane.YES_OPTION) {
                                         IS_WASTAGE = "Yes";
                                     } else if (x == JOptionPane.NO_OPTION) {
                                         IS_WASTAGE = "No";
                                     }
-                                } else if (plItemDifference < 0) {
+                                } else if (plItemDifference > 0) {
                                     IS_WASTAGE = "No";
                                 }
                                 CalculatePLItemDifference.PLItemDifference(JobRunning_SUPERVISE_BY, jobID, plItemDifference, IS_WASTAGE, itemCount, productLevelItemCode, itemCompleted);
