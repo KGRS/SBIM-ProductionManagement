@@ -23,7 +23,7 @@ public class CalculatePLItemDifference {
                     + ", IS_RETURN) VALUES ('" + jobID + "', '" + plItemDifference + "', '" + IS_WASTAGE + "'"
                     + ", '" + IS_RETURN + "')";
             stmtInsertAtPLItemDifferenceTable.execute(insertAtPLItemDifferenceTable);
-            if (IS_WASTAGE.equals("Yes") && plItemDifference > 0) {
+            if (IS_WASTAGE.equals("Yes") && plItemDifference < 0) {
                 SendEMails sendEMails = new SendEMails();
                 sendEMails.notifyAboutWastageOfCompleteJobsToSupervisourByEmail(JobRunning_SUPERVISE_BY, jobID, plItemDifference, itemCount, itemCompleted, PRODUCT_LEVEL_ITEM_CODE);
             }
