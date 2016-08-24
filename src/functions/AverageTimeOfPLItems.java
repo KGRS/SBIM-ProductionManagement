@@ -29,13 +29,15 @@ public class AverageTimeOfPLItems {
         double lowerTail_of_TAKEN_TIME, upperTail_of_TAKEN_TIME;
         double Q1Of_TAKEN_TIME = 0;
         double Q3Of_TAKEN_TIME = 0;
-        ResultSet resetSelectJobsAtFinished, resetSelectPLItemsAtAverageTimeTable;
+        double fixJobItemCount = 0, fixJobAllocateTime = 0;
+        ResultSet resetSelectJobsAtFinished, resetSelectPLItemsAtAverageTimeTable, resetFixedJobData;
         try {
             ArrayList<Double> arrayList_TAKEN_TIME = new ArrayList<Double>();
             java.sql.Statement stmtSelectJobsAtFinished = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtSelectPLItemsAtAverageTimeTable = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtInsertAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             java.sql.Statement stmtUpdateAverageTime = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            java.sql.Statement stmtFixedJobData = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectJobsAtFinished = "SELECT TAKEN_TIME, ITEM_COUNT_COMPLETED FROM JobFinished WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "' AND IS_COMPLETE_CANCLE = '" + statusOfJob + "' ORDER BY TAKEN_TIME";
             resetSelectJobsAtFinished = stmtSelectJobsAtFinished.executeQuery(selectJobsAtFinished);
             double avarageOfITEM_COUNT_COMPLETED = CalculateAvgPLItemCompletedForAvgTime.plItemsProductionCount(productLevelItemCode);
@@ -86,6 +88,14 @@ public class AverageTimeOfPLItems {
                 if (avarage_Of_TAKEN_TIME > 0 && avarageOfITEM_COUNT_COMPLETED > 0) {
                     AVERAGE_TAKEN_TIME_TO_ONE_ITEM = avarage_Of_TAKEN_TIME / avarageOfITEM_COUNT_COMPLETED;
                     AVERAGE_TAKEN_TIME_TO_ONE_ITEM = Math.ceil(AVERAGE_TAKEN_TIME_TO_ONE_ITEM);
+                } else if (avarage_Of_TAKEN_TIME <= 0 || avarageOfITEM_COUNT_COMPLETED <= 0) {
+                    String selectFixedJobData = "SELECT ITEM_COUNT, ALLOCATED_TIME FROM JobFixed WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
+                    resetFixedJobData = stmtFixedJobData.executeQuery(selectFixedJobData);
+                    if(resetFixedJobData.next()){
+                        fixJobItemCount = resetFixedJobData.getDouble("ITEM_COUNT");
+                        fixJobAllocateTime = resetFixedJobData.getDouble("ALLOCATED_TIME");
+                        AVERAGE_TAKEN_TIME_TO_ONE_ITEM = fixJobAllocateTime/fixJobItemCount;
+                    }
                 }
             }
             String selectPLItemsAtAverageTimeTable = "SELECT PRODUCT_LEVEL_ITEM_CODE FROM AverageTimeOfPLItems WHERE PRODUCT_LEVEL_ITEM_CODE = '" + productLevelItemCode + "'";
