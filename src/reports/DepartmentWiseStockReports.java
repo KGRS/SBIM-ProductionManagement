@@ -37,6 +37,7 @@ public class DepartmentWiseStockReports extends javax.swing.JInternalFrame {
     private final String select = "--Select--";
     private final String spliter = "--";
     private final String projectPath = System.getProperty("user.dir");
+    private final String menuName = "Department wise stock reports";
 
     /**
      * Creates new form StockReports
@@ -49,6 +50,7 @@ public class DepartmentWiseStockReports extends javax.swing.JInternalFrame {
         loadSuppliersToCombo();
         loadDepartmetns();
 
+        this.setTitle(menuName);
         ImageIcon DefaultBackGround = new ImageIcon(projectPath + "/pictures/InternalFrameIcons/Reports/StockReports.jpg");
         labelIcon.setIcon(DefaultBackGround);
 
@@ -88,7 +90,6 @@ public class DepartmentWiseStockReports extends javax.swing.JInternalFrame {
         backgroundLabel = new javax.swing.JLabel();
 
         setIconifiable(true);
-        setTitle("Stock Reports");
         setPreferredSize(new java.awt.Dimension(1061, 542));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
