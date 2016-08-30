@@ -89,8 +89,7 @@ public class GetLowerBound {
 
             if (reset.next()) {
 //                String wd = reset.getString(1);
-//                st_Dev = Double.parseDouble(wd);
-                
+//                st_Dev = Double.parseDouble(wd);                
 //                String wd = reset.getString(1);
                 st_Dev = reset.getDouble(1);
             }
@@ -103,15 +102,14 @@ public class GetLowerBound {
 
         //get alfa
         Double alfa = 0.9;
+        System.out.println("Confidence Interval : " + alfa*100 + "%");
 
         // Calculate 90% confidence interval
         double ci = calcMeanCI(n_Count, st_Dev, alfa);
         System.out.println("Mean: " + Mean_TimePerItem);
         double lower =  (Mean_TimePerItem - ci);
         double upper =  (Mean_TimePerItem + ci);
-        System.out.println("Confidence Interval " + alfa + "%: \n"
-                + " lower Limit : " + lower
-                + "\n Upper Limit : " + upper);
+        System.out.println("lower Limit : " + lower);
 
         return lower;
     }

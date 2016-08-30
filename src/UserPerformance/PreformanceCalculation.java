@@ -90,7 +90,7 @@ public class PreformanceCalculation {
         }
         create_dropUserPerTable u_table = new create_dropUserPerTable();
         System.out.println("Completed the Preformance Calculation");
-       // u_table.deleteUserViseItemComplete();
+        u_table.deleteUserViseItemComplete();
     }
 
     
@@ -102,9 +102,7 @@ public class PreformanceCalculation {
         
         lowerLimit =getLB.getLowerB(arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
         System.out.println(lowerLimit);
-        float lower = 0;
-        lower = (float) lowerLimit;
-
+        
         //Get Sum of taken time
         try {
             ResultSet reset;
@@ -176,7 +174,9 @@ public class PreformanceCalculation {
         InsertUserProformancs(GetEmpIds_Count, GetFixedJobIds_Count, mean);
     }
 
-    public void InsertUserProformancs(int GetEmpIds_Count, int GetFixedJobIds_Count, float mean) {
+    public void InsertUserProformancs(int GetEmpIds_Count, int GetFixedJobIds_Count, float smean) {
+        
+        float mean = smean; 
 
         try {
 

@@ -38,7 +38,8 @@ public class create_dropUserPerTable {
                     + "INTO \n"
                     + "	 \"dbo\".\"UsersVsCompleteItems\"\n"
                     + "FROM\n"
-                    + "     \"dbo\".\"EmployeesAtFinishedJob\" EmployeesAtFinishedJob INNER JOIN \"dbo\".\"JobFinished\" JobFinished ON EmployeesAtFinishedJob.\"JOB_ID\" = JobFinished.\"JOB_ID\"";
+                    + "     \"dbo\".\"EmployeesAtFinishedJob\" EmployeesAtFinishedJob INNER JOIN \"dbo\".\"JobFinished\" JobFinished ON EmployeesAtFinishedJob.\"JOB_ID\" = JobFinished.\"JOB_ID\" Where \n" 
+                    +"	 JobFinished.\"ITEM_COUNT_COMPLETED\" != 0";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);
