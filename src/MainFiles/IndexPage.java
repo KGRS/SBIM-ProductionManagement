@@ -42,6 +42,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import reports.DepartmentWiseStockReports;
 import reports.JobDetailedScreen;
 import reports.JobMoniter;
 
@@ -79,6 +80,7 @@ public class IndexPage extends javax.swing.JFrame {
 
     public static JobMoniter jobMoniter = null;
     public static JobDetailedScreen jobDetailedScreen = null;
+    public static DepartmentWiseStockReports departmentWiseStockReports = null;
     private final String timerRunOrNot = ReadConfig.isTimerRun;
 
     public IndexPage() {
@@ -194,6 +196,7 @@ public class IndexPage extends javax.swing.JFrame {
         menuItemJobMonitor = new javax.swing.JMenuItem();
         MenuReports = new javax.swing.JMenu();
         menuItemJDS = new javax.swing.JMenuItem();
+        menuItemDWSR = new javax.swing.JMenuItem();
         TabMenuTools = new javax.swing.JMenu();
         MenuNotifications = new javax.swing.JMenuItem();
         MenuPersonalization = new javax.swing.JMenu();
@@ -541,6 +544,14 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         MenuReports.add(menuItemJDS);
+
+        menuItemDWSR.setText("Department wise stock reports");
+        menuItemDWSR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDWSRActionPerformed(evt);
+            }
+        });
+        MenuReports.add(menuItemDWSR);
 
         TabMenuReports.add(MenuReports);
 
@@ -1426,6 +1437,18 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuTransferDepartmentActionPerformed
 
+    private void menuItemDWSRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDWSRActionPerformed
+        if (departmentWiseStockReports != null) {
+            if (!departmentWiseStockReports.isVisible()) {
+                departmentWiseStockReports.setVisible(true);
+            }
+        } else {
+            departmentWiseStockReports = new DepartmentWiseStockReports();
+            dskPane_RightPanel.add(departmentWiseStockReports);
+            departmentWiseStockReports.setVisible(true);
+        }
+    }//GEN-LAST:event_menuItemDWSRActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1532,6 +1555,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     public static javax.swing.JLabel labelSubDepartmentCode;
     private javax.swing.JMenuItem menuEmployeeTree;
     private javax.swing.JMenuItem menuFixedJobs;
+    private javax.swing.JMenuItem menuItemDWSR;
     public static javax.swing.JMenuItem menuItemJDS;
     private javax.swing.JMenuItem menuItemJobMonitor;
     private javax.swing.JMenuItem menuMeterialRequisitionNote;

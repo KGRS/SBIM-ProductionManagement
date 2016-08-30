@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54fab8e8-f45a-4b34-81db-b52d21fd8734">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="154"/>
 	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataStore"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="ZGJvLiJNYWluQ2F0ZWdvcnkiIEFTICwyOSwyLDFlNTc0YTJjLWI5MDUtNGZiYi04MTk3LTFhNzU1 ZTkwNWRlMTtkYm8uIkl0ZW1zIiAsNTMwLDIsMTIwY2E1OTgtMTY4OC00MDMwLTljOGQtNzljYTY2 YzhiNTY1O2Riby4iQ2xpZW50Q29tcGFueSIgLDIwLDIxNSwxNTEwYmI5ZS01ZTkwLTQ3OWItYTlm Yi01MzAyNDVmNjYyZGM7"/>
 	<parameter name="User" class="java.lang.String">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
-	<parameter name="Logo" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="Code" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      ClientCompany."Companyname" AS ClientCompany_Companyname,
      ClientCompany."Address" AS ClientCompany_Address,
      ClientCompany."Email" AS ClientCompany_Email,
-     Items."ItemCode" AS Items_ItemCode,
      Items."ItemName" AS Items_ItemName,
      Items."PurchasePrice" AS Items_PurchasePrice,
      Items."Quantity" AS Items_Quantity,
      Items."UnitPurchase" AS Items_UnitPurchase,
-     Items."Currency" AS Items_Currency,
      Items."Visibility" AS Items_Visibility,
      ClientCompany."Telephone1" AS ClientCompany_Telephone1,
      ClientCompany."Telephone2" AS ClientCompany_Telephone2,
      ClientCompany."VATRegistrationNo" AS ClientCompany_VATRegistrationNo,
      ClientCompany."Web" AS ClientCompany_Web,
-     ClientCompany."Fax" AS ClientCompany_Fax
+     ClientCompany."Fax" AS ClientCompany_Fax,
+     ItemsAtDepartments."ItemCode" AS ItemsAtDepartments_ItemCode,
+     ItemsAtDepartments."DepartmentCode" AS ItemsAtDepartments_DepartmentCode,
+     ItemsAtDepartments."Quantity" AS ItemsAtDepartments_Quantity,
+     Departments."DepartmentName" AS Departments_DepartmentName
 FROM
-     "dbo"."ClientCompany" ClientCompany,
-     "dbo"."Items" Items
+     "dbo"."Items" Items INNER JOIN "dbo"."ItemsAtDepartments" ItemsAtDepartments ON Items."ItemCode" = ItemsAtDepartments."ItemCode"
+     INNER JOIN "dbo"."Departments" Departments ON ItemsAtDepartments."DepartmentCode" = Departments."DepartmentCode",
+     "dbo"."ClientCompany" ClientCompany
 WHERE
      Items."Visibility" = 'Yes'
-AND  Items."Quantity" > 0
+ AND ItemsAtDepartments."DepartmentCode" = $P{Code}
 ORDER BY
-     Items."ItemCode" ASC]]>
+     Items."ItemName" ASC]]>
 	</queryString>
 	<field name="ClientCompany_Companyname" class="java.lang.String"/>
 	<field name="ClientCompany_Address" class="java.lang.String"/>
 	<field name="ClientCompany_Email" class="java.lang.String"/>
-	<field name="Items_ItemCode" class="java.lang.String"/>
 	<field name="Items_ItemName" class="java.lang.String"/>
 	<field name="Items_PurchasePrice" class="java.lang.Double"/>
 	<field name="Items_Quantity" class="java.lang.Double"/>
 	<field name="Items_UnitPurchase" class="java.lang.String"/>
-	<field name="Items_Currency" class="java.lang.String"/>
 	<field name="Items_Visibility" class="java.lang.String"/>
 	<field name="ClientCompany_Telephone1" class="java.lang.String"/>
 	<field name="ClientCompany_Telephone2" class="java.lang.String"/>
 	<field name="ClientCompany_VATRegistrationNo" class="java.lang.String"/>
 	<field name="ClientCompany_Web" class="java.lang.String"/>
 	<field name="ClientCompany_Fax" class="java.lang.String"/>
+	<field name="ItemsAtDepartments_ItemCode" class="java.lang.String"/>
+	<field name="ItemsAtDepartments_DepartmentCode" class="java.lang.String"/>
+	<field name="ItemsAtDepartments_Quantity" class="java.lang.Double"/>
+	<field name="Departments_DepartmentName" class="java.lang.String"/>
 	<variable name="TotalValue" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{Items_PurchasePrice}*$F{Items_Quantity}]]></variableExpression>
 	</variable>
@@ -121,14 +127,14 @@ ORDER BY
 				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="bc9d1c30-4ace-4090-b7c0-0e285a9988c8" x="95" y="25" width="262" height="39" isPrintWhenDetailOverflows="true" forecolor="#000000"/>
+				<reportElement uuid="bc9d1c30-4ace-4090-b7c0-0e285a9988c8" x="89" y="25" width="284" height="24" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Monospaced" size="12" isBold="true"/>
+					<font fontName="Monospaced" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Item list quantity greater than zero order by code ]]></text>
+				<text><![CDATA[Item list order by code - Department wise]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="1871f2ce-87e2-4110-b066-eba0858ab820" x="95" y="4" width="262" height="21" forecolor="#000000"/>
+				<reportElement uuid="1871f2ce-87e2-4110-b066-eba0858ab820" x="89" y="4" width="275" height="21" forecolor="#000000"/>
 				<textElement>
 					<font fontName="Monospaced" size="14" isBold="true"/>
 				</textElement>
@@ -138,6 +144,27 @@ ORDER BY
 				<reportElement uuid="91221209-5ca0-4438-a540-316d8f958668" x="2" y="4" width="85" height="60"/>
 				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement uuid="becd98a3-cf75-46b4-974f-11042683e6b6" mode="Transparent" x="89" y="50" width="90" height="14" forecolor="#000000" backcolor="#000000"/>
+				<textElement>
+					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Department =]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d0173739-4ad5-41c2-970f-602cdbc59494" x="181" y="50" width="98" height="14"/>
+				<textElement>
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemsAtDepartments_DepartmentCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e6560e7b-533e-47b7-92df-fbdf25bcfccb" x="280" y="50" width="126" height="14"/>
+				<textElement>
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Departments_DepartmentName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -174,7 +201,7 @@ ORDER BY
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7eee8662-e606-47ab-bdd3-27affd48435d" mode="Transparent" x="106" y="3" width="91" height="26" forecolor="#000000" backcolor="#000000"/>
+				<reportElement uuid="7eee8662-e606-47ab-bdd3-27affd48435d" mode="Transparent" x="89" y="3" width="108" height="26" forecolor="#000000" backcolor="#000000"/>
 				<textElement>
 					<font fontName="Monospaced" size="9" isBold="true" isPdfEmbedded="false"/>
 				</textElement>
@@ -193,16 +220,16 @@ ORDER BY
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16">
+		<band height="15">
 			<textField>
-				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="2" y="1" width="93" height="12"/>
+				<reportElement uuid="7aa8af8c-060e-4447-b5b5-6eb8c8712de0" x="2" y="1" width="85" height="12"/>
 				<textElement>
 					<font fontName="Monospaced" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Items_ItemCode}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ItemsAtDepartments_ItemCode}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a4c6264b-beac-4bdc-967b-bf93a5ec17b2" x="106" y="1" width="178" height="12"/>
+				<reportElement uuid="a4c6264b-beac-4bdc-967b-bf93a5ec17b2" x="89" y="1" width="195" height="12"/>
 				<textElement>
 					<font fontName="Monospaced" size="7"/>
 				</textElement>
@@ -227,14 +254,14 @@ ORDER BY
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Items_Quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ItemsAtDepartments_Quantity}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement uuid="04dd1979-c5fe-443b-89e3-ac79b56280d0" x="477" y="1" width="75" height="12"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{Items_PurchasePrice}*$F{Items_Quantity})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{Items_PurchasePrice}*$F{ItemsAtDepartments_Quantity})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="553e0134-379b-4083-a51d-008243bfd6e7" x="0" y="14" width="552" height="1" forecolor="#999999"/>
