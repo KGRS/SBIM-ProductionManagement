@@ -45,6 +45,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import reports.DepartmentWiseStockReports;
 import reports.JobDetailedScreen;
 import reports.JobMoniter;
+import reports.RawItemUsageAndWastageMoniter;
 
 /**
  *
@@ -81,6 +82,7 @@ public class IndexPage extends javax.swing.JFrame {
     public static JobMoniter jobMoniter = null;
     public static JobDetailedScreen jobDetailedScreen = null;
     public static DepartmentWiseStockReports departmentWiseStockReports = null;
+    public static RawItemUsageAndWastageMoniter rawItemUsageAndWastageMoniter = null;
     private final String timerRunOrNot = ReadConfig.isTimerRun;
 
     public IndexPage() {
@@ -197,6 +199,7 @@ public class IndexPage extends javax.swing.JFrame {
         MenuReports = new javax.swing.JMenu();
         menuItemJDS = new javax.swing.JMenuItem();
         menuItemDWSR = new javax.swing.JMenuItem();
+        menuItemUsageAndWastage = new javax.swing.JMenuItem();
         TabMenuTools = new javax.swing.JMenu();
         MenuNotifications = new javax.swing.JMenuItem();
         MenuPersonalization = new javax.swing.JMenu();
@@ -552,6 +555,14 @@ public class IndexPage extends javax.swing.JFrame {
             }
         });
         MenuReports.add(menuItemDWSR);
+
+        menuItemUsageAndWastage.setText("Department wise raw item usage and wastage");
+        menuItemUsageAndWastage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemUsageAndWastageActionPerformed(evt);
+            }
+        });
+        MenuReports.add(menuItemUsageAndWastage);
 
         TabMenuReports.add(MenuReports);
 
@@ -1449,6 +1460,18 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_menuItemDWSRActionPerformed
 
+    private void menuItemUsageAndWastageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemUsageAndWastageActionPerformed
+        if (rawItemUsageAndWastageMoniter != null) {
+            if (!rawItemUsageAndWastageMoniter.isVisible()) {
+                rawItemUsageAndWastageMoniter.setVisible(true);
+            }
+        } else {
+            rawItemUsageAndWastageMoniter = new RawItemUsageAndWastageMoniter();
+            dskPane_RightPanel.add(rawItemUsageAndWastageMoniter);
+            rawItemUsageAndWastageMoniter.setVisible(true);
+        }
+    }//GEN-LAST:event_menuItemUsageAndWastageActionPerformed
+
     public static JMenu getOpenWindowMenuItem() {
         return TabMenuSettings;
     }
@@ -1558,6 +1581,7 @@ private void TabMenuMainFilesActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem menuItemDWSR;
     public static javax.swing.JMenuItem menuItemJDS;
     private javax.swing.JMenuItem menuItemJobMonitor;
+    private javax.swing.JMenuItem menuItemUsageAndWastage;
     private javax.swing.JMenuItem menuMeterialRequisitionNote;
     private javax.swing.JMenuItem menuMeterialRequisitionNoteForProItems;
     private javax.swing.JMenuItem menuOtherCost;
