@@ -9,6 +9,7 @@ import db.ConnectSql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -73,7 +74,7 @@ public class GetLowerBound {
             JOptionPane.showMessageDialog(null, "Please contact for support.");
         }
 
-        //get item Count from db
+        //get item Standed deviation from db
         double st_Dev = 0;
         try {
             ResultSet reset;
@@ -88,9 +89,6 @@ public class GetLowerBound {
             reset = stmt.executeQuery(query);
 
             if (reset.next()) {
-//                String wd = reset.getString(1);
-//                st_Dev = Double.parseDouble(wd);                
-//                String wd = reset.getString(1);
                 st_Dev = reset.getDouble(1);
             }
 
@@ -102,16 +100,27 @@ public class GetLowerBound {
 
         //get alfa
         Double alfa = 0.9;
-        System.out.println("Confidence Interval : " + alfa*100 + "%");
+        System.out.println("Confidence Interval for Fixed Job : " + alfa*100 + "%");
 
         // Calculate 90% confidence interval
+        double S_Mean_TimePerItem = roundTwoDecimals(Mean_TimePerItem);
+
         double ci = calcMeanCI(n_Count, st_Dev, alfa);
-        System.out.println("Mean: " + Mean_TimePerItem);
-        double lower =  (Mean_TimePerItem - ci);
-        double upper =  (Mean_TimePerItem + ci);
-        System.out.println("lower Limit : " + lower);
+        System.out.println("Mean for Fixed Job : " + S_Mean_TimePerItem);
+        double S_lower =  (Mean_TimePerItem - ci);
+        double lower = roundTwoDecimals(S_lower);
+        
+        double S_upper =  (Mean_TimePerItem + ci);
+        double upper = roundTwoDecimals(S_upper);
+        
+        System.out.println("lower Limit for Fixed Job : " + lower);
 
         return lower;
+    }
+    
+    public double roundTwoDecimals(double f) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(f));
     }
 
     private static double calcMeanCI(double n, double StandardDeviation, double alfa) {

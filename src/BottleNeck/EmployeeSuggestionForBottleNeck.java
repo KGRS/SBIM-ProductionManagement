@@ -2,15 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Transactions;
+package BottleNeck;
 
 import MainFiles.IndexPage;
+import Transactions.JobStatus;
 import static Transactions.JobStatus.employeeSuggestionForBottleNeck;
 import db.ConnectSql;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,16 +26,21 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame {
 
+    
+    
     private final DefaultTableModel model_TableAllocatedEmployees;
     private final DefaultTableModel model_TableEmployee;
     private final DefaultTableModel model_TableFixedJobs;
     String employeeID = "", FirstName = "", NameWithIni = "", callName = "";
     String fixedJobID = "", Name = "", productLevel = "", productLevelItemCode = "";
     String T_fixedJobID = "";
+    
+    int Allocate_Items,Complete_Items = 0 ;
 
     public EmployeeSuggestionForBottleNeck() {
         initComponents();
 
+       
         model_TableAllocatedEmployees = (DefaultTableModel) tableAllocatedEmployee.getModel();
         model_TableEmployee = (DefaultTableModel) tableEmployee.getModel();
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
@@ -41,7 +52,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         loadAlocateEmpTable(id);
         loadSuggestEmployeesToTable(id);
         loadDate();
-
     }
 
     /**
@@ -80,12 +90,21 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField10 = new javax.swing.JTextField();
         lbl_description11 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        lbl_description12 = new javax.swing.JLabel();
+        jTextField11 = new javax.swing.JTextField();
+        lbl_description13 = new javax.swing.JLabel();
+        jTextField12 = new javax.swing.JTextField();
         textFieldJobCode = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tableEmployee1 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1070, 675));
@@ -176,8 +195,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         });
         tableEmployee.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tableEmployee);
+        if (tableEmployee.getColumnModel().getColumnCount() > 0) {
+            tableEmployee.getColumnModel().getColumn(3).setHeaderValue("Calling name");
+        }
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 540, 210));
+        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 560, 150));
 
         ButtonAddSelected.setText("-->>");
         ButtonAddSelected.addActionListener(new java.awt.event.ActionListener() {
@@ -185,7 +207,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 ButtonAddSelectedActionPerformed(evt);
             }
         });
-        panel1.add(ButtonAddSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 90, -1));
+        panel1.add(ButtonAddSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 350, 70, 60));
 
         tableAllocatedEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -231,7 +253,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 ButtonRemoveSelectedActionPerformed(evt);
             }
         });
-        panel1.add(ButtonRemoveSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 400, 90, -1));
+        panel1.add(ButtonRemoveSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 420, 70, 60));
 
         lbl_subAccount2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount2.setText("Number of employees allocated to the job");
@@ -296,7 +318,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField7.setEnabled(false);
 
         lbl_description10.setForeground(new java.awt.Color(102, 102, 102));
-        lbl_description10.setText("Item count Complete");
+        lbl_description10.setText("Item count Completed");
 
         jTextField10.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField10.setEnabled(false);
@@ -307,6 +329,20 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField6.setEnabled(false);
 
+        jLabel6.setText("l6");
+
+        lbl_description12.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description12.setText("Item count Allocated");
+
+        jTextField11.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField11.setEnabled(false);
+
+        lbl_description13.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_description13.setText("Item count To Be Complete");
+
+        jTextField12.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField12.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -315,31 +351,37 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_description11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField10)))
-                        .addContainerGap(46, Short.MAX_VALUE))
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lbl_description12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_description13))
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                    .addComponent(jTextField12)
+                                    .addComponent(jTextField10))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,32 +390,46 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel6)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                    .addComponent(lbl_description12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(102, 102, 102))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_description13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(142, 142, 142))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 330, 220));
+        panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 450, 220));
 
         textFieldJobCode.setEditable(false);
-        panel1.add(textFieldJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 530, 110, -1));
+        panel1.add(textFieldJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 530, 110, -1));
 
-        jLabel1.setText("Employee Suggestion ");
-        panel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 120, -1));
+        jLabel1.setText("Employee Suggestion");
+        panel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 110, -1));
 
         jLabel2.setText("Fixed Job / Process code :");
         panel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
@@ -388,6 +444,43 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField2.setEnabled(false);
         panel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 160, -1));
+
+        tableEmployee1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Employee code", "First name", "Last name", "Calling name", "Department", "Sub Department", "Average Time"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableEmployee1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tableEmployee1);
+        if (tableEmployee1.getColumnModel().getColumnCount() > 0) {
+            tableEmployee1.getColumnModel().getColumn(3).setHeaderValue("Calling name");
+        }
+
+        panel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 560, 130));
+
+        jLabel4.setText("Employees from Other Jobs");
+        panel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 250, -1));
+
+        jLabel5.setText("Currently Idial Employees");
+        panel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 250, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -444,10 +537,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
                 jTextField3.setText(reset.getString("JobRunning_SUPERVISE_BY"));
                 jTextField10.setText(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"));
+                Complete_Items = Complete_Items + (reset.getInt("JobRunning_ITEM_COUNT_COMPLETED"));
+                
                 jTextField5.setText(reset.getString("JobRunning_LOG_INSERT_DATE"));
                 jTextField7.setText(reset.getString("JobRunning_SHOULD_FINISHED_DATE"));
-                
-                
+
                 jTextField1.setText(reset.getString("JobRunning_FIXED_JOB_ID"));
                 jTextField2.setText(reset.getString("JobFixed_JOB_FIXED_NAME"));
 
@@ -461,6 +555,41 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
 
+        try {
+            ResultSet reset;
+            Statement stmt;
+            String query;
+
+            query = "SELECT ITEM_COUNT\n"
+                    + "  FROM [DataStoreFilled].[dbo].[JobFixed]\n"
+                    + "  where JOB_FIXED_ID = '"+job_id+"'";
+            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            reset = stmt.executeQuery(query);
+
+            while (reset.next()) {
+                jTextField11.setText(reset.getString("ITEM_COUNT"));
+                Allocate_Items = reset.getInt("ITEM_COUNT");
+            }
+            reset.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please contact for support.");
+        }
+        
+        int To_Be_complete = Allocate_Items - Complete_Items;
+        jTextField12.setText(Integer.toString(To_Be_complete));
+        
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date));
+////        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime1= LocalDateTime.parse("2016-09-13 14:00:00", formatter);
+        LocalDateTime dateTime2= LocalDateTime.parse("2016-09-13 16:00:00", formatter);
+        long diffInMinutes = java.time.Duration.between(dateTime1, dateTime2).toMinutes();
+        System.out.println(diffInMinutes);
+        
     }
 
     private void loadAlocateEmpTable(String T_fixedJobID) {
@@ -505,11 +634,15 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     }
     private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
+            cr.deleteIdialEmpTable();
             exit();
         }
     }//GEN-LAST:event_btnExitKeyPressed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
+        cr.deleteIdialEmpTable();
         exit();
     }//GEN-LAST:event_btnExitActionPerformed
 
@@ -529,34 +662,37 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             int rowCount = 0;
 
             query = "SELECT\n"
-                    + "     EmployeePerformance.\"EMPLOYEE_CODE\" AS EmployeePerformance_EMPLOYEE_CODE,\n"
+                    + "     IDIAL_EMP.\"Employees_EMPLOYEE_CODE\" AS IDIAL_EMP_Employees_EMPLOYEE_CODE,\n"
                     + "     EmployeePerformance.\"FIXED_JOB_ID\" AS EmployeePerformance_FIXED_JOB_ID,\n"
                     + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" AS EmployeePerformance_AVERAGE_TIME_TO_COMPLETE,\n"
                     + "     Employees.\"FIRST_NAME\" AS Employees_FIRST_NAME,\n"
                     + "     Employees.\"LAST_NAME\" AS Employees_LAST_NAME,\n"
                     + "     Employees.\"CALL_NAME\" AS Employees_CALL_NAME,\n"
-                    + "     Departments_A.\"DepartmentName\" AS Departments_A_DepartmentName,\n"
+                    + "     Departments.\"DepartmentName\" AS Departments_DepartmentName,\n"
                     + "     SubDepartments.\"SUB_DEPARTMENT_NAME\" AS SubDepartments_SUB_DEPARTMENT_NAME\n"
                     + "FROM\n"
-                    + "     \"dbo\".\"Employees\" Employees INNER JOIN \"dbo\".\"EmployeePerformance\" EmployeePerformance ON Employees.\"EMPLOYEE_CODE\" = EmployeePerformance.\"EMPLOYEE_CODE\"\n"
-                    + "     INNER JOIN \"dbo\".\"Departments\" Departments_A ON Employees.\"DepartmentCode\" = Departments_A.\"DepartmentCode\"\n"
+                    + "     \"dbo\".\"Employees\" Employees INNER JOIN \"dbo\".\"IDIAL_EMP\" IDIAL_EMP ON Employees.\"EMPLOYEE_CODE\" = IDIAL_EMP.\"Employees_EMPLOYEE_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"EmployeePerformance\" EmployeePerformance ON IDIAL_EMP.\"Employees_EMPLOYEE_CODE\" = EmployeePerformance.\"EMPLOYEE_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON Employees.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
+                    + "     INNER JOIN \"dbo\".\"Departments\" Departments ON SubDepartments.\"DepartmentCode\" = Departments.\"DepartmentCode\"\n"
                     + "WHERE\n"
-                    + "     FIXED_JOB_ID = '"+Fjob_id+"'\n"
-                    + "     and AVERAGE_TIME_TO_COMPLETE! = 0";
+                    + "     EmployeePerformance.\"FIXED_JOB_ID\" = '" + Fjob_id + "'\n"
+                    + "ORDER BY\n"
+                    + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" DESC";
+
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
                 model_TableEmployee.addRow(new Object[model_TableEmployee.getColumnCount()]);
-                tableEmployee.setValueAt(reset.getString("EmployeePerformance_EMPLOYEE_CODE"), rowCount, 0);
+                tableEmployee.setValueAt(reset.getString("IDIAL_EMP_Employees_EMPLOYEE_CODE"), rowCount, 0);
                 tableEmployee.setValueAt(reset.getString("Employees_FIRST_NAME"), rowCount, 1);
                 tableEmployee.setValueAt(reset.getString("Employees_LAST_NAME"), rowCount, 2);
                 tableEmployee.setValueAt(reset.getString("Employees_CALL_NAME"), rowCount, 3);
-                tableEmployee.setValueAt(reset.getString("Departments_A_DepartmentName"), rowCount, 4);
+                tableEmployee.setValueAt(reset.getString("Departments_DepartmentName"), rowCount, 4);
                 tableEmployee.setValueAt(reset.getString("SubDepartments_SUB_DEPARTMENT_NAME"), rowCount, 5);
                 tableEmployee.setValueAt(reset.getString("EmployeePerformance_AVERAGE_TIME_TO_COMPLETE"), rowCount, 6);
-                
+
                 rowCount++;
             }
             reset.close();
@@ -639,7 +775,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
-        int allocateTime, employeeCount;
+        // int allocateTime, employeeCount;
         fixedJobID = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 0).toString();
         Name = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 1).toString();
         productLevel = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 2).toString();
@@ -697,12 +833,18 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
@@ -710,6 +852,8 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JTextField jTextField7;
     private javax.swing.JLabel lbl_description10;
     private javax.swing.JLabel lbl_description11;
+    private javax.swing.JLabel lbl_description12;
+    private javax.swing.JLabel lbl_description13;
     private javax.swing.JLabel lbl_description3;
     private javax.swing.JLabel lbl_description8;
     private javax.swing.JLabel lbl_description9;
@@ -717,6 +861,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JPanel panel1;
     private javax.swing.JTable tableAllocatedEmployee;
     private javax.swing.JTable tableEmployee;
+    private javax.swing.JTable tableEmployee1;
     private javax.swing.JTable tableFixedJobs;
     private javax.swing.JTextField textFieldJobCode;
     private javax.swing.JTextField textNumberOfEmpAllocatedToJob;

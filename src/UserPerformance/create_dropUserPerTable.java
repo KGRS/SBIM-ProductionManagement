@@ -19,9 +19,7 @@ import javax.swing.JOptionPane;
  * @author LuckyLak
  */
 public class create_dropUserPerTable {
-
-    ArrayList<String> arrayList_GetJobIds = new ArrayList<String>();
-    
+ 
     public void createUserViseItemComplete() {
 
         try {

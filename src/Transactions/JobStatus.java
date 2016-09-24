@@ -10,6 +10,8 @@
  */
 package Transactions;
 
+import BottleNeck.Create_DropIdialEmployeeTable;
+import BottleNeck.EmployeeSuggestionForBottleNeck;
 import MainFiles.IndexPage;
 import static MainFiles.IndexPage.dskPane_RightPanel;
 import static MainFiles.IndexPage.jobStatus;
@@ -937,6 +939,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 employeeSuggestionForBottleNeck.setVisible(true);
             }
         } else {
+        
+        System.out.println("Employee Suggestion for Fixed Job Id :"+fixedJobID);
+        Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
+        cr.createIdialEmpTable();
+            
             employeeSuggestionForBottleNeck = new EmployeeSuggestionForBottleNeck();
             dskPane_RightPanel.add(employeeSuggestionForBottleNeck);
             employeeSuggestionForBottleNeck.setVisible(true);

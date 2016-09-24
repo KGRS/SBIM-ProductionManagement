@@ -9,6 +9,7 @@ import db.ConnectSql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,15 +24,13 @@ public class PreformanceCalculation {
     ArrayList<String> arrayList_GetFixedJobIds = new ArrayList<String>();
 
     double lowerLimit = 0;
-    
     GetLowerBound getLB = new GetLowerBound();
-    
-            
+
     public void GetCalcPreformance() {
         GetEmpIds();
-       // lowerLimit =getLB.getLowerB("FJC1");
     }
 
+    //Get the No of Employees in the System and insert to the array
     public void GetEmpIds() {
         try {
             String S_GetEmpIds;
@@ -56,6 +55,7 @@ public class PreformanceCalculation {
         GetFixedJobIds();
     }
 
+    //Get the no of fixed jobs in the system and insert to the array
     public void GetFixedJobIds() {
         try {
             String S_GetFixedJobIds;
@@ -81,6 +81,7 @@ public class PreformanceCalculation {
 
     }
 
+    //Calculate all employees vs all fixed jobs preformance
     public void calcPreformance() {
 
         for (int GetEmpIds_Count = 0; GetEmpIds_Count < arrayList_GetEmpIds.size(); GetEmpIds_Count++) {
@@ -93,16 +94,19 @@ public class PreformanceCalculation {
         u_table.deleteUserViseItemComplete();
     }
 
-    
-        public void CalcPreform(int GetEmpIds_Count, int GetFixedJobIds_Count) {
+    //Calculate one employee vs fixed job user preformance
+    public void CalcPreform(int GetEmpIds_Count, int GetFixedJobIds_Count) {
         double T_sum = 0;
         double I_sum = 0;
         String T_sum_S = null;
         String I_sum_S = null;
-        
-        lowerLimit =getLB.getLowerB(arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
-        System.out.println(lowerLimit);
-        
+
+        System.out.println("EmpID : " + arrayList_GetEmpIds.get(GetEmpIds_Count) + ", FixJobID : " +"\n"
+                + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
+
+        //Get lower limit value for the remove unnesseccery user perforance from the calulateion
+        lowerLimit = getLB.getLowerB(arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
+
         //Get Sum of taken time
         try {
             ResultSet reset;
@@ -112,7 +116,7 @@ public class PreformanceCalculation {
             query = "SELECT SUM(JobFinished_TAKEN_TIME)\n"
                     + "  FROM dbo.UsersVsCompleteItems\n"
                     + "  WHERE EmployeesAtFinishedJob_EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' \n"
-                    + "and JobFinished_FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "' and TIME_PER_ONE_ITEM > '"+ lowerLimit +"'";
+                    + "and JobFinished_FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "' and TIME_PER_ONE_ITEM > '" + lowerLimit + "'";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -141,7 +145,7 @@ public class PreformanceCalculation {
 
             query = "SELECT SUM(JobFinished_ITEM_COUNT_COMPLETED)\n"
                     + "  FROM dbo.UsersVsCompleteItems\n"
-                    + "  WHERE EmployeesAtFinishedJob_EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' and JobFinished_FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "' and TIME_PER_ONE_ITEM > '"+ lowerLimit +"'";
+                    + "  WHERE EmployeesAtFinishedJob_EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' and JobFinished_FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "' and TIME_PER_ONE_ITEM > '" + lowerLimit + "'";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -164,32 +168,53 @@ public class PreformanceCalculation {
 
         double d_mean;
         if (T_sum != 0 || I_sum != 0) {
+            //Calculate mean
             d_mean = T_sum / I_sum;
         } else {
-            d_mean = 0;
+            //Set lower limit value as default value
+            d_mean = lowerLimit;
         }
 
-        // String mean = Double.toString(d_mean);
         float mean = (float) d_mean;
         InsertUserProformancs(GetEmpIds_Count, GetFixedJobIds_Count, mean);
     }
 
+    public float roundTwoDecimals(float f) {
+        // Round value to two decimal points
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Float.valueOf(twoDForm.format(f));
+    }
+
     public void InsertUserProformancs(int GetEmpIds_Count, int GetFixedJobIds_Count, float smean) {
-        
-        float mean = smean; 
+        // Insert values to Employee preformance db
+
+        float Calculate_Preformance_Value = roundTwoDecimals(smean);
 
         try {
-
+            //check values are exsist
             java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select EMPLOYEE_CODE From EmployeePerformance WHERE EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' and FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "'";
+            String query = "select EMPLOYEE_CODE,AVERAGE_TIME_TO_COMPLETE From EmployeePerformance WHERE EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' and FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "'";
             ResultSet rset = stmt.executeQuery(query);
 
+            //update values if old value exsist
             if (rset.next()) {
+                double Old_Performance_Value = rset.getDouble("AVERAGE_TIME_TO_COMPLETE");
+                System.out.println("Old Preformance Value : " + Old_Performance_Value);
+
+                //Get old preformance value and recalculte new value
+                //Give 75% weightage to old value and 25% weightage to current calculate value
+                //And calculate final preformance value
+                double f_mean = ((Old_Performance_Value * 0.75) + (Calculate_Preformance_Value * 0.25));
+                float Final_Performance_Value = roundTwoDecimals((float) f_mean);
+
                 String UpdateQuery = "UPDATE [dbo].[EmployeePerformance]\n"
-                        + "   SET [AVERAGE_TIME_TO_COMPLETE] = '" + mean + "'\n"
+                        + "   SET [AVERAGE_TIME_TO_COMPLETE] = '" + Final_Performance_Value + "'\n"
                         + " WHERE EMPLOYEE_CODE = '" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "' and FIXED_JOB_ID = '" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "'";
                 stmt.execute(UpdateQuery);
 
+                System.out.println("New Preformance Value : " + Final_Performance_Value + " Updated Successfuly \n");
+
+                //insert new values
             } else if (!rset.next()) {
                 String UpdateQuery = "INSERT INTO [dbo].[EmployeePerformance]\n"
                         + "           ([EMPLOYEE_CODE]\n"
@@ -198,11 +223,11 @@ public class PreformanceCalculation {
                         + "     VALUES\n"
                         + "           ('" + arrayList_GetEmpIds.get(GetEmpIds_Count) + "'\n"
                         + "           ,'" + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count) + "'\n"
-                        + "           ,'" + mean + "')";
+                        + "           ,'" + Calculate_Preformance_Value + "')";
                 stmt.execute(UpdateQuery);
+                System.out.println("Preformance Value : " + Calculate_Preformance_Value + " Inserted Successfuly \n");
 
             }
-            System.out.println("EmpID : "+arrayList_GetEmpIds.get(GetEmpIds_Count)+", FixJobID : "+arrayList_GetFixedJobIds.get(GetFixedJobIds_Count)+" Preformance Updated Successfuly");
             rset.close();
 
         } catch (SQLException ex) {
