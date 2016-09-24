@@ -140,8 +140,8 @@ public class IndexPage extends javax.swing.JFrame {
             timerCheckLateJobs.schedule(new TimerMethods(), 10000, 10000); //show time in milli seconds
         }
 
-//        calcUserPerformance cu = new calcUserPerformance();
-//        cu.mainRunCalc();
+        calcUserPerformance cu = new calcUserPerformance();
+        cu.mainRunCalc();
     }
 
     /**
