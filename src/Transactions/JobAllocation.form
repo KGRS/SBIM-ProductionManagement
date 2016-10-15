@@ -697,9 +697,6 @@
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="textEndTime">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbl_description9">
               <Properties>

@@ -412,8 +412,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
             }
         });
 
-        textEndTime.setEditable(false);
-
         lbl_description9.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description9.setText("Start date *");
 
@@ -1059,8 +1057,9 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         String subDepartment = comboSubDepartment.getSelectedItem().toString();
         String department = comboDepartment.getSelectedItem().toString();
         superviseBy = comboSuperviousBy.getSelectedItem().toString();
+        jobFinishedTime = textEndTime.getText();
 
-        if (department.equals(select) || subDepartment.equals(select) || superviseBy.equals(select)) {
+        if (department.equals(select) || subDepartment.equals(select) || superviseBy.equals(select) || jobFinishedTime.equals("")) {
             JOptionPane.showMessageDialog(this, "Sub department or supervisor is not selected.", "Not selected", JOptionPane.OK_OPTION);
         } else if (RowCount <= 0) {
             JOptionPane.showMessageDialog(this, "Employees are not available at table.", "No employees", JOptionPane.OK_OPTION);
@@ -1118,7 +1117,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         jobAllocatedDate = calendarButtonStartDate.getText();
         allocatedtime = formatedTextAllocatedTime.getText();
         jobFinishedDate = calendarButtonEndDate.getText();
-        jobFinishedTime = calendarButtonStartDate.getText();
+        jobFinishedTime = textEndTime.getText();
         String superviseByCode[] = comboSuperviousBy.getSelectedItem().toString().split(spliter);
 
         try {
@@ -1172,7 +1171,8 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + Date + "'\n"
                     + "           ,'" + Time + "'\n"
                     + "           ,'" + jobFinishedDate + "'\n"
-                    + "           ,'" + emptyField + "'\n"
+//                    + "           ,'" + emptyField + "'\n"
+                    + "           ,'" + jobFinishedTime + "'\n"
                     + "           ,'" + isLate + "')";
             stmtMain.execute(MainInsertQuery);
 
