@@ -27,12 +27,14 @@ public class Create_DropIdialEmployeeTable {
             String query;
 
             query = "SELECT\n"
-                    + "     Employees.\"EMPLOYEE_CODE\" AS Employees_EMPLOYEE_CODE\n"
+                    + "     Employees.\"EMPLOYEE_CODE\" AS Employees_EMPLOYEE_CODE, count(*) AS RoW \n"
                     + "INTO\n"
                     + "	\"dbo\".\"IDIAL_EMP\"\n"
                     + "FROM\n"
                     + "     \"dbo\".\"JobRunning\" JobRunning INNER JOIN \"dbo\".\"EmployeesAtRunningJob\" EmployeesAtRunningJob ON JobRunning.\"JOB_ID\" = EmployeesAtRunningJob.\"JOB_ID\"\n"
-                    + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeesAtRunningJob.\"EMPLOYEE_CODE\" != Employees.\"EMPLOYEE_CODE\"";
+                    + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeesAtRunningJob.\"EMPLOYEE_CODE\" != Employees.\"EMPLOYEE_CODE\"\n"
+                    + "GROUP BY Employees.\"EMPLOYEE_CODE\"\n" 
+                    + "HAVING count(*) > 1";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);
@@ -49,7 +51,8 @@ public class Create_DropIdialEmployeeTable {
             Statement stmt;
             String query;
 
-            query = "DROP TABLE [dbo].[IDIAL_EMP]";
+            query = "DROP TABLE\n"
+                    + " [dbo].[IDIAL_EMP]";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);

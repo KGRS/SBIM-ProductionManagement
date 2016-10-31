@@ -44,7 +44,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         model_TableAllocatedEmployees = (DefaultTableModel) tableAllocatedEmployee.getModel();
         model_TableEmployee = (DefaultTableModel) tableEmployee.getModel();
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
-
         panel1.setToolTipText("Press right mouse click to refresh.");
 
         String id = JobStatus.labelFlobID.getText();
@@ -379,6 +378,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
         jTextField13.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField13.setEnabled(false);
+        jTextField13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField13ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -489,11 +493,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
         jTextField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField1.setEnabled(false);
-        panel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 160, -1));
+        panel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 360, -1));
 
         jTextField2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField2.setEnabled(false);
-        panel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 160, -1));
+        panel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 360, -1));
 
         tableEmployee1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -590,6 +594,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 jTextField3.setText(reset.getString("JobRunning_SUPERVISE_BY"));
                 jTextField10.setText(reset.getString("JobRunning_ITEM_COUNT_COMPLETED"));
                 Complete_Items = Complete_Items + (reset.getInt("JobRunning_ITEM_COUNT_COMPLETED"));
+                Allocate_Items = Allocate_Items + (reset.getInt("JobRunning_ITEM_COUNT"));
 
                 jTextField5.setText(reset.getString("JobRunning_LOG_INSERT_DATE"));
                 jTextField7.setText(reset.getString("JobRunning_SHOULD_FINISHED_DATE"));
@@ -605,27 +610,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
-
-        try {
-            ResultSet reset;
-            Statement stmt;
-            String query;
-
-            query = "SELECT ITEM_COUNT\n"
-                    + "  FROM [DataStoreFilled].[dbo].[JobFixed]\n"
-                    + "  where JOB_FIXED_ID = '" + job_id + "'";
-            stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            reset = stmt.executeQuery(query);
-
-            while (reset.next()) {
-                jTextField11.setText(reset.getString("ITEM_COUNT"));
-                Allocate_Items = reset.getInt("ITEM_COUNT");
-            }
-            reset.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(this, "Please contact for support.");
-        }
+        jTextField11.setText(""+Allocate_Items);
 
         int To_Be_complete = Allocate_Items - Complete_Items;
         jTextField12.setText(Integer.toString(To_Be_complete));
@@ -673,14 +658,13 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     + "     JobRunning.FIXED_JOB_ID = '" + T_fixedJobID + "'";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
-
+            
             while (reset.next()) {
                 model_TableAllocatedEmployees.addRow(new Object[model_TableAllocatedEmployees.getColumnCount()]);
                 tableAllocatedEmployee.setValueAt(reset.getString("Employees_EMPLOYEE_CODE"), rowCount, 0);
                 tableAllocatedEmployee.setValueAt(reset.getString("Employees_FIRST_NAME"), rowCount, 1);
                 tableAllocatedEmployee.setValueAt(reset.getString("Employees_LAST_NAME"), rowCount, 2);
                 tableAllocatedEmployee.setValueAt(reset.getString("Employees_CALL_NAME"), rowCount, 3);
-
                 rowCount++;
             }
             reset.close();
@@ -868,6 +852,10 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private void textNumberOfEmpAllocatedToJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberOfEmpAllocatedToJobActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textNumberOfEmpAllocatedToJobActionPerformed
+
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField13ActionPerformed
 
     protected Object[] CheckIfStudentAlreadyAdded(String studntFromBtch) {
         int rowCount = model_TableAllocatedEmployees.getRowCount();
