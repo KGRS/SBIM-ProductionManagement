@@ -54,7 +54,7 @@ public class TimerMethods extends TimerTask {
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
-                    + "WHERE JobRunning.\"IS_LATE\" = 'No'\n"
+                    + "WHERE JobRunning.\"IS_LATE\" = 'No' AND JobRunning.\"IS_NEW_ONGOING\" = 'Ongoing'\n"
                     + "AND SubDepartments.\"DepartmentCode\" = '" + LogedUserDepartmentCode + "'";
         } else if (TimerRunsAccordingTo.equals("Sub Department")) {
             query = "SELECT\n"
@@ -72,7 +72,7 @@ public class TimerMethods extends TimerTask {
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
-                    + "WHERE JobRunning.\"IS_LATE\" = 'No'\n"
+                    + "WHERE JobRunning.\"IS_LATE\" = 'No' AND JobRunning.\"IS_NEW_ONGOING\" = 'Ongoing'\n"
                     + "AND JobFixed.\"SUB_DEPARTMENT_CODE\" = '" + LogedUserSubDepartmentCode + "'";
         } else if (TimerRunsAccordingTo.equals("All")) {
             query = "SELECT\n"
@@ -90,7 +90,7 @@ public class TimerMethods extends TimerTask {
                     + "FROM\n"
                     + "     \"dbo\".\"JobFixed\" JobFixed INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON JobFixed.\"JOB_FIXED_ID\" = JobRunning.\"FIXED_JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"SubDepartments\" SubDepartments ON JobFixed.\"SUB_DEPARTMENT_CODE\" = SubDepartments.\"SUB_DEPARTMENT_CODE\"\n"
-                    + "WHERE JobRunning.\"IS_LATE\" = 'No'";
+                    + "WHERE JobRunning.\"IS_LATE\" = 'No' AND JobRunning.\"IS_NEW_ONGOING\" = 'Ongoing'";
         }
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);

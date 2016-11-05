@@ -939,11 +939,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 employeeSuggestionForBottleNeck.setVisible(true);
             }
         } else {
-        
-        System.out.println("Employee Suggestion for Fixed Job Id :"+fixedJobID);
-        Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
-        cr.createIdialEmpTable();
-            
+
+            System.out.println("Employee Suggestion for Fixed Job Id :" + fixedJobID);
+            Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
+            cr.createIdialEmpTable();
+
             employeeSuggestionForBottleNeck = new EmployeeSuggestionForBottleNeck();
             dskPane_RightPanel.add(employeeSuggestionForBottleNeck);
             employeeSuggestionForBottleNeck.setVisible(true);
@@ -1144,11 +1144,11 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         String queryDeleteEmployeesAtJobs = "DELETE FROM [EmployeesAtRunningJob]\n"
                                 + "      WHERE JOB_ID = '" + jobID + "'";
                         stmtDeleteEmpInRunningJobs.execute(queryDeleteEmployeesAtJobs);
-                    }else if (!resetCheckIfIssue.next()) {
+                    } else if (!resetCheckIfIssue.next()) {
                         JOptionPane.showMessageDialog(this, "Row items are not issued to complete.", "Not issued", JOptionPane.OK_OPTION);
                     }
 
-                } else if (statusOfJob.equals("Ongoing") || statusOfJob.equals("New")) {
+                } else if (statusOfJob.equals("New")) {
                     takenTime = tableJobs.getValueAt(i, 6).toString();
                     jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
                     itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
@@ -1156,6 +1156,29 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET TAKEN_TIME = '" + takenTime + "'"
                             + ", SHOULD_FINISHED_AT = '" + jobFinishedTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "', IS_NEW_ONGOING  = '" + statusOfJob + "' WHERE JOB_ID = '" + jobID + "'";
                     stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
+                } else if (statusOfJob.equals("Ongoing")) {
+                    String CheckIfIssue = "SELECT\n"
+                            + "     JobRunning.\"JOB_ID\" AS JobRunning_JOB_ID,\n"
+                            + "     JobRunning.\"MRNID\" AS JobRunning_MRNID,\n"
+                            + "     IssueMain.\"IssueID\" AS IssueMain_IssueID,\n"
+                            + "     MRNmain.\"DepartmentCode\" AS MRNmain_DepartmentCode\n"
+                            + "FROM\n"
+                            + "     \"dbo\".\"MRNmain\" MRNmain INNER JOIN \"dbo\".\"JobRunning\" JobRunning ON MRNmain.\"MRNID\" = JobRunning.\"MRNID\"\n"
+                            + "     INNER JOIN \"dbo\".\"IssueMain\" IssueMain ON MRNmain.\"MRNID\" = IssueMain.\"MRNID\"\n"
+                            + "WHERE\n"
+                            + "     JobRunning.\"JOB_ID\" = '" + jobID + "'";
+                    resetCheckIfIssue = stmtCheckIfIssue.executeQuery(CheckIfIssue);
+                    if (resetCheckIfIssue.next()) {
+                        takenTime = tableJobs.getValueAt(i, 6).toString();
+                        jobFinishedTime = tableJobs.getValueAt(i, 8).toString();
+                        itemCompleted = Integer.parseInt(tableJobs.getValueAt(i, 10).toString());
+
+                        String queryUpdateDetailsInRunningJobs = "UPDATE JobRunning SET TAKEN_TIME = '" + takenTime + "'"
+                                + ", SHOULD_FINISHED_AT = '" + jobFinishedTime + "', ITEM_COUNT_COMPLETED = '" + itemCompleted + "', IS_NEW_ONGOING  = '" + statusOfJob + "' WHERE JOB_ID = '" + jobID + "'";
+                        stmtUpdateDetailsInRunningJobs.execute(queryUpdateDetailsInRunningJobs);
+                    } else if (!resetCheckIfIssue.next()) {
+                        JOptionPane.showMessageDialog(this, "Row items are not issued to '" + jobID + "' to change status as ongoing.", "Not issued", JOptionPane.OK_OPTION);
+                    }
                 } else if (statusOfJob.equals("Ignored")) {
                     fixedJobID = tableJobs.getValueAt(i, 1).toString();
                     jobAllocatedDate = tableJobs.getValueAt(i, 3).toString();

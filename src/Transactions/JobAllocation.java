@@ -747,7 +747,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeeTree.\"EMPLOYEE_CODE\" = Employees.\"EMPLOYEE_CODE\"\n"
                     + "     INNER JOIN \"dbo\".\"EmployeeDesignation\" EmployeeDesignation ON EmployeeDesignationTree.\"EMPLOYEE_DESIGNATION_CODE\" = EmployeeDesignation.\"EMPLOYEE_DESIGNATION_CODE\"\n"
                     + "WHERE\n"
-                    + "     EmployeeDesignationTree.\"SUB_DEPARTMENT_CODE\" = '"+subDepartmentCode+"'\n"
+                    + "     EmployeeDesignationTree.\"SUB_DEPARTMENT_CODE\" = '" + subDepartmentCode + "'\n"
                     + " AND EmployeeDesignation.\"IS_SUPERVISING\" = 'Yes'\n"
                     + "ORDER BY Employees.\"FIRST_NAME\"";
             ResultSet rset = stmt.executeQuery(query);
@@ -1107,13 +1107,21 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         remarks = textAreaRemarks.getText();
         itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
 
+//        if (checkBoxGetJobSavingTime.isSelected()) {
+//            jobAllocatedtime = Time;
+//            statusOfJob = "Ongoing";
+//        } else if (!checkBoxGetJobSavingTime.isSelected()) {
+//            jobAllocatedtime = textStartTime.getText();
+//            statusOfJob = "New";
+//        }
         if (checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = Time;
-            statusOfJob = "Ongoing";
         } else if (!checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = textStartTime.getText();
-            statusOfJob = "New";
         }
+
+        statusOfJob = "New";
+        jobAllocatedtime = textStartTime.getText();
         jobAllocatedDate = calendarButtonStartDate.getText();
         allocatedtime = formatedTextAllocatedTime.getText();
         jobFinishedDate = calendarButtonEndDate.getText();
@@ -1171,7 +1179,7 @@ public class JobAllocation extends javax.swing.JInternalFrame {
                     + "           ,'" + Date + "'\n"
                     + "           ,'" + Time + "'\n"
                     + "           ,'" + jobFinishedDate + "'\n"
-//                    + "           ,'" + emptyField + "'\n"
+                    //                    + "           ,'" + emptyField + "'\n"
                     + "           ,'" + jobFinishedTime + "'\n"
                     + "           ,'" + isLate + "')";
             stmtMain.execute(MainInsertQuery);
