@@ -38,7 +38,7 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     private final String menuName = "Job allocation for bottle necks";
     private final String logUser = IndexPage.LabelUser.getText();
     private DocNumGenerator AutoID;
-    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", emptyField = "", jobFinishedTime = "", jobFinishedDate = "", superviseBy;
+    String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", emptyField = "", jobFinishedTime = "", jobFinishedDate = "", superviseBy, subdeptCode;
     int itemCount, itemCompleted = 0;
     String JOB_ALLOCATED_TIME, JOB_ALLOCATED_DATE, isLate;
     int ALLOCATED_TIME;
@@ -54,11 +54,15 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
         this.setTitle(menuName);
-        loadDepartmentsToCombo();
+//        loadDepartmentsToCombo();
+        LoadFromTemptable();
         rBtnProductLevel1.setSelected(true);
         textStartTime.setEditable(false);
         calendarButtonStartDate.setText(logDate);
         calendarButtonEndDate.setText(logDate);
+
+        lblSubDepCode.setVisible(false);
+        lblEmpCode.setVisible(false);
     }
 
     /**
@@ -119,6 +123,8 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
         rBtnProductLevel2 = new javax.swing.JRadioButton();
         textFieldJobCode = new javax.swing.JTextField();
         buttonPrepareMRN = new javax.swing.JButton();
+        lblSubDepCode = new javax.swing.JLabel();
+        lblEmpCode = new javax.swing.JLabel();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1070, 675));
@@ -562,6 +568,12 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
         });
         panel1.add(buttonPrepareMRN, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 610, 130, -1));
 
+        lblSubDepCode.setText("sub dep");
+        panel1.add(lblSubDepCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 380, 80, 20));
+
+        lblEmpCode.setText("emp code");
+        panel1.add(lblEmpCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 420, 60, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -575,6 +587,27 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void LoadFromTemptable() {
+        String query = "SELECT * FROM TempEmpTable";
+        try {
+            Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultset = statement.executeQuery(query);
+
+            if (resultset.next()) {
+                employeeID = resultset.getString("empid");
+                subdeptCode = resultset.getString("subdept");
+
+                lblEmpCode.setText(employeeID);
+                lblSubDepCode.setText(subdeptCode);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please contact for support.");
+        }
+        loadSubDepartmentsToCombo();
+    }
 
     private void RefreshTable() {
         try {
@@ -601,6 +634,8 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     }
 
     private void loadFixedJobsToTable(String subDepartmentCode) {
+        fixedJobID = EmployeeSuggestionForBottleNeck.jTextField1.getText();
+        Name = EmployeeSuggestionForBottleNeck.jTextField2.getText();
         if (rBtnProductLevel1.isSelected()) {
             try {
                 ResultSet reset;
@@ -625,14 +660,17 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
                         + "FROM\n"
                         + "     \"dbo\".\"ProductLevel1\" ProductLevel1 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel1.\"PL1_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
                         + "WHERE\n"
-                        + "     JobFixed.\"SUB_DEPARTMENT_CODE\" = '" + subDepartmentCode + "' AND ProductLevel1.\"VISIBILITY\"= 'Yes'";
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + fixedJobID + "' AND ProductLevel1.\"VISIBILITY\"= 'Yes'";
                 stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 reset = stmt.executeQuery(query);
 
                 while (reset.next()) {
                     model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
-                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
-                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+//                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
+//                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+                    tableFixedJobs.setValueAt(fixedJobID, rowCount, 0);
+                    tableFixedJobs.setValueAt(Name, rowCount, 1);
+
                     tableFixedJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 2);
                     tableFixedJobs.setValueAt(reset.getString("JobFixed_PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                     rowCount++;
@@ -666,14 +704,16 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
                         + "FROM\n"
                         + "     \"dbo\".\"ProductLevel2\" ProductLevel2 INNER JOIN \"dbo\".\"JobFixed\" JobFixed ON ProductLevel2.\"PL2_ITEM_CODE\" = JobFixed.\"PRODUCT_LEVEL_ITEM_CODE\"\n"
                         + "WHERE\n"
-                        + "     JobFixed.\"SUB_DEPARTMENT_CODE\" = '" + subDepartmentCode + "' AND ProductLevel2.\"VISIBILITY\" = 'Yes'";
+                        + "     JobFixed.\"JOB_FIXED_ID\" = '" + fixedJobID + "' AND ProductLevel2.\"VISIBILITY\" = 'Yes'";
                 stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 reset = stmt.executeQuery(query);
 
                 while (reset.next()) {
                     model_TableFixedJobs.addRow(new Object[model_TableFixedJobs.getColumnCount()]);
-                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
-                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+//                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_ID"), rowCount, 0);
+//                    tableFixedJobs.setValueAt(reset.getString("JobFixed_JOB_FIXED_NAME"), rowCount, 1);
+                    tableFixedJobs.setValueAt(fixedJobID, rowCount, 0);
+                    tableFixedJobs.setValueAt(Name, rowCount, 1);
                     tableFixedJobs.setValueAt(reset.getString("JobFixed_ITEM_COUNT"), rowCount, 2);
                     tableFixedJobs.setValueAt(reset.getString("JobFixed_PRODUCT_LEVEL_ITEM_CODE"), rowCount, 3);
                     rowCount++;
@@ -711,22 +751,25 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
 
     private void loadSubDepartmentsToCombo() {
         try {
-            String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
+            subdeptCode = lblSubDepCode.getText();
             java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments WHERE DepartmentCode = '" + departmentCode[1] + "' order by SUB_DEPARTMENT_NAME";
+            String query = "select SUB_DEPARTMENT_CODE, SUB_DEPARTMENT_NAME From SubDepartments WHERE SUB_DEPARTMENT_CODE = '" + subdeptCode + "'";
             ResultSet rset = stmt.executeQuery(query);
 
-            comboSubDepartment.removeAllItems();
-            comboSubDepartment.insertItemAt(select, 0);
-            int position = 1;
             if (rset.next()) {
-                do {
-                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + spliter + rset.getString("SUB_DEPARTMENT_CODE"), position);
-                    position++;
-                } while (rset.next());
+                comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + spliter + rset.getString("SUB_DEPARTMENT_CODE"), 0);
             }
-            comboSubDepartment.setSelectedIndex(0);
 
+//            comboSubDepartment.removeAllItems();
+//            comboSubDepartment.insertItemAt(select, 0);
+//            int position = 1;
+//            if (rset.next()) {
+//                do {
+//                    comboSubDepartment.insertItemAt(rset.getString("SUB_DEPARTMENT_NAME") + spliter + rset.getString("SUB_DEPARTMENT_CODE"), position);
+//                    position++;
+//                } while (rset.next());
+//            }
+//            comboSubDepartment.setSelectedIndex(0);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -805,17 +848,12 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void buttonViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonViewActionPerformed
-        String subDepartment = comboSubDepartment.getSelectedItem().toString();
-        if (!subDepartment.equals(select)) {
-            String subDepartmentCode[] = comboSubDepartment.getSelectedItem().toString().split(spliter);
-            String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
-            loadFixedJobsToTable(subDepartmentCode[1]);
-            loadAllEmployeesToTable(subDepartmentCode[1]);
-            loadSuperviseByToCombo(subDepartmentCode[1]);
-        } else if (subDepartment.equals(select)) {
-            JOptionPane.showMessageDialog(this, "Sub department is not selected.", "Not selected", JOptionPane.OK_OPTION);
-            comboSubDepartment.requestFocus();
-        }
+//        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+        String subDepartmentCode = lblSubDepCode.getText();
+//            String departmentCode[] = comboDepartment.getSelectedItem().toString().split(spliter);
+        loadFixedJobsToTable(subDepartmentCode);
+        loadAllEmployeesToTable(subDepartmentCode);
+        loadSuperviseByToCombo(subDepartmentCode);
     }//GEN-LAST:event_buttonViewActionPerformed
 
     private void loadAllEmployeesToTable(String subDepartmentCode) {
@@ -826,30 +864,33 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
             int rowCount = 0;
             RefreshEmployeeTable();
 
-            query = "SELECT [EMPLOYEE_CODE]\n"
-                    + "      ,[EPF_NO]\n"
-                    + "      ,[FIRST_NAME]\n"
-                    + "      ,[LAST_NAME]\n"
-                    + "      ,[SUR_NAME]\n"
-                    + "      ,[INITIALS]\n"
-                    + "      ,[CALL_NAME]\n"
-                    + "      ,[DepartmentCode]\n"
-                    + "      ,[SUB_DEPARTMENT_CODE]\n"
-                    + "      ,[EMPLOYEE_TYPE_CODE]\n"
-                    + "      ,[CONTACT_LAND]\n"
-                    + "      ,[CONTACT_MOBILE]\n"
-                    + "      ,[EMAIL]\n"
-                    + "      ,[ACTIVE]\n"
-                    + "  FROM [Employees] WHERE SUB_DEPARTMENT_CODE = '" + subDepartmentCode + "' ORDER BY FIRST_NAME";
+            query = "SELECT\n"
+                    + "     TempEmpTable.\"empid\" AS TempEmpTable_empid,\n"
+                    + "     TempEmpTable.\"subdept\" AS TempEmpTable_subdept,\n"
+                    + "     TempEmpTable.\"date\" AS TempEmpTable_date,\n"
+                    + "     Employees.\"EPF_NO\" AS Employees_EPF_NO,\n"
+                    + "     Employees.\"FIRST_NAME\" AS Employees_FIRST_NAME,\n"
+                    + "     Employees.\"LAST_NAME\" AS Employees_LAST_NAME,\n"
+                    + "     Employees.\"SUR_NAME\" AS Employees_SUR_NAME,\n"
+                    + "     Employees.\"INITIALS\" AS Employees_INITIALS,\n"
+                    + "     Employees.\"CALL_NAME\" AS Employees_CALL_NAME,\n"
+                    + "     Employees.\"DepartmentCode\" AS Employees_DepartmentCode,\n"
+                    + "     Employees.\"EMPLOYEE_TYPE_CODE\" AS Employees_EMPLOYEE_TYPE_CODE,\n"
+                    + "     Employees.\"CONTACT_LAND\" AS Employees_CONTACT_LAND,\n"
+                    + "     Employees.\"CONTACT_MOBILE\" AS Employees_CONTACT_MOBILE,\n"
+                    + "     Employees.\"EMAIL\" AS Employees_EMAIL,\n"
+                    + "     Employees.\"ACTIVE\" AS Employees_ACTIVE\n"
+                    + "FROM\n"
+                    + "     \"dbo\".\"Employees\" Employees INNER JOIN \"dbo\".\"TempEmpTable\" TempEmpTable ON Employees.\"EMPLOYEE_CODE\" = TempEmpTable.\"empid\" WHERE TempEmpTable.\"subdept\" = '"+subDepartmentCode+"' ORDER BY Employees.\"FIRST_NAME\"";
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
 
             while (reset.next()) {
                 model_TableEmployee.addRow(new Object[model_TableEmployee.getColumnCount()]);
-                tableEmployee.setValueAt(reset.getString("EMPLOYEE_CODE"), rowCount, 0);
-                tableEmployee.setValueAt(reset.getString("FIRST_NAME"), rowCount, 1);
-                tableEmployee.setValueAt(reset.getString("INITIALS"), rowCount, 2);
-                tableEmployee.setValueAt(reset.getString("CALL_NAME"), rowCount, 3);
+                tableEmployee.setValueAt(reset.getString("TempEmpTable_empid"), rowCount, 0);
+                tableEmployee.setValueAt(reset.getString("Employees_FIRST_NAME"), rowCount, 1);
+                tableEmployee.setValueAt(reset.getString("Employees_INITIALS"), rowCount, 2);
+                tableEmployee.setValueAt(reset.getString("Employees_CALL_NAME"), rowCount, 3);
                 rowCount++;
             }
             TextNumberOfEmpAtDepartment.setText(String.valueOf(rowCount));
@@ -1271,6 +1312,8 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblEmpCode;
+    private javax.swing.JLabel lblSubDepCode;
     private javax.swing.JLabel lbl_accountType1;
     private javax.swing.JLabel lbl_description;
     private javax.swing.JLabel lbl_description2;
