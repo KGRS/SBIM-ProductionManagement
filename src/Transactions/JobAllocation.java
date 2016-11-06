@@ -1121,7 +1121,6 @@ public class JobAllocation extends javax.swing.JInternalFrame {
         }
 
         statusOfJob = "New";
-        jobAllocatedtime = textStartTime.getText();
         jobAllocatedDate = calendarButtonStartDate.getText();
         allocatedtime = formatedTextAllocatedTime.getText();
         jobFinishedDate = calendarButtonEndDate.getText();
