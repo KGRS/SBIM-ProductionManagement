@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class Create_DropIdialEmployeeTable {
 
-    public void createIdialEmpTable() {
+    public void createIdialEmpTable(int numOfJobsLoaded) {
 
         try {
             Statement stmt;
@@ -34,7 +34,7 @@ public class Create_DropIdialEmployeeTable {
                     + "     \"dbo\".\"JobRunning\" JobRunning INNER JOIN \"dbo\".\"EmployeesAtRunningJob\" EmployeesAtRunningJob ON JobRunning.\"JOB_ID\" = EmployeesAtRunningJob.\"JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeesAtRunningJob.\"EMPLOYEE_CODE\" != Employees.\"EMPLOYEE_CODE\"\n"
                     + "GROUP BY Employees.\"EMPLOYEE_CODE\"\n" 
-                    + "HAVING count(*) > 3";
+                    + "HAVING count(*) > "+numOfJobsLoaded+"";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);

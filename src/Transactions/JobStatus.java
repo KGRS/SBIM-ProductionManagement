@@ -52,7 +52,7 @@ public class JobStatus extends javax.swing.JInternalFrame {
     private final String logDate = IndexPage.LabelDate.getText();
 //    private final String departmentCode[] = IndexPage.labelDepartmentCode.getText().split(spliter);
     String jobID = "", Name = "", productLevel = "", productLevelItemCode = "", productLevelItemName = "", remarks = "", jobAllocatedDate = "", jobAllocatedtime = "", allocatedtime = "", takenTime = "", emptyFields = "", employeeID = "", FirstName = "", NameWithIni = "", callName = "", fixedJobID = "", statusOfJob = "", orderOfShowingJobs = "", startDate = "", endDate = "", JobRunning_LOG_INSERT_DATE = "", JobRunning_LOG_INSERT_TIME = "", JobRunning_ASSIGNED_BY = "", JobRunning_SUPERVISE_BY = "", jobFinishTime, SHOULD_FINISHED_DATE, SHOULD_FINISHED_AT, IS_LATE, MRNID, jobFinishedTime, jobFinishedDate, IS_WASTAGE, jobDepartmentCode;
-    int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted, plItemDifference;
+    int itemCount, selectedRowOfTableJobs, selectedRowCountOfTableJobs, itemCompleted, plItemDifference, numOfJobsLoaded;
 
     public JobStatus() {
         initComponents();
@@ -931,6 +931,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
     private void buttonEmployeeSuggestionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEmployeeSuggestionsActionPerformed
         selectedRowOfTableJobs = tableJobs.getSelectedRow();
+        numOfJobsLoaded = Integer.parseInt(textNumberTransactions.getText());
         fixedJobID = tableJobs.getValueAt(selectedRowOfTableJobs, 1).toString();
         labelFlobID.setText(fixedJobID);
 
@@ -942,7 +943,7 @@ private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
             System.out.println("Employee Suggestion for Fixed Job Id :" + fixedJobID);
             Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
-            cr.createIdialEmpTable();
+            cr.createIdialEmpTable(numOfJobsLoaded);
 
             employeeSuggestionForBottleNeck = new EmployeeSuggestionForBottleNeck();
             dskPane_RightPanel.add(employeeSuggestionForBottleNeck);
