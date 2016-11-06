@@ -24,6 +24,7 @@ public class PreformanceCalculation {
     ArrayList<String> arrayList_GetFixedJobIds = new ArrayList<String>();
 
     double lowerLimit = 0;
+    double upperLimit = 0;
     GetLowerBound getLB = new GetLowerBound();
 
     public void GetCalcPreformance() {
@@ -101,11 +102,14 @@ public class PreformanceCalculation {
         String T_sum_S = null;
         String I_sum_S = null;
 
-        System.out.println("EmpID : " + arrayList_GetEmpIds.get(GetEmpIds_Count) + ", FixJobID : " +"\n"
+        System.out.println("EmpID : " + arrayList_GetEmpIds.get(GetEmpIds_Count) + ", FixJobID : " 
                 + arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
 
         //Get lower limit value for the remove unnesseccery user perforance from the calulateion
         lowerLimit = getLB.getLowerB(arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
+        
+        //Get Upper limit value for the remove unnesseccery user perforance from the calulateion
+        upperLimit = getLB.getUpperB(arrayList_GetFixedJobIds.get(GetFixedJobIds_Count));
 
         //Get Sum of taken time
         try {
@@ -172,7 +176,7 @@ public class PreformanceCalculation {
             d_mean = T_sum / I_sum;
         } else {
             //Set lower limit value as default value
-            d_mean = lowerLimit;
+            d_mean = upperLimit;
         }
 
         float mean = (float) d_mean;
