@@ -34,11 +34,12 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
     String StopTime = null;
     int endtm = 0;
-    double avgPr = 0.0;
+    double avgPr = 0.0, iavg = 0.0;
     int Allocate_Items, Complete_Items = 0;
-    int To_Be_complete =0;
+    int To_Be_complete = 0;
     
-    
+    String subdep;
+    String dateA;
 
     public EmployeeSuggestionForBottleNeck() {
         initComponents();
@@ -57,7 +58,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         loadSuggestNCR_EmployeesToTable(id);
         loadDate();
         PredictItemCount();
-        
 
     }
 
@@ -108,6 +108,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField9 = new javax.swing.JTextField();
         lbl_description16 = new javax.swing.JLabel();
         lbl_description17 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         textFieldJobCode = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -274,7 +275,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
         lbl_subAccount2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount2.setText("Number of employees allocated to the job");
-        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 250, 220, 20));
+        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 260, 220, 20));
 
         textNumberOfEmpAllocatedToJob.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         textNumberOfEmpAllocatedToJob.setEnabled(false);
@@ -283,7 +284,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 textNumberOfEmpAllocatedToJobActionPerformed(evt);
             }
         });
-        panel1.add(textNumberOfEmpAllocatedToJob, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 250, 70, -1));
+        panel1.add(textNumberOfEmpAllocatedToJob, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 260, 70, -1));
 
         tableFixedJobs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -356,8 +357,8 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField6.setEnabled(false);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("msg");
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setText("msg2");
 
         lbl_description12.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description12.setText("Predicted Item Count");
@@ -395,6 +396,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             }
         });
 
+        jTextField9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTextField9.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField9.setEnabled(false);
         jTextField9.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -414,6 +416,9 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         lbl_description17.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description17.setText("Item count Allocated");
 
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel9.setText("msg");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -429,97 +434,102 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lbl_description13)))
-                                .addGap(30, 30, 30)
-                                .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(92, 92, 92)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lbl_description17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                     .addComponent(jTextField12)
-                                    .addComponent(jTextField10))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                                    .addComponent(jTextField10)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(80, 80, 80))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lbl_description13))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(64, 64, 64)
+                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                                .addComponent(jTextField8)
-                                .addComponent(jTextField9))
-                            .addComponent(lbl_description12))
-                        .addGap(30, 30, 30))))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(318, Short.MAX_VALUE)
-                    .addComponent(lbl_description16, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(38, 38, 38)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_description16, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_description12))
+                                .addGap(0, 52, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_description12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(165, 165, 165))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_description17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_description15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(116, 116, 116))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(76, 76, 76)
-                    .addComponent(lbl_description16, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(235, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_description8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_description17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(116, 116, 116))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_description11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lbl_description16, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbl_description12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(165, 165, 165))))
         );
 
-        panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 450, 220));
+        panel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, 460, 230));
 
         textFieldJobCode.setEditable(false);
         panel1.add(textFieldJobCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 530, 110, -1));
@@ -640,21 +650,31 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         int val = (int) Math.floor(f);
         return val;
     }
-    
-    public  void PredictItemCount(){
-        int aa =  roundToFloorVal(endtm/avgPr);
+
+    public void PredictItemCount() {
+        int aa = roundToFloorVal(endtm / avgPr);
         int empCount = Integer.parseInt(textNumberOfEmpAllocatedToJob.getText());
-        
-        if(aa > 0){
-            jTextField9.setText(""+(aa*empCount+Complete_Items));
+
+        if (aa >= 0) {
+            jTextField9.setText("" + (aa * empCount + Complete_Items));
+        } else {
+            jTextField9.setText("" + (Complete_Items));
         }
-        else{
-            jTextField9.setText(""+(0+Complete_Items));
+
+        int cc = (aa * empCount + Complete_Items);
+        if (Allocate_Items <= cc) {
+            jLabel6.setText("Item completion Ok...");
+            jLabel6.setForeground(Color.green);
+            jTextField9.setBackground(Color.green);
+
+        } else {
+            jLabel6.setText("Item completion error...");
+            jLabel6.setForeground(Color.red);
+            jTextField9.setBackground(Color.red);
         }
-        
-        
+
     }
-    
+
     private void loadFixedJobsToTable(String job_id) {
 
         try {
@@ -725,18 +745,19 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         endtm = remainingTime;
 
         if (remainingTime > 0) {
-            jLabel6.setText("Process Ok");
-            jLabel6.setForeground(Color.green);
+            jLabel9.setText("Process Ok");
+            jLabel9.setForeground(Color.green);
             lbl_description16.setText("Remaining Time");
             jTextField8.setText(remainingTime + " Minutes");
         } else {
-            jLabel6.setText("Process Late");
-            jLabel6.setForeground(Color.red);
+            jLabel9.setText("Process Late");
+            jLabel9.setForeground(Color.red);
             lbl_description16.setText("Late Time");
             jTextField8.setBackground(Color.red);
             jTextField8.setText((remainingTime * -1) + " Minutes");
             jTextField8.setForeground(Color.red);
         }
+
     }
 
     private void loadAlocateEmpTable(String T_fixedJobID) {
@@ -780,7 +801,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             }
             reset.close();
             textNumberOfEmpAllocatedToJob.setText("" + rowCount);
-            
+
             avgPr = (avPr / rowCount);
             jTextField13.setText("" + roundToTwoDecimal(avgPr));
 
@@ -789,13 +810,13 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
-    
+
     public double roundToTwoDecimal(double f) {
         DecimalFormat ft = new DecimalFormat("##.00");
         return Double.parseDouble(ft.format(f));
     }
-    
-    
+
+
     private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
@@ -816,6 +837,60 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
+        String job = jTextField1.getText();
+        String querysd = "SELECT SUB_DEPARTMENT_CODE FROM JobFixed WHERE JOB_FIXED_ID = '" + job + "'";
+
+        try {
+            Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultset = statement.executeQuery(querysd);
+
+            if (resultset.next()) {
+                subdep = resultset.getString("SUB_DEPARTMENT_CODE");
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please contact for support.");
+        }
+
+        String query = "SELECT GETDATE() AS CurrentDateTime";
+        
+        try {
+            Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultset = statement.executeQuery(query);
+
+            if (resultset.next()) {
+                dateA = IndexPage.LabelDate.getText();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please contact for support.");
+        }
+
+        int Row = model_TableAllocatedEmployees1.getRowCount();
+        String empID = "";
+        for (int i = 0; i < Row; i++) {
+            int SelectedRow = i;
+            try {
+                empID = tableEmployee.getValueAt(SelectedRow, 0).toString();
+                java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                
+                
+
+                
+                String UpdateQuery = "INSERT INTO [dbo].[TempEmpTable]\n"
+                        + "           ([empid],[subdept],[date])\n"
+                        + "     VALUES ('"+empID+"','"+subdep+"','"+dateA+"')";
+                stmt.execute(UpdateQuery);
+                JOptionPane.showMessageDialog(this, "Employee "+empID+" Successfuly allocated");
+                
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please contact for support.");
+            }
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void loadSuggestEmployeesToTable(String Fjob_id) {
@@ -895,7 +970,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     + "     INNER JOIN \"dbo\".\"EmployeePerformance\" EmployeePerformance ON JobRunning.\"FIXED_JOB_ID\" = EmployeePerformance.\"FIXED_JOB_ID\"\n"
                     + "     AND Employees.\"EMPLOYEE_CODE\" = EmployeePerformance.\"EMPLOYEE_CODE\"\n"
                     + "WHERE\n"
-                    + "     JobRunning.FIXED_JOB_ID! = '"+Fjob_id+"'\n"
+                    + "     JobRunning.FIXED_JOB_ID! = '" + Fjob_id + "'\n"
                     + "     and JobRunning.\"ITEM_COUNT\"-JobRunning.\"ITEM_COUNT_COMPLETED\" = 0\n"
                     + "ORDER BY\n"
                     + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" DESC";
@@ -935,7 +1010,10 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 JOptionPane.showMessageDialog(this, "Employee is already allocated.", "Already allocated.", JOptionPane.OK_OPTION);
             } else {
                 addToAllocateTable();
+
             }
+            PredictItemCount();
+            jTextField13.setText("" + roundToTwoDecimal((avgPr + iavg)) / 2);
         }
     }//GEN-LAST:event_ButtonAddSelectedActionPerformed
 
@@ -947,8 +1025,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             NameWithIni = tableEmployee.getValueAt(SelectedRow, 2).toString();
             callName = tableEmployee.getValueAt(SelectedRow, 3).toString();
 
+            String avg = tableEmployee.getValueAt(SelectedRow, 6).toString();
+            iavg = Double.parseDouble(avg);
+
             model_TableAllocatedEmployees1.addRow(new Object[]{employeeID, FirstName, NameWithIni, callName});
-            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()+model_TableAllocatedEmployees1.getRowCount()));
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount() + model_TableAllocatedEmployees1.getRowCount()));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -957,7 +1038,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
     private void tableAllocatedEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllocatedEmployeeMouseClicked
         if (evt.getClickCount() == 2) {
-            int i = tableAllocatedEmployee.getSelectedRowCount();
+            int i = tableAllocatedEmployee1.getSelectedRowCount();
             if (i == 1) {
                 tableAllocatedEmployeesOfJob();
             } else if (i != 1) {
@@ -971,7 +1052,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         if (x == JOptionPane.YES_OPTION) {
             int i = tableAllocatedEmployee1.getSelectedRow();
             model_TableAllocatedEmployees1.removeRow(i);
-            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()+model_TableAllocatedEmployees1.getRowCount()));
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount() + model_TableAllocatedEmployees1.getRowCount()));
         }
     }
 
@@ -992,6 +1073,8 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         } else if (i != 1) {
             JOptionPane.showMessageDialog(this, "Please select a single row.", "Select one row", JOptionPane.OK_OPTION);
         }
+        PredictItemCount();
+        jTextField13.setText("" + roundToTwoDecimal((avgPr * 2) - iavg));
     }//GEN-LAST:event_ButtonRemoveSelectedActionPerformed
 
     private void tableFixedJobsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFixedJobsMouseClicked
@@ -1002,19 +1085,29 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         productLevelItemCode = tableFixedJobs.getValueAt(tableFixedJobs.getSelectedRow(), 3).toString();
     }//GEN-LAST:event_tableFixedJobsMouseClicked
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void textNumberOfEmpAllocatedToJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberOfEmpAllocatedToJobActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_textNumberOfEmpAllocatedToJobActionPerformed
 
-    private void jTextField8MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField8MouseMoved
-        int diff = endtm * 60 * 1000;
+    private void tableAllocatedEmployee1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableAllocatedEmployee1MouseClicked
 
-        int diffMinutes = diff / (60 * 1000) % 60;
-        int diffHours = diff / (60 * 60 * 1000) % 24;
-        int diffDays = diff / (24 * 60 * 60 * 1000);
+    private void tableAllocatedEmployee1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableAllocatedEmployee1KeyPressed
 
-        JOptionPane.showMessageDialog(null, diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes ");
-    }//GEN-LAST:event_jTextField8MouseMoved
+    private void jTextField9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField9MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField9MouseClicked
+
+    private void jTextField9MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField9MouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField9MouseMoved
+
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField13ActionPerformed
 
     private void jTextField8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField8MouseClicked
         int diff = endtm * 60 * 1000;
@@ -1026,29 +1119,19 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         JOptionPane.showMessageDialog(null, diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes ");
     }//GEN-LAST:event_jTextField8MouseClicked
 
-    private void textNumberOfEmpAllocatedToJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberOfEmpAllocatedToJobActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textNumberOfEmpAllocatedToJobActionPerformed
+    private void jTextField8MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField8MouseMoved
+        int diff = endtm * 60 * 1000;
 
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
+        int diffMinutes = diff / (60 * 1000) % 60;
+        int diffHours = diff / (60 * 60 * 1000) % 24;
+        int diffDays = diff / (24 * 60 * 60 * 1000);
 
-    private void jTextField9MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField9MouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9MouseMoved
+        JOptionPane.showMessageDialog(null, diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes ");
+    }//GEN-LAST:event_jTextField8MouseMoved
 
-    private void jTextField9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField9MouseClicked
+    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9MouseClicked
-
-    private void tableAllocatedEmployee1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tableAllocatedEmployee1MouseClicked
-
-    private void tableAllocatedEmployee1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tableAllocatedEmployee1KeyPressed
+    }//GEN-LAST:event_jTextField7ActionPerformed
 
     protected Object[] CheckIfEmpAlreadyAdded(String studntFromBtch) {
         int rowCount = model_TableAllocatedEmployees.getRowCount();
@@ -1106,6 +1189,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

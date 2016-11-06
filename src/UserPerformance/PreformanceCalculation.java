@@ -230,7 +230,6 @@ public class PreformanceCalculation {
                         + "           ,'" + Calculate_Preformance_Value + "')";
                 stmt.execute(UpdateQuery);
                 System.out.println("Preformance Value : " + Calculate_Preformance_Value + " Inserted Successfuly \n");
-
             }
             rset.close();
 
