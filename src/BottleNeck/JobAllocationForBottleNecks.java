@@ -8,7 +8,6 @@ import static BottleNeck.EmployeeSuggestionForBottleNeck.jobAllocationForBottleN
 import Transactions.*;
 import MainFiles.IndexPage;
 import static MainFiles.IndexPage.dskPane_RightPanel;
-import static MainFiles.IndexPage.jobAllocation;
 import static MainFiles.IndexPage.materialRequisitionNoteForProItems;
 import db.ConnectSql;
 import functions.AverageTimeOfPLItems;
@@ -923,7 +922,7 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tableAllocatedEmployeeKeyPressed
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
-        jobAllocation.toFront();
+        jobAllocationForBottleNecks.toFront();
     }//GEN-LAST:event_formInternalFrameIconified
 
     private void comboSubDepartmentPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubDepartmentPopupMenuWillBecomeInvisible
@@ -1056,18 +1055,18 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
     private void CheckBeforeSave() {
         int RowCount = tableAllocatedEmployee.getRowCount();
         int selectedRowCountAtFixJob = tableFixedJobs.getSelectedRowCount();
-        String subDepartment = comboSubDepartment.getSelectedItem().toString();
-        String department = comboDepartment.getSelectedItem().toString();
+//        String subDepartment = comboSubDepartment.getSelectedItem().toString();
+//        String department = comboDepartment.getSelectedItem().toString();
         superviseBy = comboSuperviousBy.getSelectedItem().toString();
         jobFinishedTime = textEndTime.getText();
 
-        if (department.equals(select) || subDepartment.equals(select) || superviseBy.equals(select) || jobFinishedTime.equals("")) {
-            JOptionPane.showMessageDialog(this, "Sub department or supervisor is not selected.", "Not selected", JOptionPane.OK_OPTION);
+        if (superviseBy.equals(select) || jobFinishedTime.equals("")) {
+            JOptionPane.showMessageDialog(this, "Supervisor is not selected.", "Not selected", JOptionPane.OK_OPTION);
         } else if (RowCount <= 0) {
             JOptionPane.showMessageDialog(this, "Employees are not available at table.", "No employees", JOptionPane.OK_OPTION);
         } else if (selectedRowCountAtFixJob != 1) {
             JOptionPane.showMessageDialog(this, "Job selection is not correct.", "Incorrect selection", JOptionPane.OK_OPTION);
-        } else if (!department.equals(select) && RowCount > 0 && !subDepartment.equals(select) && !superviseBy.equals(select) && selectedRowCountAtFixJob == 1) {
+        } else if (RowCount > 0 && !superviseBy.equals(select) && selectedRowCountAtFixJob == 1) {
             int x = JOptionPane.showConfirmDialog(this, "Are you sure to allocate these employees?", "Save?", JOptionPane.YES_NO_OPTION);
             if (x == JOptionPane.YES_OPTION) {
                 loadDateTime();
@@ -1109,13 +1108,6 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
         remarks = textAreaRemarks.getText();
         itemCount = Integer.parseInt(spinnerItemCount.getValue().toString());
 
-//        if (checkBoxGetJobSavingTime.isSelected()) {
-//            jobAllocatedtime = Time;
-//            statusOfJob = "Ongoing";
-//        } else if (!checkBoxGetJobSavingTime.isSelected()) {
-//            jobAllocatedtime = textStartTime.getText();
-//            statusOfJob = "New";
-//        }
         if (checkBoxGetJobSavingTime.isSelected()) {
             jobAllocatedtime = Time;
         } else if (!checkBoxGetJobSavingTime.isSelected()) {
@@ -1123,7 +1115,6 @@ public class JobAllocationForBottleNecks extends javax.swing.JInternalFrame {
         }
 
         statusOfJob = "New";
-        jobAllocatedtime = textStartTime.getText();
         jobAllocatedDate = calendarButtonStartDate.getText();
         allocatedtime = formatedTextAllocatedTime.getText();
         jobFinishedDate = calendarButtonEndDate.getText();
