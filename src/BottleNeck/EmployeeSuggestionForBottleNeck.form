@@ -405,7 +405,7 @@
                                       <Component id="lbl_description17" min="-2" pref="130" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jTextField11" pref="50" max="32767" attributes="0"/>
+                                          <Component id="txtItemCountAllocated" pref="50" max="32767" attributes="0"/>
                                           <Component id="jTextField12" max="32767" attributes="0"/>
                                           <Component id="jTextField10" max="32767" attributes="0"/>
                                       </Group>
@@ -465,7 +465,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField11" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtItemCountAllocated" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_description17" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -595,7 +595,7 @@
                 <Property name="text" type="java.lang.String" value="Predicted Item Count"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField11">
+            <Component class="javax.swing.JTextField" name="txtItemCountAllocated">
               <Properties>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>

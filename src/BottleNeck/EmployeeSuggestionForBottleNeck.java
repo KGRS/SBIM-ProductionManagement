@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,10 +22,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame {
 
+    public static JobAllocationForBottleNecks jobAllocationForBottleNecks = null;
     private final DefaultTableModel model_TableAllocatedEmployees;
     private final DefaultTableModel model_TableEmployee;
     private final DefaultTableModel model_TableNCREmployee;
     private final DefaultTableModel model_TableFixedJobs;
+    private final String logUser = IndexPage.LabelUser.getText();
+    private final String menuName = "Employee suggestion for bottle neck";
     String employeeID = "", FirstName = "", NameWithIni = "", callName = "";
     String fixedJobID = "", Name = "", productLevel = "", productLevelItemCode = "";
     String T_fixedJobID = "";
@@ -35,9 +37,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     int endtm = 0;
     double avgPr = 0.0;
     int Allocate_Items, Complete_Items = 0;
-    int To_Be_complete =0;
-    
-    
+    int To_Be_complete = 0;
 
     public EmployeeSuggestionForBottleNeck() {
         initComponents();
@@ -47,6 +47,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         model_TableNCREmployee = (DefaultTableModel) tableEmployee1.getModel();
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
         panel1.setToolTipText("Press right mouse click to refresh.");
+        this.setTitle(menuName);
 
         String id = JobStatus.labelFlobID.getText();
         loadFixedJobsToTable(id);
@@ -55,7 +56,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         loadSuggestNCR_EmployeesToTable(id);
         loadDate();
         PredictItemCount();
-        
 
     }
 
@@ -97,7 +97,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jTextField6 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         lbl_description12 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        txtItemCountAllocated = new javax.swing.JTextField();
         lbl_description13 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
@@ -356,8 +356,8 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         lbl_description12.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description12.setText("Predicted Item Count");
 
-        jTextField11.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jTextField11.setEnabled(false);
+        txtItemCountAllocated.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtItemCountAllocated.setEnabled(false);
 
         lbl_description13.setForeground(new java.awt.Color(102, 102, 102));
         lbl_description13.setText("Item count To Be Complete");
@@ -445,7 +445,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                                 .addComponent(lbl_description17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                    .addComponent(txtItemCountAllocated, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                     .addComponent(jTextField12)
                                     .addComponent(jTextField10))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
@@ -491,7 +491,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtItemCountAllocated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_description17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -590,20 +590,18 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         int val = (int) Math.floor(f);
         return val;
     }
-    
-    public  void PredictItemCount(){
-        int aa =  roundToFloorVal(endtm/avgPr);
-        
-        if(aa > 0){
-            jTextField9.setText(""+(aa+To_Be_complete));
+
+    public void PredictItemCount() {
+        int aa = roundToFloorVal(endtm / avgPr);
+
+        if (aa > 0) {
+            jTextField9.setText("" + (aa + To_Be_complete));
+        } else {
+            jTextField9.setText("" + (0 + To_Be_complete));
         }
-        else{
-            jTextField9.setText(""+(0+To_Be_complete));
-        }
-        
-        
+
     }
-    
+
     private void loadFixedJobsToTable(String job_id) {
 
         try {
@@ -664,7 +662,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
-        jTextField11.setText("" + Allocate_Items);
+        txtItemCountAllocated.setText("" + Allocate_Items);
 
         To_Be_complete = Allocate_Items - Complete_Items;
         jTextField12.setText(Integer.toString(To_Be_complete));
@@ -756,7 +754,11 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-
+        if (jobAllocationForBottleNecks != null) {
+            if (!jobAllocationForBottleNecks.isVisible()) {
+                jobAllocationForBottleNecks.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void loadSuggestEmployeesToTable(String Fjob_id) {
@@ -836,7 +838,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     + "     INNER JOIN \"dbo\".\"EmployeePerformance\" EmployeePerformance ON JobRunning.\"FIXED_JOB_ID\" = EmployeePerformance.\"FIXED_JOB_ID\"\n"
                     + "     AND Employees.\"EMPLOYEE_CODE\" = EmployeePerformance.\"EMPLOYEE_CODE\"\n"
                     + "WHERE\n"
-                    + "     JobRunning.FIXED_JOB_ID! = '"+Fjob_id+"'\n"
+                    + "     JobRunning.FIXED_JOB_ID! = '" + Fjob_id + "'\n"
                     + "     and JobRunning.\"ITEM_COUNT\"-JobRunning.\"ITEM_COUNT_COMPLETED\" = 0\n"
                     + "ORDER BY\n"
                     + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" DESC";
@@ -1044,7 +1046,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField2;
@@ -1072,5 +1073,6 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JTable tableFixedJobs;
     private javax.swing.JTextField textFieldJobCode;
     private javax.swing.JTextField textNumberOfEmpAllocatedToJob;
+    private javax.swing.JTextField txtItemCountAllocated;
     // End of variables declaration//GEN-END:variables
 }
