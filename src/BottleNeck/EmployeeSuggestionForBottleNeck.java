@@ -5,6 +5,7 @@
 package BottleNeck;
 
 import MainFiles.IndexPage;
+import static MainFiles.IndexPage.dskPane_RightPanel;
 import Transactions.JobStatus;
 import static Transactions.JobStatus.employeeSuggestionForBottleNeck;
 import db.ConnectSql;
@@ -28,6 +29,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private final DefaultTableModel model_TableEmployee;
     private final DefaultTableModel model_TableNCREmployee;
     private final DefaultTableModel model_TableFixedJobs;
+    public static JobAllocationForBottleNecks jobAllocationForBottleNecks = null;
     String employeeID = "", FirstName = "", NameWithIni = "", callName = "";
     String fixedJobID = "", Name = "", productLevel = "", productLevelItemCode = "";
     String T_fixedJobID = "";
@@ -37,7 +39,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     double avgPr = 0.0, iavg = 0.0;
     int Allocate_Items, Complete_Items = 0;
     int To_Be_complete = 0;
-    
+
     String subdep;
     String dateA;
 
@@ -854,7 +856,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         }
 
         String query = "SELECT GETDATE() AS CurrentDateTime";
-        
+
         try {
             Statement statement = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultset = statement.executeQuery(query);
@@ -875,21 +877,27 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             try {
                 empID = tableEmployee.getValueAt(SelectedRow, 0).toString();
                 java.sql.Statement stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                
-                
 
-                
                 String UpdateQuery = "INSERT INTO [dbo].[TempEmpTable]\n"
                         + "           ([empid],[subdept],[date])\n"
-                        + "     VALUES ('"+empID+"','"+subdep+"','"+dateA+"')";
+                        + "     VALUES ('" + empID + "','" + subdep + "','" + dateA + "')";
                 stmt.execute(UpdateQuery);
-                JOptionPane.showMessageDialog(this, "Employee "+empID+" Successfuly allocated");
-                
+                JOptionPane.showMessageDialog(this, "Employee " + empID + " Successfuly allocated");
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(this, "Please contact for support.");
             }
+        }
+
+        if (jobAllocationForBottleNecks != null) {
+            if (!jobAllocationForBottleNecks.isVisible()) {
+                jobAllocationForBottleNecks.setVisible(true);
+            }
+        } else {
+            jobAllocationForBottleNecks = new JobAllocationForBottleNecks();
+            dskPane_RightPanel.add(jobAllocationForBottleNecks);
+            jobAllocationForBottleNecks.setVisible(true);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
