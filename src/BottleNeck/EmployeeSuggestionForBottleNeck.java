@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame {
 
     private final DefaultTableModel model_TableAllocatedEmployees;
+    private final DefaultTableModel model_TableAllocatedEmployees1;
     private final DefaultTableModel model_TableEmployee;
     private final DefaultTableModel model_TableNCREmployee;
     private final DefaultTableModel model_TableFixedJobs;
@@ -43,6 +44,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         initComponents();
 
         model_TableAllocatedEmployees = (DefaultTableModel) tableAllocatedEmployee.getModel();
+        model_TableAllocatedEmployees1 = (DefaultTableModel) tableAllocatedEmployee1.getModel();
         model_TableEmployee = (DefaultTableModel) tableEmployee.getModel();
         model_TableNCREmployee = (DefaultTableModel) tableEmployee1.getModel();
         model_TableFixedJobs = (DefaultTableModel) tableFixedJobs.getModel();
@@ -116,6 +118,10 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         tableEmployee1 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableAllocatedEmployee1 = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(1070, 675));
@@ -149,7 +155,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSave.setMnemonic('s');
-        btnSave.setText("Save");
+        btnSave.setText("Allocate");
         btnSave.setActionCommand("Delete");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -256,7 +262,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         });
         jScrollPane2.setViewportView(tableAllocatedEmployee);
 
-        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 360, 210));
+        panel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 360, 90));
 
         ButtonRemoveSelected.setText("<<--");
         ButtonRemoveSelected.addActionListener(new java.awt.event.ActionListener() {
@@ -268,7 +274,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
 
         lbl_subAccount2.setForeground(new java.awt.Color(102, 102, 102));
         lbl_subAccount2.setText("Number of employees allocated to the job");
-        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 260, 220, 20));
+        panel1.add(lbl_subAccount2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 250, 220, 20));
 
         textNumberOfEmpAllocatedToJob.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         textNumberOfEmpAllocatedToJob.setEnabled(false);
@@ -277,7 +283,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                 textNumberOfEmpAllocatedToJobActionPerformed(evt);
             }
         });
-        panel1.add(textNumberOfEmpAllocatedToJob, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 260, 70, -1));
+        panel1.add(textNumberOfEmpAllocatedToJob, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 250, 70, -1));
 
         tableFixedJobs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -572,6 +578,50 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         jLabel5.setText("Currently Idial Employees");
         panel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 250, -1));
 
+        tableAllocatedEmployee1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Employee code", "First name", "Last name", "Calling name"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableAllocatedEmployee1.getTableHeader().setReorderingAllowed(false);
+        tableAllocatedEmployee1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableAllocatedEmployee1MouseClicked(evt);
+            }
+        });
+        tableAllocatedEmployee1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableAllocatedEmployee1KeyPressed(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tableAllocatedEmployee1);
+
+        panel1.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, 360, 90));
+
+        jLabel7.setText("Suggest Employees");
+        panel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 410, -1, -1));
+
+        jLabel8.setText("Assigned Employees");
+        panel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 280, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -593,12 +643,13 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     
     public  void PredictItemCount(){
         int aa =  roundToFloorVal(endtm/avgPr);
+        int empCount = Integer.parseInt(textNumberOfEmpAllocatedToJob.getText());
         
         if(aa > 0){
-            jTextField9.setText(""+(aa+To_Be_complete));
+            jTextField9.setText(""+(aa*empCount+Complete_Items));
         }
         else{
-            jTextField9.setText(""+(0+To_Be_complete));
+            jTextField9.setText(""+(0+Complete_Items));
         }
         
         
@@ -729,14 +780,22 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             }
             reset.close();
             textNumberOfEmpAllocatedToJob.setText("" + rowCount);
+            
             avgPr = (avPr / rowCount);
-            jTextField13.setText("" + avgPr);
+            jTextField13.setText("" + roundToTwoDecimal(avgPr));
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
         }
     }
+    
+    public double roundToTwoDecimal(double f) {
+        DecimalFormat ft = new DecimalFormat("##.00");
+        return Double.parseDouble(ft.format(f));
+    }
+    
+    
     private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Create_DropIdialEmployeeTable cr = new Create_DropIdialEmployeeTable();
@@ -783,7 +842,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
                     + "WHERE\n"
                     + "     EmployeePerformance.\"FIXED_JOB_ID\" = '" + Fjob_id + "'\n"
                     + "ORDER BY\n"
-                    + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" ASC";
+                    + "     EmployeePerformance.\"AVERAGE_TIME_TO_COMPLETE\" DESC";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             reset = stmt.executeQuery(query);
@@ -888,8 +947,8 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             NameWithIni = tableEmployee.getValueAt(SelectedRow, 2).toString();
             callName = tableEmployee.getValueAt(SelectedRow, 3).toString();
 
-            model_TableAllocatedEmployees.addRow(new Object[]{employeeID, FirstName, NameWithIni, callName});
-            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()));
+            model_TableAllocatedEmployees1.addRow(new Object[]{employeeID, FirstName, NameWithIni, callName});
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()+model_TableAllocatedEmployees1.getRowCount()));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             JOptionPane.showMessageDialog(this, "Please contact for support.");
@@ -910,9 +969,9 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private void tableAllocatedEmployeesOfJob() {
         int x = JOptionPane.showConfirmDialog(this, "Are you sure To remove selected employee?", "Remove employee?", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
-            int i = tableAllocatedEmployee.getSelectedRow();
-            model_TableAllocatedEmployees.removeRow(i);
-            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()));
+            int i = tableAllocatedEmployee1.getSelectedRow();
+            model_TableAllocatedEmployees1.removeRow(i);
+            textNumberOfEmpAllocatedToJob.setText(String.valueOf(model_TableAllocatedEmployees.getRowCount()+model_TableAllocatedEmployees1.getRowCount()));
         }
     }
 
@@ -927,7 +986,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     }//GEN-LAST:event_formInternalFrameIconified
 
     private void ButtonRemoveSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoveSelectedActionPerformed
-        int i = tableAllocatedEmployee.getSelectedRowCount();
+        int i = tableAllocatedEmployee1.getSelectedRowCount();
         if (i == 1) {
             tableAllocatedEmployeesOfJob();
         } else if (i != 1) {
@@ -983,6 +1042,14 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField9MouseClicked
 
+    private void tableAllocatedEmployee1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableAllocatedEmployee1MouseClicked
+
+    private void tableAllocatedEmployee1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableAllocatedEmployee1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableAllocatedEmployee1KeyPressed
+
     protected Object[] CheckIfEmpAlreadyAdded(String studntFromBtch) {
         int rowCount = model_TableAllocatedEmployees.getRowCount();
         Object[] data = new Object[2];
@@ -1037,11 +1104,14 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -1067,6 +1137,7 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
     private javax.swing.JLabel lbl_subAccount2;
     private javax.swing.JPanel panel1;
     private javax.swing.JTable tableAllocatedEmployee;
+    private javax.swing.JTable tableAllocatedEmployee1;
     private javax.swing.JTable tableEmployee;
     private javax.swing.JTable tableEmployee1;
     private javax.swing.JTable tableFixedJobs;
