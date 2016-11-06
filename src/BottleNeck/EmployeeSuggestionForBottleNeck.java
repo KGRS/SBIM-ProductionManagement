@@ -5,6 +5,7 @@
 package BottleNeck;
 
 import MainFiles.IndexPage;
+import static MainFiles.IndexPage.dskPane_RightPanel;
 import Transactions.JobStatus;
 import static Transactions.JobStatus.employeeSuggestionForBottleNeck;
 import db.ConnectSql;
@@ -820,6 +821,10 @@ public class EmployeeSuggestionForBottleNeck extends javax.swing.JInternalFrame 
             if (!jobAllocationForBottleNecks.isVisible()) {
                 jobAllocationForBottleNecks.setVisible(true);
             }
+        }else{
+            jobAllocationForBottleNecks = new JobAllocationForBottleNecks();
+            dskPane_RightPanel.add(jobAllocationForBottleNecks);
+            jobAllocationForBottleNecks.setVisible(true);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
