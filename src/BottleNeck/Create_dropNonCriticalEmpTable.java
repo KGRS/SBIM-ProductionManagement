@@ -9,18 +9,15 @@ import db.ConnectSql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author LuckyLak
  */
-public class Create_DropIdialEmployeeTable {
-
-    public void createIdialEmpTable() {
+public class Create_dropNonCriticalEmpTable {
+   
+        public void createNonCriticalEmpTable() {
 
         try {
             Statement stmt;
@@ -34,7 +31,7 @@ public class Create_DropIdialEmployeeTable {
                     + "     \"dbo\".\"JobRunning\" JobRunning INNER JOIN \"dbo\".\"EmployeesAtRunningJob\" EmployeesAtRunningJob ON JobRunning.\"JOB_ID\" = EmployeesAtRunningJob.\"JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeesAtRunningJob.\"EMPLOYEE_CODE\" != Employees.\"EMPLOYEE_CODE\"\n"
                     + "GROUP BY Employees.\"EMPLOYEE_CODE\"\n" 
-                    + "HAVING count(*) > 3";
+                    + "HAVING count(*) > 2";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);
@@ -46,7 +43,7 @@ public class Create_DropIdialEmployeeTable {
         }
     }
 
-    public void deleteIdialEmpTable() {
+    public void deleteNonCriticalEmpTable() {
         try {
             Statement stmt;
             String query;
