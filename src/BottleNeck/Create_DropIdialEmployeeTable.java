@@ -34,7 +34,7 @@ public class Create_DropIdialEmployeeTable {
                     + "     \"dbo\".\"JobRunning\" JobRunning INNER JOIN \"dbo\".\"EmployeesAtRunningJob\" EmployeesAtRunningJob ON JobRunning.\"JOB_ID\" = EmployeesAtRunningJob.\"JOB_ID\"\n"
                     + "     INNER JOIN \"dbo\".\"Employees\" Employees ON EmployeesAtRunningJob.\"EMPLOYEE_CODE\" != Employees.\"EMPLOYEE_CODE\"\n"
                     + "GROUP BY Employees.\"EMPLOYEE_CODE\"\n" 
-                    + "HAVING count(*) > "+numOfJobsLoaded+"";
+                    + "HAVING count(*) > "+(numOfJobsLoaded-1)+"";
 
             stmt = ConnectSql.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.execute(query);
